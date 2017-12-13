@@ -1,0 +1,12 @@
+<launch>
+
+	<include file="$(find kobuki_gazebo)/launch/kobuki_playground.launch">
+	</include>
+   
+	<include file="$(find rbx2_gazebo)/launch/kobuki_yocs_safety_controller.launch" />
+
+
+	<!--运行测试功能包-->
+	<!-- <node pkg="cleaner_robot" type="cleaner_robot" name="cleaner_robot" /> -->
+	
+</launch>

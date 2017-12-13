@@ -1,0 +1,6 @@
+<launch>
+	<!--运行测试功能包-->
+	<node pkg="cleaner_robot" type="cleaner_robot" name="cleaner_robot" /> 
+</launch>
+
+

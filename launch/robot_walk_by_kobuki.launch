@@ -1,0 +1,16 @@
+<launch>
+
+	<include file="$(find kobuki_node)/launch/minimal.launch" />
+
+	<!--  <include file="$(find kobuki_keyop)/launch/keyop.launch" />  -->
+
+
+	<!--  rosrun rosserial_python serial_node.py /dev/ttyUSB0  -->
+	<node pkg="rosserial_python" type="serial_node.py" name="rosserial_python"  args="/dev/ttyUSB0"/> 
+
+
+	<!--运行测试功能包-->
+	<node pkg="cleaner_robot" type="cleaner_robot" name="cleaner_robot" /> 
+	
+</launch>
+
