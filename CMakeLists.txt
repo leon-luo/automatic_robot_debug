@@ -225,6 +225,7 @@ include_directories(
 
 include_directories(
 	include/${PROJECT_NAME}/lib/common
+	include/${PROJECT_NAME}/lib/common/angle
 	include/${PROJECT_NAME}/lib/common/algorithm
 	include/${PROJECT_NAME}/lib/common/algorithm/pid
 )
@@ -250,7 +251,8 @@ add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp
 								src/cfg_layer/data/cfg_robot_data.cpp
 								src/cfg_layer/walk_plan/cfg_walk_plan.cpp
 								src/cfg_layer/modulate/cfg_modulate.cpp
-								src/common/algorithm/pid/pid.cpp)
+								src/common/algorithm/pid/pid.cpp
+								src/common/angle/angle_base.cpp)
 
 
 target_link_libraries(${PROJECT_NAME}
