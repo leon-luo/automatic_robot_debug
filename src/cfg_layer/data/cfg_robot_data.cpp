@@ -177,7 +177,6 @@ void cfg_robot_data::get_origin_position(POSE_STRU &pos)
 	pos = origin_pos_;
 }
 
-
 /*****************************************************************************
  函 数 名: cfg_robot_data.set_current_position
  功能描述  : 设置当前位置
@@ -193,8 +192,6 @@ void cfg_robot_data::get_origin_position(POSE_STRU &pos)
 void cfg_robot_data::set_current_position(const POSE_STRU pos)
 {
 	current_pos_ = pos;
-	//debug_print_info("{(%lf, %lf) %lf})", pos.point.x, pos.point.y, pos.angle);
-	//debug_print_info("{(%lf, %lf) %lf})", current_pos_.point.x, current_pos_.point.y, current_pos_.angle);
 }
 
 /*****************************************************************************
@@ -212,8 +209,6 @@ void cfg_robot_data::set_current_position(const POSE_STRU pos)
 void cfg_robot_data::get_current_position(POSE_STRU &pos)
 {
 	pos = current_pos_;
-	//debug_print_info("{(%lf, %lf) %lf})", current_pos_.point.x, current_pos_.point.y, current_pos_.angle);
-	//debug_print_info("{(%lf, %lf) %lf})", pos.point.x, pos.point.y, pos.angle);
 }
 
 /*****************************************************************************
@@ -249,7 +244,6 @@ void cfg_robot_data::get_goal_position(POSE_STRU &pos)
 {
 	pos = goal_pos_;
 }
-
 
 /*****************************************************************************
  函 数 名: cfg_robot_data.set_recover_position
@@ -356,6 +350,80 @@ void cfg_robot_data::get_bumper_state(BUMPER_ID_ENUM id, bool &state)
 	state = bumper_state_[id];
 }
 
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.convert_bumper_id
+ 功能描述  : 转化碰撞传感器编号
+ 输入参数: uint8_t num         
+ 输出参数: BUMPER_ID_ENUM &id  
+ 返 回 值: bool 正确执行返回真否则返回假
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::convert_bumper_id(uint8_t num, BUMPER_ID_ENUM &id)
+{
+	bool ret = true;
+	const uint8_t left_bumper = 0;
+	const uint8_t right_bumper = 2;
+	const uint8_t center_bumper = 1;
+
+	if ( left_bumper == num )
+	{
+		id = LEFT_BUMPER;
+	}
+	else if ( right_bumper == num )
+	{
+		id = RIGHT_BUMPER;
+	}
+	else if ( center_bumper == num )
+	{
+		id = CENTER_BUMPER;
+	}
+	else
+	{
+		ret = false;
+		debug_print_warnning("num = %d; id = %d", num, id);
+	}
+	
+	return ret;
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.convert_bumper_state
+ 功能描述  : 获取碰撞传感器的状态值
+ 输入参数: const uint8_t value  
+ 输出参数: bool state 真表示按下,假表示释放
+ 返 回 值: bool 正确执行返回真否则返回假
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::convert_bumper_state(const uint8_t value, bool &state)
+{
+	bool ret = true;
+	const uint8_t pressed = 1;
+	const uint8_t released = 0;
+
+	if ( pressed == value )
+	{
+		state = true;
+	}
+	else if ( released == value )
+	{
+		state = false;
+	}
+	else
+	{
+		debug_print_warnning("value = %d", value);
+		ret = false;
+	}
+	
+	return ret;
+}
 
 /*****************************************************************************
  函 数 名: cfg_robot_data.set_wheel_drop_state
@@ -394,6 +462,77 @@ void cfg_robot_data::get_wheel_drop_state(WHEEL_ID_ENUM id, bool &state)
 }
 
 /*****************************************************************************
+ 函 数 名: cfg_robot_data.convert_wheel_drop_id
+ 功能描述  : 转换为跌落传感器编号
+ 输入参数: uint8_t num        
+ 输出参数: WHEEL_ID_ENUM &id  
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::convert_wheel_drop_id(uint8_t num, WHEEL_ID_ENUM &id)
+{
+	bool ret = true;
+	const uint8_t left_wheel = 0;
+	const uint8_t right_wheel = 1;
+	
+	if (left_wheel == num )
+	{
+		id = LEFT_WHEEL;
+	}
+	else if (right_wheel == num )
+	{
+		id = RIGHT_WHEEL;
+	}
+	else
+	{
+		debug_print_warnning("num = %d", num);
+		ret = false;
+	}
+	
+	return ret;
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.convert_wheel_drop_state
+ 功能描述  : 转换跌落状态
+ 输入参数: uint8_t value
+           bool &state  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::convert_wheel_drop_state(uint8_t value, bool &state)
+{
+	bool ret = true;
+	const uint8_t normal = 0;
+	const uint8_t abnormal = 1;
+
+	if ( abnormal == value )
+	{
+		state = true;
+	}
+	else if ( normal == value )
+	{
+		state = false;
+	}
+	else
+	{
+		debug_print_warnning("value = %d", value);
+		ret = false;
+	}
+	
+	return ret;
+}
+
+/*****************************************************************************
  函 数 名: cfg_robot_data.set_cliff_state
  功能描述  : 设置悬崖传感器状态信息
  输入参数: CLIFF_ID_ENUM id  
@@ -410,6 +549,7 @@ void cfg_robot_data::set_cliff_state(CLIFF_ID_ENUM id, const bool state)
 {
 	cliff_state_[id] = state;
 }
+
 /*****************************************************************************
  函 数 名: cfg_robot_data.get_cliff_state
  功能描述  : 获取悬崖传感器状态信息
@@ -426,6 +566,86 @@ void cfg_robot_data::set_cliff_state(CLIFF_ID_ENUM id, const bool state)
 void cfg_robot_data::get_cliff_state(CLIFF_ID_ENUM id, bool &state)
 {
 	state = cliff_state_[id];
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.convert_cliff_id
+ 功能描述  : 转换为悬崖传感器编号
+ 输入参数: uint8_t num        
+ 输出参数: CLIFF_ID_ENUM &id  
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::convert_cliff_id(uint8_t num, CLIFF_ID_ENUM &id)
+{
+	bool ret = true;
+	const uint8_t left_bumper = 0;
+	const uint8_t right_bumper = 2;
+	const uint8_t left_center_bumper = 1;
+	const uint8_t right_center_bumper = 3;
+	
+	if (left_bumper == num)
+	{
+		id = LEFT_CLIFF;
+	}
+	else if (left_center_bumper == num)
+	{
+		id = LEFT_CENTER_CLIFF;
+	}
+	else if (right_center_bumper == num)
+	{
+		id = RIGHT_CENTER_CLIFF;
+	}
+	else if (right_bumper == num)
+	{
+		id = RIGHT_CLIFF;
+	}
+	else
+	{
+		ret = false;
+	}
+	
+	return ret;
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.convert_cliff_state
+ 功能描述  : 转换悬崖传感器状态
+ 输入参数: uint8_t value  
+           bool &state  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::convert_cliff_state(uint8_t value, bool &state)
+{
+	bool ret = true;
+	const uint8_t normal = 0;
+	const uint8_t abnormal = 1;
+
+	if ( abnormal == value )
+	{
+		state = true;
+	}
+	else if ( normal == value )
+	{
+		state = false;
+	}
+	else
+	{
+		debug_print_warnning("value = %d", value);
+		ret = false;
+	}
+	
+	return ret;
 }
 
 /*****************************************************************************
@@ -461,7 +681,6 @@ void cfg_robot_data::get_battery_state(BATTERY_STRU &state)
 {
 	state = charge_state_;
 }
-
 
 /*****************************************************************************
  函 数 名: cfg_robot_data.set_ultrasonic_sensor_state

@@ -89,6 +89,8 @@ typedef enum BUMPER_ID
 typedef enum CLIFF_ID
 {
 	LEFT_CLIFF = 0,
+	LEFT_CENTER_CLIFF,
+	RIGHT_CENTER_CLIFF,
 	RIGHT_CLIFF,
 	CLIFF_SUM,
 }CLIFF_ID_ENUM;
@@ -181,12 +183,18 @@ public:
 
 	void set_bumper_state(BUMPER_ID_ENUM id, const bool state);
 	void get_bumper_state(BUMPER_ID_ENUM id, bool &state);
+	bool convert_bumper_id(uint8_t num, BUMPER_ID_ENUM &id);
+	bool convert_bumper_state(const uint8_t value, bool &state);
 
 	void set_wheel_drop_state(WHEEL_ID_ENUM id, const bool state);
 	void get_wheel_drop_state(WHEEL_ID_ENUM id, bool &state);
+	bool convert_wheel_drop_id(uint8_t num, WHEEL_ID_ENUM &id);
+	bool convert_wheel_drop_state(uint8_t value, bool &state);
 
 	void set_cliff_state(CLIFF_ID_ENUM id, const bool state);
 	void get_cliff_state(CLIFF_ID_ENUM id, bool &state);
+	bool convert_cliff_id(uint8_t num, CLIFF_ID_ENUM &id);
+	bool convert_cliff_state(uint8_t value, bool &state);
 	
 	void set_battery_state(const BATTERY_STRU state);
 	void get_battery_state(BATTERY_STRU &state);
