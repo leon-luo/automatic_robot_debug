@@ -3619,7 +3619,13 @@ void cfg_mobile_robot::bumper_sensor_respond_deal(void)
 *****************************************************************************/
 void cfg_mobile_robot::cliff_sensor_respond_deal(void)
 {
-
+	bool ret = true;
+	
+	ret = test_robot_is_ok();
+	if (false == ret )
+	{
+		return;
+	}
 }
 
 /*****************************************************************************
