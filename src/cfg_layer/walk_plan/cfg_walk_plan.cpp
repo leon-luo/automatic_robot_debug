@@ -83,7 +83,6 @@ cfg_walk_plan* cfg_walk_plan::get_instance(void)
 	}
 		
 	return p_instance_;
-
 }
 
 /*****************************************************************************
