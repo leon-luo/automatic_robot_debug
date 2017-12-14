@@ -196,7 +196,7 @@ class cfg_walk_plan
 	private:
 		static pthread_mutex_t mutex_;
 		static cfg_walk_plan* p_instance_;
-		static constexpr double local_erea_edge_length_ = 1.4;//1.6;2.0;//      //局域清扫边长(单位:m)
+		static constexpr double local_erea_edge_length_ = 2.0;//1.6;2.0;//      //局域清扫边长(单位:m)
 		
 		AREA_STRU map_frame_;
 		AREA_STRU district_;
