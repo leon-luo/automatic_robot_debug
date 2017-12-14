@@ -190,11 +190,13 @@ public:
 	void get_wheel_drop_state(WHEEL_ID_ENUM id, bool &state);
 	bool convert_wheel_drop_id(uint8_t num, WHEEL_ID_ENUM &id);
 	bool convert_wheel_drop_state(uint8_t value, bool &state);
+	bool test_wheel_sensor_is_normal(void);
 
 	void set_cliff_state(CLIFF_ID_ENUM id, const bool state);
 	void get_cliff_state(CLIFF_ID_ENUM id, bool &state);
 	bool convert_cliff_id(uint8_t num, CLIFF_ID_ENUM &id);
 	bool convert_cliff_state(uint8_t value, bool &state);
+	bool test_cliff_sensor_is_normal(void);
 	
 	void set_battery_state(const BATTERY_STRU state);
 	void get_battery_state(BATTERY_STRU &state);
@@ -207,7 +209,6 @@ public:
 
 	void set_version_info(const VERSION_STRU version);
 	void get_version_info(VERSION_STRU &version);
-
 
 	void set_linear_velocity(double value);
 	void get_linear_velocity(double &value);
@@ -224,6 +225,8 @@ public:
 	double get_curr_x_axis_coordinate(void);
 	double get_curr_y_axis_coordinate(void);
 	double get_curr_pos_angle(void);
+
+	bool test_robot_is_ok(void);
 	
 	static pthread_mutex_t mutex;
 	cfg_robot_data();

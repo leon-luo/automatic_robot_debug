@@ -533,6 +533,37 @@ bool cfg_robot_data::convert_wheel_drop_state(uint8_t value, bool &state)
 }
 
 /*****************************************************************************
+ 函 数 名: cfg_robot_data.test_wheel_sensor_is_normal
+ 功能描述  : 检测跌落传感器是否正常
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::test_wheel_sensor_is_normal(void)
+{
+	bool ret = true;
+	bool state = false;
+	uint8_t i = 0;
+	uint8_t sum = WHEEL_SUM;
+
+	for (i = 0; i < sum; ++i)
+	{
+		get_wheel_drop_state((WHEEL_ID_ENUM)i, state);
+		if ( true == state )
+		{
+			return false;
+		}
+	}
+
+	return ret;
+}
+
+/*****************************************************************************
  函 数 名: cfg_robot_data.set_cliff_state
  功能描述  : 设置悬崖传感器状态信息
  输入参数: CLIFF_ID_ENUM id  
@@ -645,6 +676,37 @@ bool cfg_robot_data::convert_cliff_state(uint8_t value, bool &state)
 		ret = false;
 	}
 	
+	return ret;
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.test_cliff_sensor_is_normal
+ 功能描述  : 检测悬崖传感器是否正常
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: bool 任何一个悬崖传感器检测到悬崖则返回真，否则返回假
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::test_cliff_sensor_is_normal(void)
+{
+	bool ret = true;
+	bool state = false;
+	uint8_t i = 0;
+	uint8_t sum = CLIFF_SUM;
+
+	for (i = 0; i < sum; ++i)
+	{
+		get_cliff_state((CLIFF_ID_ENUM)i, state);
+		if ( true == state )
+		{
+			return false;
+		}
+	}
+
 	return ret;
 }
 
@@ -974,6 +1036,31 @@ double cfg_robot_data::get_curr_pos_angle(void)
 {
 	return current_pos_.angle;
 }
+
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.test_robot_is_ok
+ 功能描述  : 检测机器人是否处于正常运行状态
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: bool 是返回真，否则返回假
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::test_robot_is_ok(void)
+{
+	bool ret = true;
+	ret = test_wheel_sensor_is_normal();
+	if (false == ret)
+	{
+		return false;
+	}
+
+	return ret;
+}
+
 
 /******************************************************************************
  * 内部函数声明

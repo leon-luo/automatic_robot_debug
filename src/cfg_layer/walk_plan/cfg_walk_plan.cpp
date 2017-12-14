@@ -183,7 +183,6 @@ bool cfg_walk_plan::test_local_move_is_enable(void)
 	return district_.enable;
 }
 
-
 /*****************************************************************************
  函 数 名: cfg_walk_plan.set_local_move_mode
  功能描述  : 设置局域行驶模式
