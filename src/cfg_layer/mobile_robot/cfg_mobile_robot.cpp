@@ -166,8 +166,6 @@ void cfg_mobile_robot::init ( void )
 	set_reference_data(ref_data);
 
 	cfg_modulate *p_modulate = cfg_modulate::get_instance();
-
-	register_msgs_callback();
 }
 
 /*****************************************************************************
@@ -681,6 +679,46 @@ void cfg_mobile_robot::get_last_action(ACTION_STATUS_ENUM &action)
 }
 
 /*****************************************************************************
+ 函 数 名: cfg_mobile_robot.save_running_status
+ 功能描述  : 保存运行状态数据
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void cfg_mobile_robot::save_running_status(void)
+{
+	ACTION_STATUS_ENUM action;
+
+	get_curr_action(action);
+	set_last_action(action);
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_mobile_robot.recover_running_status
+ 功能描述  : 恢复运行状态数据
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void cfg_mobile_robot::recover_running_status(void)
+{
+	ACTION_STATUS_ENUM action;
+
+	get_last_action(action);
+	set_curr_action(action);
+}
+
+/*****************************************************************************
  函 数 名: cfg_mobile_robot.set_reference_data
  功能描述  : 设置参照数据
  输入参数: const REFERENCE_DATA_STRU &data  
@@ -1191,39 +1229,6 @@ double cfg_mobile_robot::get_turnt_to_reference_deriction_angle(void)
 void cfg_mobile_robot::get_turnt_to_reference_deriction_action_type(ACTION_STATUS_ENUM &action)
 {
 	get_rotate_action_type(action);
-//	bool area_part_is_left = false;
-//	bool direction_is_forward = false;
-//	const ACTION_STATUS_ENUM clockwise = TURN_RIGHT_ANGLE_CLOCKWISE;
-//	const ACTION_STATUS_ENUM anticlockwise = TURN_RIGHT_ANGLE_ANTICLOCKWISE;
-//
-//	area_part_is_left = test_local_move_area_part_is_left();
-//	direction_is_forward = test_local_move_direction_is_forward();
-//	if(true == area_part_is_left)
-//	{
-//		if(true == direction_is_forward)
-//		{
-//			action = clockwise;
-//			debug_print_error("FST PART----true == direction_is_forward----action = TURN_RIGHT_ANGLE_CLOCKWISE;");
-//		}
-//		else
-//		{
-//			action = anticlockwise;
-//			debug_print_error("FST PART----false == direction_is_forward---action = TURN_RIGHT_ANGLE_ANTICLOCKWISE;");
-//		}
-//	}
-//	else
-//	{
-//		if(true == direction_is_forward)
-//		{
-//			action = anticlockwise;
-//			debug_print_error("SEC PART----true == direction_is_forward----action = TURN_RIGHT_ANGLE_ANTICLOCKWISE;");
-//		}
-//		else
-//		{
-//			action = clockwise;
-//			debug_print_error("SEC PART-----false == direction_is_forward---action = TURN_RIGHT_ANGLE_CLOCKWISE;");
-//		}
-//	}
 }
 
 /*****************************************************************************
@@ -1523,6 +1528,44 @@ void cfg_mobile_robot::update_wall_following_sensor_data (double value)
 }
 
 /*****************************************************************************
+ 函 数 名: cfg_mobile_robot.upate_cliff_state
+ 功能描述  : 更新悬崖传感器状态
+ 输入参数: uint8_t id     
+           uint8_t value  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void cfg_mobile_robot::upate_cliff_state(uint8_t id, uint8_t value)
+{
+	bool flag = false;
+	bool cliff_state = false;
+	CLIFF_ID_ENUM cliff_id;
+	
+	flag = convert_cliff_id(id, cliff_id);
+	if (false == flag)
+	{
+		debug_print_warnning("id = %d", id);
+		return;
+	}
+
+	flag = convert_cliff_state(value, cliff_state);
+	if (false == flag)
+	{
+		debug_print_warnning("value = %d", value);
+		return;
+	}
+
+	set_cliff_state(cliff_id, cliff_state);
+	
+	debug_print_info("cliff_id=%d, cliff_state=%d", cliff_id, cliff_state);
+}
+
+/*****************************************************************************
  函 数 名: cfg_mobile_robot.upate_bumper_state
  功能描述  : 更新碰撞传感器的状态
  输入参数: uint8_t id     
@@ -1538,21 +1581,22 @@ void cfg_mobile_robot::update_wall_following_sensor_data (double value)
 void cfg_mobile_robot::upate_bumper_state(uint8_t id, uint8_t value)
 {
 	bool ret = false;
-	bool state = false;
+	bool bumper_state = false;
 	BUMPER_ID_ENUM bumper_id;
 
 	ret = convert_bumper_id(id, bumper_id);
 	if ( false == ret )
 	{
+		debug_print_warnning("id = %d", id);
 		return;
 	}
 	
-	ret = convert_bumper_state(value, state);
+	ret = convert_bumper_state(value, bumper_state);
 	if ( false == ret )
 	{
+		debug_print_warnning("value = %d", value);
 		return;
 	}
-	//debug_print_warnning("id=%d, value=%d", id, value);
 
 	std::string name_str ("< INFO > the ");
 	std::string state_str ("unknow!");
@@ -1570,92 +1614,53 @@ void cfg_mobile_robot::upate_bumper_state(uint8_t id, uint8_t value)
 	}
 	name_str += "bumper ";
 
-	if (true == state)
+	if (true == bumper_state)
 	{
 		state_str = " pressed.";
 	}
-	else if (false == state)
+	else if (false == bumper_state)
 	{
 		state_str = " released.";
 	}
-	
 	std::cout<<name_str<<state_str<<std::endl;
 	
-	set_bumper_state(bumper_id, state);
+	set_bumper_state(bumper_id, bumper_state);
 }
 
 /*****************************************************************************
- 函 数 名: cfg_mobile_robot.convert_bumper_id
- 功能描述  : 根据值获取碰撞传感器序号ID
- 输入参数: const uint8_t value
- 输出参数: BUMPER_ID_ENUM &id
- 返 回 值: bool 正确执行返回真否则返回假
+ 函 数 名: cfg_mobile_robot.upate_wheel_drop_state
+ 功能描述  : 更新跌落传感器状态
+ 输入参数: uint8_t id     
+           uint8_t value  
+ 输出参数: 无
+ 返 回 值: void
  
  修改历史:
-  1.日     期: 2017年8月14日
+  1.日     期: 2017年12月14日
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-bool cfg_mobile_robot::convert_bumper_id(const uint8_t value, BUMPER_ID_ENUM &id)
+void cfg_mobile_robot::upate_wheel_drop_state(uint8_t id, uint8_t value)
 {
-	bool ret = true;
-	const uint8_t left_bumper = 0;
-	const uint8_t right_bumper = 2;
-	const uint8_t center_bumper = 1;
+	bool ret = false;
+	bool wheel_state = false;
+	WHEEL_ID_ENUM wheel_id;
 
-	if ( left_bumper == value )
+	ret = convert_wheel_drop_id(id, wheel_id);
+	if ( false == ret )
 	{
-		id = LEFT_BUMPER;
-	}
-	else if ( right_bumper == value )
-	{
-		id = RIGHT_BUMPER;
-	}
-	else if ( center_bumper == value )
-	{
-		id = CENTER_BUMPER;
-	}
-	else
-	{
-		ret = false;
-		debug_print_warnning("value = %d; id = %d", value, id);
+		debug_print_warnning("id = %d", id);
+		return;
 	}
 	
-	return ret;
-}
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.convert_bumper_state
- 功能描述  : 获取碰撞传感器的状态值
- 输入参数: const uint8_t value  
- 输出参数: bool state 真表示按下,假表示释放
- 返 回 值: bool 正确执行返回真否则返回假
- 
- 修改历史:
-  1.日     期: 2017年8月14日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-bool cfg_mobile_robot::convert_bumper_state(const uint8_t value, bool &state)
-{
-	bool ret = true;
-	const uint8_t pressed = 1;
-	const uint8_t released = 0;
-
-	if ( pressed == value )
-	{
-		state = true;
-	}
-	else if ( released == value )
-	{
-		state = false;
-	}
-	else
+	ret = convert_wheel_drop_state(value, wheel_state);
+	if ( false == ret )
 	{
 		debug_print_warnning("value = %d", value);
-		ret = false;
+		return;
 	}
-	
-	return ret;
+
+	set_wheel_drop_state(wheel_id, wheel_state);
 }
 
 /*****************************************************************************
@@ -1721,8 +1726,8 @@ void cfg_mobile_robot::update_obstatcle_safety_level(void)
 }
 
 /*****************************************************************************
- 函 数 名: cfg_mobile_robot.detect_obstacle
- 功能描述  : 检测障碍物
+ 函 数 名: cfg_mobile_robot.sensors_deal
+ 功能描述  : 检测传感器处理
  输入参数: void  
  输出参数: 无
  返 回 值: void
@@ -1732,10 +1737,12 @@ void cfg_mobile_robot::update_obstatcle_safety_level(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_mobile_robot::detect_obstacle(void)
+void cfg_mobile_robot::sensors_deal(void)
 {
 	ultrasonic_sensor_respond_deal();
-	bumper_respond_deal();
+	bumper_sensor_respond_deal();
+	wheel_drop_sensor_respond_deal();
+	cliff_sensor_respond_deal();
 }
 
 /*****************************************************************************
@@ -3548,7 +3555,7 @@ void cfg_mobile_robot::set_monitor_angle_rotate_call_back(double angle, void(cfg
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_mobile_robot::bumper_respond_deal(void)
+void cfg_mobile_robot::bumper_sensor_respond_deal(void)
 {
 	bool left_state = false;
 	bool right_state = false;
@@ -3594,6 +3601,58 @@ void cfg_mobile_robot::bumper_respond_deal(void)
 		{
 			debug_print_warnning("【right】bump！");
 			monitor_angle_right_bumper_deal();
+		}
+	}
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_mobile_robot.cliff_sensor_respond_deal
+ 功能描述  : 悬崖传感器处理
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void cfg_mobile_robot::cliff_sensor_respond_deal(void)
+{
+
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_mobile_robot.wheel_drop_sensor_respond_deal
+ 功能描述  : 跌落传感器处理
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void cfg_mobile_robot::wheel_drop_sensor_respond_deal(void)
+{
+	bool curr_is_normal = true;
+	static bool last_is_normal = true;
+	
+	curr_is_normal = test_wheel_sensor_is_normal();
+	if ( false == curr_is_normal )
+	{
+		if ( true == last_is_normal )
+		{
+			save_running_status();
+			stop();
+		}
+	}
+	else
+	{
+		if ( false == last_is_normal )
+		{
+			recover_running_status();
 		}
 	}
 }
@@ -3676,9 +3735,6 @@ void cfg_mobile_robot::functional_mode ( void )
 			break;
 		case AUTO_DOCK:
 			auto_dock();
-			break;
-		case LOCAL_AREA:
-			//local_cover_movement();
 			break;
 		default:
 			//stop();
@@ -3837,13 +3893,12 @@ void cfg_mobile_robot::print_curr_pose_angle(void)
 *****************************************************************************/
 void cfg_mobile_robot::change_curr_action(const ACTION_STATUS_ENUM action)
 {
-	ACTION_STATUS_STRU status;
-		
-	get_action_status ( status);
-	if ( action != status.curr_action)
+	ACTION_STATUS_ENUM curr_action;
+	
+	get_curr_action(curr_action);
+	if ( action != curr_action)
 	{
-		status.curr_action = action;
-		set_action_status ( status);
+		set_curr_action ( action);
 	}
 }
 
@@ -5108,8 +5163,7 @@ void cfg_mobile_robot::timer_callback(const ros::TimerEvent& event)
 	POSE_STRU pos;
 	ACTION_STATUS_STRU status;
 	get_action_status ( status );
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->get_current_position(pos);
+	get_current_position(pos);
 	//debug_print_info("robot current postion :-------------------------------------{(%lf, %lf) : %lf}", pos.point.x, pos.point.y, pos.angle);
 	MONITOR_ENUM stage;
 	get_monitor_angle_stage(stage);
@@ -5142,7 +5196,7 @@ void cfg_mobile_robot::retreat_callback(const ros::TimerEvent& event)
 		n++;
 		if (n > 80)
 		{
-			debug_print_fatal();
+			debug_print_fatal("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 			monitor_angle_left_bumper_deal();
 			n = 0;
 		}
@@ -5151,101 +5205,6 @@ void cfg_mobile_robot::retreat_callback(const ros::TimerEvent& event)
 	{
 		n = 0;
 	}
-}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.register_msgs_callback
- 功能描述  : 注册消息处理相关回调函数
- 输入参数: void
- 输出参数: 无
- 返 回 值: void
-
- 修改历史:
-  1.日     期: 2017年8月2日
-    作     者: Leon
-    修改内容: 新生成函数
-firefly@firefly:~$ rostopic list
-/capability_server/bonds
-/capability_server/events
-/cmd_vel_mux/active
-/cmd_vel_mux/input/navi
-/cmd_vel_mux/input/safety_controller
-/cmd_vel_mux/input/switch
-/cmd_vel_mux/input/teleop
-/cmd_vel_mux/parameter_descriptions
-/cmd_vel_mux/parameter_updates
-/diagnostics
-/diagnostics_agg
-/diagnostics_toplevel_state
-/gateway/force_update
-/gateway/gateway_info
-/info
-/interactions/interactive_clients
-/interactions/pairing
-/joint_states
-/mobile_base/commands/controller_info
-/mobile_base/commands/digital_output
-/mobile_base/commands/external_power
-/mobile_base/commands/led1
-/mobile_base/commands/led2
-/mobile_base/commands/motor_power
-/mobile_base/commands/reset_odometry
-/mobile_base/commands/sound
-/mobile_base/commands/velocity
-/mobile_base/controller_info
-/mobile_base/debug/raw_control_command
-/mobile_base/debug/raw_data_command
-/mobile_base/debug/raw_data_stream
-/mobile_base/events/bumper
-/mobile_base/events/button
-/mobile_base/events/cliff
-/mobile_base/events/digital_input
-/mobile_base/events/power_system
-/mobile_base/events/robot_state
-/mobile_base/events/wheel_drop
-/mobile_base/sensors/bumper_pointcloud
-/mobile_base/sensors/core
-/mobile_base/sensors/dock_ir
-/mobile_base/sensors/dock_us
-/mobile_base/sensors/edge_ir
-/mobile_base/sensors/imu_data
-/mobile_base/sensors/imu_data_raw
-/mobile_base/version_info
-/mobile_base_nodelet_manager/bond
-/odom
-/rosout
-/rosout_agg
-/scan
-/tf
-/tf_static
-/trajectory
-/turtlebot/incompatible_rapp_list
-/turtlebot/rapp_list
-/turtlebot/status
-/zeroconf/lost_connections
-/zeroconf/new_connections
-
-*****************************************************************************/
-void cfg_mobile_robot::register_msgs_callback ( void )
-{
-	ros::NodeHandle node_h;
-	//发布
-	pub_cmvl_ = node_h.advertise<geometry_msgs::Twist> ( "/mobile_base/commands/velocity", 10 );
-	pub_path_ = node_h.advertise<nav_msgs::Path>("trajectory", 1, true);
-
-	//订阅
-	position_sub_ = node_h.subscribe ( "/odom", 10, &cfg_mobile_robot::odometry_callback, p_instance_);
-	cliff_sub_ = node_h.subscribe ( "/mobile_base/events/cliff", 10, &cfg_mobile_robot::cliff_event_callback, p_instance_);
-	bumper_sub_ = node_h.subscribe ( "/mobile_base/events/bumper", 10, &cfg_mobile_robot::bumper_evnet_callback, p_instance_);
-	wheel_drop_sub_ = node_h.subscribe ( "/mobile_base/events/wheel_drop", 10, &cfg_mobile_robot::wheel_drop_event_callback, p_instance_);
-	velocity_sub_ = node_h.subscribe ( "/mobile_base/commands/velocity", 100, &cfg_mobile_robot::velocity_callback, p_instance_);
-	ultrasonic_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/dock_us", 100, &cfg_mobile_robot::ultrasonic_sensor_callback, p_instance_);
-	wall_following_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/edge_ir", 100, &cfg_mobile_robot::wall_following_sensor_callback, p_instance_);
-	laser_scan_sub_ = node_h.subscribe ( "/scan", 100, &cfg_mobile_robot::laser_scan_callback, p_instance_);
-
-	
-	ros::Timer timer = node_h.createTimer(ros::Duration(2), &cfg_mobile_robot::timer_callback, p_instance_);
-	ros::Timer retreat_timer = node_h.createTimer(ros::Duration(0.01), &cfg_mobile_robot::retreat_callback, p_instance_);
 }
 
 /*****************************************************************************
@@ -5275,29 +5234,10 @@ void cfg_mobile_robot::odometry_callback ( const nav_msgs::Odometry::ConstPtr& m
 	pos.point.y = msg->pose.pose.position.y;
 	pos.angle = yaw;
 	
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->save_current_positions (pos.point.x, pos.point.y, pos.angle);
-	p_instance->set_odometry_updated(true);
-//	POSE_STRU data;
-//	data.point.x = pos.point.x;
-//	data.point.y = pos.point.y;
-//	data.angle = pos.angle;
-//	p_instance->updata_district_area(data);
-
-	static int i = 0;
-	if (i>200)
-	{
-		i = 0;
-		//p_instance->get_current_position(pos);
-		//ANGLE_MONITOR_STRU data;
-		//p_instance->get_monitor_angle_data(data);
-		//debug_print_info("{(x=%lf, y=%lf; curr theta=%lf) goal data.angle=%lf}",pos.x, pos.y, pos.theta,data.angle);
-	}
-	else
-	{
-		i++;
-	}
+	save_current_positions (pos.point.x, pos.point.y, pos.angle);
+	set_odometry_updated(true);
 }
+
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.cliff_event_callback
  功能描述  : 悬崖传感器检测回调
@@ -5334,7 +5274,10 @@ void cfg_mobile_robot::cliff_event_callback ( const kobuki_msgs::CliffEvent& msg
 	# distance to floor when cliff was detected
 	uint16 bottom
 	*/
-	debug_print_source_line();
+	uint8_t cliff_id = msg.sensor;
+	uint8_t cliff_state = msg.state;
+
+	upate_cliff_state(cliff_id, cliff_state);
 }
 
 /*****************************************************************************
@@ -5372,8 +5315,7 @@ void cfg_mobile_robot::bumper_evnet_callback ( const kobuki_msgs::BumperEvent& m
 	uint8_t bumper_id = msg.bumper;
 	uint8_t state = msg.state;
 
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->upate_bumper_state(bumper_id, state);
+	upate_bumper_state(bumper_id, state);
 }
 
 /*****************************************************************************
@@ -5409,26 +5351,11 @@ void cfg_mobile_robot::wheel_drop_event_callback ( const kobuki_msgs::WheelDropE
 	uint8_t state
 	*/
 	uint8_t wheel_id = msg.wheel;
-	uint8_t state = msg.state;
-	const uint8_t left_wheel = msg.LEFT;
-	const uint8_t right_wheel = msg.RIGHT;
-	const uint8_t raise = msg.RAISED;
-	const uint8_t dropped = msg.DROPPED;
+	uint8_t wheel_state = msg.state;
 
-	if ( ( wheel_id == left_wheel ) || ( wheel_id == right_wheel ) )
-	{
-		cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-		if ( state == raise )
-		{
-			p_instance->stop();
-		}
-		else if ( state == dropped )
-		{
-			p_instance->go_forward();
-		}
-	}
-	debug_print_info("wheel_id=%d, state=%d", wheel_id, state);
+	upate_wheel_drop_state(wheel_id, wheel_state);
 }
+
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.ultrasonic_sensor_callback
  功能描述  : 超声波传感器回调函数
@@ -5444,8 +5371,8 @@ void cfg_mobile_robot::wheel_drop_event_callback ( const kobuki_msgs::WheelDropE
 void cfg_mobile_robot::ultrasonic_sensor_callback ( const std_msgs::Int16& msg )
 {
 	double value = ( double ) msg.data;
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->update_ultrasonic_sensor_data (value);
+
+	update_ultrasonic_sensor_data (value);
 }
 
 /*****************************************************************************
@@ -5463,8 +5390,8 @@ void cfg_mobile_robot::ultrasonic_sensor_callback ( const std_msgs::Int16& msg )
 void cfg_mobile_robot::wall_following_sensor_callback ( const std_msgs::Int16& msg )
 {
 	double value = ( double ) msg.data;
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->update_wall_following_sensor_data (value);
+
+	update_wall_following_sensor_data (value);
 }
 
 /*****************************************************************************
@@ -5563,6 +5490,127 @@ void cfg_mobile_robot::velocity_callback ( const geometry_msgs::Twist& msg )
 	{
 		i++;
 	}
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_mobile_robot.register_msgs_callback
+ 功能描述  : 注册消息处理相关回调函数
+ 输入参数: void
+ 输出参数: 无
+ 返 回 值: void
+
+ 修改历史:
+  1.日     期: 2017年8月2日
+    作     者: Leon
+    修改内容: 新生成函数
+firefly@firefly:~$ rostopic list
+/capability_server/bonds
+/capability_server/events
+/cmd_vel_mux/active
+/cmd_vel_mux/input/navi
+/cmd_vel_mux/input/safety_controller
+/cmd_vel_mux/input/switch
+/cmd_vel_mux/input/teleop
+/cmd_vel_mux/parameter_descriptions
+/cmd_vel_mux/parameter_updates
+/diagnostics
+/diagnostics_agg
+/diagnostics_toplevel_state
+/gateway/force_update
+/gateway/gateway_info
+/info
+/interactions/interactive_clients
+/interactions/pairing
+/joint_states
+/mobile_base/commands/controller_info
+/mobile_base/commands/digital_output
+/mobile_base/commands/external_power
+/mobile_base/commands/led1
+/mobile_base/commands/led2
+/mobile_base/commands/motor_power
+/mobile_base/commands/reset_odometry
+/mobile_base/commands/sound
+/mobile_base/commands/velocity
+/mobile_base/controller_info
+/mobile_base/debug/raw_control_command
+/mobile_base/debug/raw_data_command
+/mobile_base/debug/raw_data_stream
+/mobile_base/events/bumper
+/mobile_base/events/button
+/mobile_base/events/cliff
+/mobile_base/events/digital_input
+/mobile_base/events/power_system
+/mobile_base/events/robot_state
+/mobile_base/events/wheel_drop
+/mobile_base/sensors/bumper_pointcloud
+/mobile_base/sensors/core
+/mobile_base/sensors/dock_ir
+/mobile_base/sensors/dock_us
+/mobile_base/sensors/edge_ir
+/mobile_base/sensors/imu_data
+/mobile_base/sensors/imu_data_raw
+/mobile_base/version_info
+/mobile_base_nodelet_manager/bond
+/odom
+/rosout
+/rosout_agg
+/scan
+/tf
+/tf_static
+/trajectory
+/turtlebot/incompatible_rapp_list
+/turtlebot/rapp_list
+/turtlebot/status
+/zeroconf/lost_connections
+/zeroconf/new_connections
+
+*****************************************************************************/
+void cfg_mobile_robot::register_msgs_callback ( void )
+{
+	ros::NodeHandle node_h;
+	//发布
+	pub_cmvl_ = node_h.advertise<geometry_msgs::Twist> ( "/mobile_base/commands/velocity", 10 );
+	pub_path_ = node_h.advertise<nav_msgs::Path>("trajectory", 1, true);
+
+	//订阅
+	position_sub_ = node_h.subscribe ( "/odom", 10, &cfg_mobile_robot::odometry_callback, p_instance_);
+	cliff_sub_ = node_h.subscribe ( "/mobile_base/events/cliff", 10, &cfg_mobile_robot::cliff_event_callback, p_instance_);
+	bumper_sub_ = node_h.subscribe ( "/mobile_base/events/bumper", 10, &cfg_mobile_robot::bumper_evnet_callback, p_instance_);
+	wheel_drop_sub_ = node_h.subscribe ( "/mobile_base/events/wheel_drop", 10, &cfg_mobile_robot::wheel_drop_event_callback, p_instance_);
+	velocity_sub_ = node_h.subscribe ( "/mobile_base/commands/velocity", 100, &cfg_mobile_robot::velocity_callback, p_instance_);
+	ultrasonic_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/dock_us", 100, &cfg_mobile_robot::ultrasonic_sensor_callback, p_instance_);
+	wall_following_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/edge_ir", 100, &cfg_mobile_robot::wall_following_sensor_callback, p_instance_);
+	laser_scan_sub_ = node_h.subscribe ( "/scan", 100, &cfg_mobile_robot::laser_scan_callback, p_instance_);
+
+	//定时器
+	timer_ = node_h.createTimer(ros::Duration(2), &cfg_mobile_robot::timer_callback, p_instance_);
+	retreat_timer_ = node_h.createTimer(ros::Duration(0.01), &cfg_mobile_robot::retreat_callback, p_instance_);
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_mobile_robot.function_processor
+ 功能描述  : 移动机器人功能处理机
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void cfg_mobile_robot::function_processor ( void )
+{
+	functional_mode();
+	
+	sensors_deal();
+	
+	monitor_angle_running();
+	monitor_angle_respond();
+
+	local_cover_movement();
+
+	show_trajectory();
 }
 
 /******************************************************************************

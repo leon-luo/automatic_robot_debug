@@ -81,23 +81,13 @@
 int main(int argc, char** argv)
 {
 	ros::init ( argc, argv, "cleaner_robot" );
-	ros::NodeHandle node_h;
 	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	
+	p_instance->register_msgs_callback();
+
 	while ( ros::ok() )
 	{
-		p_instance->functional_mode();
-		
-		p_instance->detect_obstacle();
-		
-		p_instance->monitor_angle_running();
-		p_instance->monitor_angle_respond();
-
-		p_instance->local_cover_movement();
-
-		p_instance->show_trajectory();
-
-		ros::spinOnce();                                  //调用后还可以继续执行之后的程序
+		p_instance->function_processor();
+		ros::spinOnce();
 	}
 	
 	ROS_WARN ( "[%s():%d:]After while(ros::ok())", __FUNCTION__, __LINE__);

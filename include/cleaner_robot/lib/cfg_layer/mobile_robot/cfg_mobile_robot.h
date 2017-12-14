@@ -205,6 +205,9 @@ public:
 	
 	void set_last_action(ACTION_STATUS_ENUM action);
 	void get_last_action(ACTION_STATUS_ENUM &action);
+
+	void save_running_status(void);
+	void recover_running_status(void);
 	
 	void set_reference_data(const REFERENCE_DATA_STRU &data);
 	void get_reference_data(REFERENCE_DATA_STRU &data);
@@ -243,13 +246,13 @@ public:
 	void update_goal_positions(void);
 	void update_ultrasonic_sensor_data (double value);
 	void update_wall_following_sensor_data (double value);
-	
+
+	void upate_cliff_state(uint8_t id, uint8_t value);
 	void upate_bumper_state(uint8_t id, uint8_t value);
-	bool convert_bumper_id(const uint8_t value, BUMPER_ID_ENUM &id);
-	bool convert_bumper_state(const uint8_t value, bool &state);
+	void upate_wheel_drop_state(uint8_t id, uint8_t value);
 
 	void update_obstatcle_safety_level(void);
-	void detect_obstacle(void);
+	void sensors_deal(void);
 
 	double format_angle(double angle);
 	double convert_degrees_to_radians(double degrees);
@@ -336,7 +339,9 @@ public:
 	void set_monitor_angle_rotate_call_back(double angle, void(cfg_mobile_robot::*pf_call_back)(void));
 	
 
-	void bumper_respond_deal(void);
+	void bumper_sensor_respond_deal(void);
+	void cliff_sensor_respond_deal(void);
+	void wheel_drop_sensor_respond_deal(void);
 	void ultrasonic_sensor_respond_deal(void);
 
 	void functional_mode(void);
@@ -408,6 +413,7 @@ public:
 	void velocity_callback( const geometry_msgs::Twist& msg );
 
 	void register_msgs_callback(void);
+	void function_processor( void );
 
 	inline double angle_wrap(double angle)
 	{
@@ -459,6 +465,9 @@ private:
 	ros::Subscriber ultrasonic_sensor_sub_;
 	ros::Subscriber wall_following_sensor_sub_;
 	ros::Subscriber laser_scan_sub_;
+
+	ros::Timer timer_;
+	ros::Timer retreat_timer_;
 	
 	ACTION_STATUS_STRU action_;                                    //当前运动状态
 	REFERENCE_DATA_STRU ref_data_;
