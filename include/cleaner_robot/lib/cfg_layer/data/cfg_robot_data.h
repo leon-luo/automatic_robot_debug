@@ -113,12 +113,6 @@ typedef struct BATTERY
 	CHARGE_STATE_ENUM charge;                                //(充电状态)
 }BATTERY_STRU;
 
-//版本相关信息
-typedef struct VERSION
-{
-	int hardware[8];                                         //前后各四个字段
-	int firmware[8];                                         //前后各四个字段
-}VERSION_STRU;
 
 //超生波传感器信息
 typedef struct ULTRASONIC_SENSOR
@@ -161,7 +155,7 @@ typedef struct TWIST
 class cfg_robot_data
 {
 public:
-	static cfg_robot_data* get_instance();
+	static cfg_robot_data* get_instance(void);
 
 	void set_odometry_updated(bool flag);
 	bool get_odometry_updated(void);
@@ -207,9 +201,6 @@ public:
 	void set_wall_following_sensor_state(const WALL_FOLLOWING_SENSOR_STRU state);
 	void get_wall_following_sensor_state(WALL_FOLLOWING_SENSOR_STRU &state);
 
-	void set_version_info(const VERSION_STRU version);
-	void get_version_info(VERSION_STRU &version);
-
 	void set_linear_velocity(double value);
 	void get_linear_velocity(double &value);
 
@@ -254,8 +245,6 @@ private:
 	BATTERY_STRU charge_state_;                                //充电状态
 	ULTRASONIC_SENSOR_STRU ultrasonic_sensor_;                 //超声波传感器状态
 	WALL_FOLLOWING_SENSOR_STRU wall_following_sensor_;         //沿墙传感器状态
-
-	VERSION_STRU version_;                                     //版本信息
 
 	double linear_velocity_;                                   //当前的线速度
 	double angular_velocity_;                                  //当前的角速度

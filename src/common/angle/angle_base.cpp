@@ -59,6 +59,100 @@
  * 内部函数声明
  ******************************************************************************/
 /*****************************************************************************
+ 函 数 名: angel_base.angel_base
+ 功能描述  : 构造函数
+ 输入参数  : 无
+ 输出参数: 无
+ 返 回 值: angel_base
+ 
+ 修改历史:
+  1.日     期: 2017年12月15日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+angel_base::angel_base()
+{
+
+}
+
+/*****************************************************************************
+ 函 数 名: angel_base.~angel_base
+ 功能描述  : 析构函数
+ 输入参数  : 无
+ 输出参数: 无
+ 返 回 值: angel_base
+ 
+ 修改历史:
+  1.日     期: 2017年12月15日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+angel_base::~angel_base()
+{
+
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_mobile_robot.convert_degrees_to_radians
+ 功能描述  : 角度转化为弧度
+ 输入参数: double degrees  
+ 输出参数: 无
+ 返 回 值: double
+ 
+ 修改历史:
+  1.日     期: 2017年12月15日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+double angel_base::convert_degrees_to_radians(double degrees)
+{
+	double radians = (M_PI/180.0)*degrees;
+	return radians;
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_mobile_robot.convert_radians_to_degrees
+ 功能描述  : 弧度转化为角度
+ 输入参数: double radians  
+ 输出参数: 无
+ 返 回 值: double
+ 
+ 修改历史:
+  1.日     期: 2017年12月15日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+double angel_base::convert_radians_to_degrees(double radians)
+{
+	double degrees = (180.0/M_PI)*radians;
+	return degrees;
+}
+
+/*****************************************************************************
+ 函 数 名: angel_base.format_angle
+ 功能描述  : 格式化角度在合理的范围
+ 输入参数: double angle  
+ 输出参数: 无
+ 返 回 值: double
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+double angel_base::format_angle(double angle)
+{
+	//把角度规划到-180至180之间
+	const double pi_angle = 180.0;
+	if (angle > pi_angle)
+		angle = angle - 2*pi_angle;
+	else if (angle < (-1.0*pi_angle))
+		angle = angle + 2*pi_angle;
+	
+	return angle;
+}
+
+/*****************************************************************************
  函 数 名: angel_base.get_angle
  功能描述  : 获取原点到点的角度
  输入参数: double x  
@@ -73,7 +167,13 @@
 *****************************************************************************/
 double angel_base::get_angle(double x, double y)
 {
-
+	double angle = 0.0;
+	double radian = 0.0;
+	
+	radian = atan2(y, x);
+	angle = 180.0/(M_PI/radian);                             //用弧度算出角度
+	
+	return angle;
 }
 
 /*****************************************************************************
@@ -157,31 +257,6 @@ QUADRANT_ENUM angel_base::get_quadrant(double angle)
 	}
 	
 	return quadrant;
-}
-
-
-/*****************************************************************************
- 函 数 名: angel_base.format_angle
- 功能描述  : 格式化角度在合理的范围
- 输入参数: double angle  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年12月14日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-double angel_base::format_angle(double angle)
-{
-	//把角度规划到-180至180之间
-	const double pi_angle = 180.0;
-	if (angle > pi_angle)
-		angle = angle - 2*pi_angle;
-	else if (angle < (-1.0*pi_angle))
-		angle = angle + 2*pi_angle;
-	
-	return angle;
 }
 
 /*****************************************************************************
@@ -278,7 +353,7 @@ double angel_base::get_right_angle_anticlockwise(double angle)
  函 数 名: angel_base.get_right_angle
  功能描述  : 获取指定角度的垂直角度
  输入参数: double angle                        
-           ROTATIONAL_MOVEMENT_ENUM direction  
+           ROTATE_DIRECTION_ENUM direction  
  输出参数: 无
  返 回 值: double
  
@@ -287,7 +362,7 @@ double angel_base::get_right_angle_anticlockwise(double angle)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double angel_base::get_right_angle(double angle, ROTATIONAL_MOVEMENT_ENUM direction)
+double angel_base::get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction)
 {
 	double ret = 0.0;
 	
@@ -301,6 +376,53 @@ double angel_base::get_right_angle(double angle, ROTATIONAL_MOVEMENT_ENUM direct
 	}
 	
 	return ret;
+}
+
+/*****************************************************************************
+ 函 数 名: angel_base.get_angle_differences
+ 功能描述  : 获取连个方向的夹角（锐角）
+ 输入参数: double angle1  
+           double angle2  
+ 输出参数: 无
+ 返 回 值: double
+ 
+ 修改历史:
+  1.日     期: 2017年12月14日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+double angel_base::get_angle_differences(double angle1, double angle2)
+{
+	double temp = 0.0;
+	double offset = 0.0;
+
+	temp = angle1*angle2;
+	if (temp > 0.0)
+	{
+		offset = fabs(angle1 - angle2);
+		//debug_print_info("offset = fabs(angle1=%lf - angle2=%lf) = %lf", angle1, angle2, offset);
+	}
+	else
+	{
+		temp = fabs(angle1) + fabs(angle2);
+		if (temp < 180.0)
+		{
+			offset = temp;
+			//debug_print_info("angle1=%lf; angle2=%lf; offset = temp = %lf", angle1, angle2, offset);
+		}
+		else if ((180.0 <= temp) && (temp <= 360.0))
+		{
+			offset = 360.0 - temp;
+			//debug_print_fatal("angle1=%lf; angle2=%lf; offset = 360.0 - temp(%lf) = %lf", angle1, angle2, temp, offset);
+		}
+		else if(temp > 360.0)
+		{
+			offset = fmod( temp, 360.0 );
+			//debug_print_warnning("angle1=%lf; angle2=%lf; offset = fmod( temp(%lf), 360.0 ) = %lf", angle1, angle2, temp, offset);
+		}
+	}
+	
+	return offset;
 }
 
 /*****************************************************************************
@@ -574,50 +696,5 @@ bool angel_base::test_angle_rotate_direction_is_clockwise(double start, double t
 	return flag;
 }
 
-/*****************************************************************************
- 函 数 名: angel_base.get_angle_differences
- 功能描述  : 获取连个方向的夹角（锐角）
- 输入参数: double angle1  
-           double angle2  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年12月14日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-double angel_base::get_angle_differences(double angle1, double angle2)
-{
-	double temp = 0.0;
-	double offset = 0.0;
 
-	temp = angle1*angle2;
-	if (temp > 0.0)
-	{
-		offset = fabs(angle1 - angle2);
-		//debug_print_info("offset = fabs(angle1=%lf - angle2=%lf) = %lf", angle1, angle2, offset);
-	}
-	else
-	{
-		temp = fabs(angle1) + fabs(angle2);
-		if (temp < 180.0)
-		{
-			offset = temp;
-			//debug_print_info("angle1=%lf; angle2=%lf; offset = temp = %lf", angle1, angle2, offset);
-		}
-		else if ((180.0 <= temp) && (temp <= 360.0))
-		{
-			offset = 360.0 - temp;
-			//debug_print_fatal("angle1=%lf; angle2=%lf; offset = 360.0 - temp(%lf) = %lf", angle1, angle2, temp, offset);
-		}
-		else if(temp > 360.0)
-		{
-			offset = fmod( temp, 360.0 );
-			//debug_print_warnning("angle1=%lf; angle2=%lf; offset = fmod( temp(%lf), 360.0 ) = %lf", angle1, angle2, temp, offset);
-		}
-	}
-	
-	return offset;
-}
 

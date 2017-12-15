@@ -54,6 +54,8 @@
 #include "math.h"
 
 #include "base_type.h"
+#include "version.h"
+
 
 #include "debug_function.h"
 #include "cfg_walk_plan.h"
@@ -905,17 +907,17 @@ bool cfg_mobile_robot::get_reference_data_inversion(void)
  功能描述  : 获取当前旋转方向
  输入参数: void  
  输出参数: 无
- 返 回 值: ROTATIONAL_MOVEMENT_ENUM
+ 返 回 值: ROTATE_DIRECTION_ENUM
  
  修改历史:
   1.日     期: 2017年11月22日
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-ROTATIONAL_MOVEMENT_ENUM cfg_mobile_robot::get_curr_rotate_direction(void)
+ROTATE_DIRECTION_ENUM cfg_mobile_robot::get_curr_rotate_direction(void)
 {
 	ACTION_STATUS_ENUM action;
-	ROTATIONAL_MOVEMENT_ENUM rotate;
+	ROTATE_DIRECTION_ENUM rotate;
 	
 	get_curr_action(action);
 	switch ( action )
@@ -1033,7 +1035,6 @@ void cfg_mobile_robot::get_rotate_action_type(ACTION_STATUS_ENUM &action)
 	}
 }
 
-
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.get_driving_direction_right_angle
  功能描述  : 获取相对与运行方向的垂直角度
@@ -1052,7 +1053,7 @@ double cfg_mobile_robot::get_driving_direction_right_angle(void)
 	double right_angle = 0.0;
 	bool area_part_is_left = false;
 	bool direction_is_forward = false;
-	ROTATIONAL_MOVEMENT_ENUM direction;
+	ROTATE_DIRECTION_ENUM direction;
 
 	area_part_is_left = test_local_move_area_part_is_left();
 	direction_is_forward = test_local_move_direction_is_forward();
@@ -1817,7 +1818,7 @@ double cfg_mobile_robot::get_right_angle_anticlockwise(double angle)
  函 数 名: cfg_mobile_robot.get_right_angle
  功能描述  : 获取指定角度的垂直角度
  输入参数: double angle                        
-           ROTATIONAL_MOVEMENT_ENUM direction  
+           ROTATE_DIRECTION_ENUM direction  
  输出参数: 无
  返 回 值: double
  
@@ -1826,7 +1827,7 @@ double cfg_mobile_robot::get_right_angle_anticlockwise(double angle)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::get_right_angle(double angle, ROTATIONAL_MOVEMENT_ENUM direction)
+double cfg_mobile_robot::get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction)
 {
 	double ret = 0.0;
 	
@@ -1913,7 +1914,7 @@ double cfg_mobile_robot::get_curr_pose_reverse_angle(void)
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.get_curr_pose_right_angle
  功能描述  : 获取当前角度的偏移一个直角的角度
- 输入参数: ROTATIONAL_MOVEMENT_ENUM direction  
+ 输入参数: ROTATE_DIRECTION_ENUM direction  
  输出参数: 无
  返 回 值: double
  
@@ -1922,7 +1923,7 @@ double cfg_mobile_robot::get_curr_pose_reverse_angle(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::get_curr_pose_right_angle(ROTATIONAL_MOVEMENT_ENUM direction)
+double cfg_mobile_robot::get_curr_pose_right_angle(ROTATE_DIRECTION_ENUM direction)
 {
 	double angle = 0.0;
 	double ret = 0.0;
@@ -2189,7 +2190,7 @@ bool cfg_mobile_robot::test_angle_is_over(double current, double target, double 
 {
 	double diff = 0.0;
 	bool over_flag = false;
-	ROTATIONAL_MOVEMENT_ENUM rotate_dir;
+	ROTATE_DIRECTION_ENUM rotate_dir;
 	
 	diff = get_angle_differences(current, target);
 	

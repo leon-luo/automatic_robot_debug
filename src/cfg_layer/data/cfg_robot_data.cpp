@@ -94,7 +94,7 @@ cfg_robot_data::cfg_robot_data()
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-cfg_robot_data* cfg_robot_data::get_instance()
+cfg_robot_data* cfg_robot_data::get_instance(void)
 {
 	if (p_instance_ == NULL)
 	{
@@ -810,40 +810,6 @@ void cfg_robot_data::set_wall_following_sensor_state(const WALL_FOLLOWING_SENSOR
 void cfg_robot_data::get_wall_following_sensor_state(WALL_FOLLOWING_SENSOR_STRU &state)
 {
 	state = wall_following_sensor_;
-}
-
-/*****************************************************************************
- 函 数 名: cfg_robot_data.set_version_info
- 功能描述  : 设置版本信息
- 输入参数: const VERSION_STRU version  
- 输出参数: 无
- 返 回 值: void
- 
- 修改历史:
-  1.日     期: 2017年8月2日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-void cfg_robot_data::set_version_info(const VERSION_STRU version)
-{
-	version_ = version;
-}
-
-/*****************************************************************************
- 函 数 名: cfg_robot_data.get_version_info
- 功能描述  : 获取版本信息
- 输入参数: VERSION_STRU &version  
- 输出参数: 无
- 返 回 值: void
- 
- 修改历史:
-  1.日     期: 2017年8月2日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-void cfg_robot_data::get_version_info(VERSION_STRU &version)
-{
-	version = version_;
 }
 
 /*****************************************************************************

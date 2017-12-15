@@ -82,6 +82,7 @@ int main(int argc, char** argv)
 {
 	ros::init ( argc, argv, "cleaner_robot" );
 	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
+	p_instance->print_version();
 	p_instance->register_msgs_callback();
 
 	while ( ros::ok() )

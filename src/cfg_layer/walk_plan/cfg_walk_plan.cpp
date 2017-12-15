@@ -103,7 +103,6 @@ cfg_walk_plan::cfg_walk_plan()
 	district.max_x = 4;
 	district.max_y = 4;
 	district.precision = 0.1;
-	debug_print_info("district.max_x = %lf, district.max_y = %lf", district.max_x, district.max_y);
 	set_district_area(district);
 
 	disable_local_move();

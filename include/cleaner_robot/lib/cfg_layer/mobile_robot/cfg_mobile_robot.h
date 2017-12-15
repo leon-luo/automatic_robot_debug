@@ -51,6 +51,8 @@
 #include <kobuki_msgs/BumperEvent.h>
 #include <kobuki_msgs/WheelDropEvent.h>
 
+#include "version.h"
+
 #include "cfg_robot_data.h"
 #include "cfg_walk_plan.h"
 #include "cfg_modulate.h"
@@ -111,11 +113,11 @@ typedef enum MONITOR
 	MONITOR_RESPOND,
 }MONITOR_ENUM;
 
-typedef enum ROTATIONAL_MOVEMENT
+typedef enum ROTATE_DIRECTION
 {
 	CLOCKWISE = 0,
 	ANTICLOCKWISE,
-}ROTATIONAL_MOVEMENT_ENUM;
+}ROTATE_DIRECTION_ENUM;
 	
 typedef void (*PF_FUNC)(void);//定义一个函数指针类型 
 
@@ -167,7 +169,7 @@ typedef struct REFERENCE_DATA
  ******************************************************************************/
 
 //移动机器人状态数据类 
-class cfg_mobile_robot : public cfg_robot_data, public cfg_walk_plan, public cfg_modulate
+class cfg_mobile_robot : public cfg_robot_data, public cfg_walk_plan, public cfg_modulate, public version
 {
 public:
 	static cfg_mobile_robot* get_instance();
@@ -223,7 +225,7 @@ public:
 	void set_reference_data_inversion(bool data);
 	bool get_reference_data_inversion(void);
 
-	ROTATIONAL_MOVEMENT_ENUM get_curr_rotate_direction(void);
+	ROTATE_DIRECTION_ENUM get_curr_rotate_direction(void);
 
 	bool set_traight_line_moving(void);
 	bool test_is_traight_line_moving(void);
@@ -265,11 +267,11 @@ public:
 	
 	double get_right_angle_clockwise(double angle);
 	double get_right_angle_anticlockwise(double angle);
-	double get_right_angle(double angle, ROTATIONAL_MOVEMENT_ENUM direction);
+	double get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction);
 	double get_reverse_angle(double angle);
 	double get_curr_pose_angle(void);
 	double get_curr_pose_reverse_angle(void);
-	double get_curr_pose_right_angle(ROTATIONAL_MOVEMENT_ENUM direction);
+	double get_curr_pose_right_angle(ROTATE_DIRECTION_ENUM direction);
 
 	bool test_angle_is_over_clockwise(double current, double target);
 	bool test_angle_is_over_anticlockwise(double current, double target);
