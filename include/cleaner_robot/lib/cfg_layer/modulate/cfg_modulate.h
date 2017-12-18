@@ -114,9 +114,6 @@ public:
 
 	void disable_linear_velocity_ajust(void);
 	void endble_linear_velocity_ajust(double velocity);
-	
-	bool ajust_angular_velocity(double real, double target, double &velocity);
-	void update_velocity(POSE_STRU curr, POSE_STRU ref, POSE_STRU target);
 
 	double get_distance(double x1, double y1, double x2, double y2);
 
