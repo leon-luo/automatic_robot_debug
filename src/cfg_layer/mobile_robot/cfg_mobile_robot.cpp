@@ -1113,12 +1113,12 @@ void cfg_mobile_robot::get_turn_back_action_type(ACTION_STATUS_ENUM &action)
 		if(true == direction_is_forward)
 		{
 			action = TURN_BACK_ANTICLOCKWISE;
-			debug_print_info(" area_part_is_left: action = TURN_BACK_ANTICLOCKWISE;");
+			//debug_print_info(" area_part_is_left: action = TURN_BACK_ANTICLOCKWISE;");
 		}
 		else
 		{
 			action = TURN_BACK_CLOCKWISE;
-			debug_print_info(" area_part_is_left: action = TURN_BACK_CLOCKWISE;");
+			//debug_print_info(" area_part_is_left: action = TURN_BACK_CLOCKWISE;");
 		}
 	}
 	else
@@ -1126,12 +1126,12 @@ void cfg_mobile_robot::get_turn_back_action_type(ACTION_STATUS_ENUM &action)
 		if(true == direction_is_forward)
 		{
 			action = TURN_BACK_CLOCKWISE;
-			debug_print_info(" area_part_is_right: action = TURN_BACK_CLOCKWISE;");
+			//debug_print_info(" area_part_is_right: action = TURN_BACK_CLOCKWISE;");
 		}
 		else
 		{
 			action = TURN_BACK_ANTICLOCKWISE;
-			debug_print_info(" area_part_is_right: action = TURN_BACK_ANTICLOCKWISE;");
+			//debug_print_info(" area_part_is_right: action = TURN_BACK_ANTICLOCKWISE;");
 		}
 	}
 }
@@ -1211,7 +1211,7 @@ double cfg_mobile_robot::get_turnt_to_reference_deriction_angle(void)
 	{
 		get_reference_data_forward_angle(angle);
 	}
-	debug_print_warnning("-------direction_is_forward=%d; angle=%lf", direction_is_forward, angle);
+
 	return angle;
 }
 
@@ -1268,7 +1268,7 @@ void cfg_mobile_robot::save_first_line_refer_direction(void)
 		set_reference_data(ref_data);
 		
 		std::cout<<std::endl;
-		debug_print_warnning("current pos.angle=%lf; forward=%lf; reverse =%lf",pos.angle, forward, reverse);
+		debug_print_info("current pos.angle=%lf; forward=%lf; reverse =%lf",pos.angle, forward, reverse);
 		updata_district_area(pos);
 		std::cout<<std::endl;
 	}
@@ -1747,125 +1747,6 @@ void cfg_mobile_robot::sensors_deal(void)
 }
 
 /*****************************************************************************
- 函 数 名: cfg_mobile_robot.change_angle
- 功能描述  : 改变角度
- 输入参数: double angle         
-           double change_value  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年10月24日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-//double cfg_mobile_robot::change_angle(double angle, double change_value)
-//{
-//	double temp = 0.0;
-//	double ret = 0.0;
-//	
-//	temp = angle + change_value;
-//	ret = format_angle(temp);
-//	
-//	return ret;
-//}
-
-///*****************************************************************************
-// 函 数 名: cfg_mobile_robot.get_right_angle_clockwise
-// 功能描述  : 获取顺时针旋转一个直角的角度
-// 输入参数: double angle  
-// 输出参数: 无
-// 返 回 值: double
-// 
-// 修改历史:
-//  1.日     期: 2017年10月24日
-//    作     者: Leon
-//    修改内容: 新生成函数
-//*****************************************************************************/
-//double cfg_mobile_robot::get_right_angle_clockwise(double angle)
-//{
-//	double ret = 0.0;
-//	const double change_value = 90.0;
-//	
-//	ret = change_angle(angle, change_value);
-//	
-//	return ret;
-//}
-//
-///*****************************************************************************
-// 函 数 名: cfg_mobile_robot.get_right_angle_anticlockwise
-// 功能描述  : 获取逆时针旋转一个直角的角度
-// 输入参数: double angle  
-// 输出参数: 无
-// 返 回 值: double
-// 
-// 修改历史:
-//  1.日     期: 2017年10月24日
-//    作     者: Leon
-//    修改内容: 新生成函数
-//*****************************************************************************/
-//double cfg_mobile_robot::get_right_angle_anticlockwise(double angle)
-//{
-//	double ret = 0.0;
-//	const double change_value = -90.0;
-//	
-//	ret = change_angle(angle, change_value);
-//	
-//	return ret;
-//}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.get_right_angle
- 功能描述  : 获取指定角度的垂直角度
- 输入参数: double angle                        
-           ROTATE_DIRECTION_ENUM direction  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年10月27日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-//double cfg_mobile_robot::get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction)
-//{
-//	double ret = 0.0;
-//	
-//	if ( CLOCKWISE == direction )
-//	{
-//		ret = get_right_angle_clockwise(angle);
-//	}
-//	else if( ANTICLOCKWISE == direction )
-//	{
-//		ret = get_right_angle_anticlockwise(angle);
-//	}
-//	
-//	return ret;
-//}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.get_reverse_angle
- 功能描述  : 获取反向角度
- 输入参数: double angle  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年9月4日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-//double cfg_mobile_robot::get_reverse_angle(double angle)
-//{
-//	double ret = 0.0;
-//	const double change_value = 180.0;
-//		
-//	ret = change_angle(angle, change_value);
-//		
-//	return ret;
-//}
-
-/*****************************************************************************
  函 数 名: cfg_mobile_robot.get_curr_pose_angle
  功能描述  : 获取当前角度
  输入参数: void  
@@ -1942,186 +1823,6 @@ double cfg_mobile_robot::get_curr_pose_right_angle(ROTATE_DIRECTION_ENUM directi
 
 	return ret;
 }
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.test_angle_is_over_clockwise
- 功能描述  : 设置顺时针旋转方向角度是否已经超过目标角度
- 输入参数: double current  
-           double target   
- 输出参数: 无
- 返 回 值: bool
- 
- 修改历史:
-  1.日     期: 2017年11月27日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-//bool cfg_mobile_robot::test_angle_is_over_clockwise(double current, double target)
-//{
-//	double temp = 0.0;
-//	bool over_flag = false;
-//	QUADRANT_ENUM curr_quadrant;
-//	QUADRANT_ENUM target_quadrant;
-//
-//	curr_quadrant = get_quadrant(current);
-//	target_quadrant = get_quadrant(target);
-//	if ((current >= 0.0) && (target >= 0.0))
-//	{
-//		if (current < target)
-//		{
-//			over_flag = true;
-//		}
-//	}
-//	else if ((current < 0.0) && (target < 0.0))
-//	{
-//		if (current < target)
-//		{
-//			over_flag = true;
-//		}
-//	}
-//	else
-//	{
-//		temp = fabs(current) + fabs(target);
-//		
-//		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-//		{
-//			over_flag = false;
-//		}
-//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-//		{
-//			over_flag = true;
-//		}
-//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-//		{
-//			over_flag = false;
-//		}
-//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-//		{
-//			over_flag = true;
-//		}
-//		
-//		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-//		{
-//			if ( temp > 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-//		{
-//			if ( temp < 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-//		{
-//			if ( temp > 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-//		{
-//			if ( temp < 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//	}
-//
-//	return over_flag;
-//}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.test_angle_is_over_anticlockwise
- 功能描述  :  设置逆时针旋转方向角度是否已经超过目标角度
- 输入参数: double current  
-           double target   
- 输出参数: 无
- 返 回 值: bool
- 
- 修改历史:
-  1.日     期: 2017年11月27日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-//bool cfg_mobile_robot::test_angle_is_over_anticlockwise(double current, double target)
-//{
-//	double temp = 0.0;
-//	bool over_flag = false;
-//	QUADRANT_ENUM curr_quadrant;
-//	QUADRANT_ENUM target_quadrant;
-//
-//	curr_quadrant = get_quadrant(current);
-//	target_quadrant = get_quadrant(target);
-//	if ((current >= 0.0) && (target >= 0.0))
-//	{
-//		if (current > target)
-//		{
-//			over_flag = true;
-//		}
-//	}
-//	else if ((current < 0.0) && (target < 0.0))
-//	{
-//		if (current > target)
-//		{
-//			over_flag = true;
-//		}
-//	}
-//	else
-//	{
-//		temp = fabs(current) + fabs(target);
-//		
-//		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-//		{
-//			over_flag = true;
-//		}
-//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-//		{
-//			over_flag = false;
-//		}
-//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-//		{
-//			over_flag = true;
-//		}
-//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-//		{
-//			over_flag = false;
-//		}
-//		
-//		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-//		{
-//			if ( temp < 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-//		{
-//			if ( temp > 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-//		{
-//			if ( temp < 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-//		{
-//			if ( temp > 180.0 ) 
-//			{
-//				over_flag = true;
-//			}
-//		}
-//	}
-//	
-//	return over_flag;
-//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.test_rotate_is_over_clockwise
@@ -2245,16 +1946,10 @@ double cfg_mobile_robot::get_curr_angle_difference_respond(void)
 	double current = 0.0;
 	double target = 0.0;
 	bool over_flag = false;
-//	static double pre_angle = 0.0;
 	
 	current = get_curr_pose_angle();
 	target = get_monitor_angle_respond_goal();
 	over_flag = test_angle_is_over(current, target, diff);
-//	if ( pre_angle != current )
-//	{
-//		pre_angle = current;
-//		debug_print_info("current=%lf, target=%lf, diff=%lf, over_flag=%d", current, target, diff, over_flag);
-//	}
 	
 	return diff;
 }
@@ -4851,7 +4546,6 @@ void cfg_mobile_robot::local_move_fst_half_area(void)
 	double vertical_dimension = 0.0;
 	POSE_STRU curr_pos;
 	POSE_STRU original_pose;
-	//static double pre_distance = 0.0;
 	
 	flag = test_is_traight_line_moving();
 	if (true == flag)
@@ -4863,11 +4557,6 @@ void cfg_mobile_robot::local_move_fst_half_area(void)
 		
 		distance = get_distance_to_traight_line_moving_start_pos();
 		length = get_local_move_edge_length();
-		//if (pre_distance != distance)
-		//{
-		//	pre_distance = distance;
-			//debug_print_info("#######fst########length = %lf  distance = %lf", length, distance);
-		//}
 
 		half_length = length/2;
 		vertical_dimension = get_vertical_dimension_curr_pos_to_refer_line();
@@ -4880,9 +4569,7 @@ void cfg_mobile_robot::local_move_fst_half_area(void)
 		{
 			if (true == half_done_flag)
 			{
-				debug_print_warnning("LOCAL_MOVE_FST_HALF_DONE：half_length = %lf  vertical_dimension = %lf", half_length, vertical_dimension);
 				set_local_move_state(LOCAL_MOVE_FST_HALF_DONE);
-				//disable_linear_velocity_ajust();
 				return;
 			}
 			change_rotate_direction();
@@ -4894,9 +4581,7 @@ void cfg_mobile_robot::local_move_fst_half_area(void)
 			{
 				if (true == half_done_flag)
 				{
-					debug_print_warnning("LOCAL_MOVE_FST_HALF_DONE：half_length = %lf  vertical_dimension = %lf", half_length, vertical_dimension);
 					set_local_move_state(LOCAL_MOVE_FST_HALF_DONE);
-					//disable_linear_velocity_ajust();
 					return;
 				}
 				change_rotate_direction();
@@ -4932,7 +4617,6 @@ void cfg_mobile_robot::local_move_sec_half_area(void)
 	POSE_STRU curr_pos;
 	POSE_STRU original_pose;
 	ACTION_STATUS_ENUM curr_action;
-	//static double pre_distance = 0.0;
 	
 	flag = test_is_traight_line_moving();
 	if (true == flag)
@@ -4946,20 +4630,12 @@ void cfg_mobile_robot::local_move_sec_half_area(void)
 
 		distance = get_distance_to_traight_line_moving_start_pos();
 		length = get_local_move_edge_length();
-		
-		//if (pre_distance != distance)
-		//{
-		//	pre_distance = distance;
-			//debug_print_info("#####sec##########length = %lf  distance = %lf", length, distance);
-		//}
-
 		if (distance >= length)
 		{
 			half_length = length/2;
 			vertical_dimension = get_vertical_dimension_curr_pos_to_refer_line();
 			if (vertical_dimension > half_length)
 			{
-				debug_print_warnning("LOCAL_MOVE_SEC_HALF_DONE：half_length = %lf  vertical_dimension = %lf", half_length, vertical_dimension);
 				set_local_move_state(LOCAL_MOVE_TURN_TO_CENTER_DIR);
 				return;
 			}

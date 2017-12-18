@@ -472,12 +472,12 @@ void cfg_walk_plan::switch_local_move_direction(void)
 	if (FORWARD == data)
 	{
 		data = BACKWARD;
-		debug_print_info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<set_local_move_direction(BACKWARD)");
+		//debug_print_info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<set_local_move_direction(BACKWARD)");
 	}
 	else
 	{
 		data = FORWARD;
-		debug_print_info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>set_local_move_direction(FORWARD)");
+		//debug_print_info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>set_local_move_direction(FORWARD)");
 	}
 	set_local_move_direction(data);
 }
@@ -857,20 +857,20 @@ void cfg_walk_plan::updata_district_area(const POSE_STRU &data)
 					//debug_print_warnning("pose[%d].point=(%lf, %lf)", i, pose[i].point.x, pose[i].point.y);
 					set_local_move_planning_pose(pose[i], i); 
 				}
-				debug_print_warnning("pose[%d].point=(%lf, %lf)   pose[%d].point=(%lf, %lf)", 1, pose[1].point.x, pose[1].point.y, 0, pose[0].point.x, pose[0].point.y);
-				debug_print_warnning("pose[%d].point=(%lf, %lf)   pose[%d].point=(%lf, %lf)", 2, pose[2].point.x, pose[2].point.y, 3, pose[3].point.x, pose[3].point.y);
+				//debug_print_warnning("pose[%d].point=(%lf, %lf)   pose[%d].point=(%lf, %lf)", 1, pose[1].point.x, pose[1].point.y, 0, pose[0].point.x, pose[0].point.y);
+				//debug_print_warnning("pose[%d].point=(%lf, %lf)   pose[%d].point=(%lf, %lf)", 2, pose[2].point.x, pose[2].point.y, 3, pose[3].point.x, pose[3].point.y);
 				hypotenuse = length;                      //三角形斜边
 				opposite = hypotenuse*sin((M_PI/180.0)*data.angle);    //三角形对边
 				adjacent = hypotenuse*cos((M_PI/180.0)*data.angle);    //三角形邻边
-				debug_print_warnning("hypotenuse=%lf; opposite=%lf; adjacent=%lf;", hypotenuse, opposite, adjacent);
+				//debug_print_warnning("hypotenuse=%lf; opposite=%lf; adjacent=%lf;", hypotenuse, opposite, adjacent);
 				start.point.x = x0 - adjacent;
 				start.point.y = y0 - opposite;
 				start.angle = data.angle;
 				end.point.x = x0 + adjacent;
 				end.point.y = y0 + opposite;
 				end.angle = data.angle;
-				debug_print_warnning("start.point = {(%lf, %lf) : %lf}", start.point.x, start.point.y, start.angle);
-				debug_print_warnning("end.point   = {(%lf, %lf) : %lf}", end.point.x, end.point.y, end.angle);
+				//debug_print_warnning("start.point = {(%lf, %lf) : %lf}", start.point.x, start.point.y, start.angle);
+				//debug_print_warnning("end.point   = {(%lf, %lf) : %lf}", end.point.x, end.point.y, end.angle);
 				set_refer_line_start_point_pose(start);
 				set_refer_line_end_point_pose(end);
 
