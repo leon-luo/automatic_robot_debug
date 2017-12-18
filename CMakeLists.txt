@@ -251,14 +251,25 @@ include_directories(
 	src/common/version
 )
 
-add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp 
+include_directories(
+	src/business_logic_layer/rotate
+	src/business_logic_layer/straight_line_moving
+)
+
+add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp
+
 								src/cfg_layer/mobile_robot/cfg_mobile_robot.cpp
 								src/cfg_layer/data/cfg_robot_data.cpp
 								src/cfg_layer/walk_plan/cfg_walk_plan.cpp
 								src/cfg_layer/modulate/cfg_modulate.cpp
+								
 								src/common/algorithm/pid/pid.cpp
 								src/common/angle/angle_base.cpp
-								src/common/version/version.cpp)
+								src/common/version/version.cpp
+								
+								src/business_logic_layer/rotate/bll_rotate.cpp
+								src/business_logic_layer/straight_line_moving/bll_traight_line_moving.cpp
+)
 
 
 target_link_libraries(${PROJECT_NAME}
