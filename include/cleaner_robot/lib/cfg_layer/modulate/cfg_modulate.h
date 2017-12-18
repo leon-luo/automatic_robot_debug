@@ -115,14 +115,9 @@ public:
 	void disable_linear_velocity_ajust(void);
 	void endble_linear_velocity_ajust(double velocity);
 	
-	//double get_angle_differences(double angle1, double angle2);
-	//QUADRANT_ENUM get_quadrant(double angle);
-	//bool test_angle_rotate_direction_is_clockwise(double start, double target);
-	
 	bool ajust_angular_velocity(double real, double target, double &velocity);
 	void update_velocity(POSE_STRU curr, POSE_STRU ref, POSE_STRU target);
 
-	//double get_angle(double x1, double y1, double x2, double y2);
 	double get_distance(double x1, double y1, double x2, double y2);
 
 	void set_traight_line_moving_flag(const bool flag);

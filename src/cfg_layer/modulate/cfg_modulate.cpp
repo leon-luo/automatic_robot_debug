@@ -414,181 +414,7 @@ void cfg_modulate::endble_linear_velocity_ajust(double velocity)
 {
 	set_linear_velocity_ajust(true, velocity);
 }
-#if 0
-/*****************************************************************************
- 函 数 名: cfg_modulate.get_angle_differences
- 功能描述  : 获取连个方向的夹角（锐角）
- 输入参数: double angle1  
-           double angle2  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年11月21日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-double cfg_modulate::get_angle_differences(double angle1, double angle2)
-{
-	double temp = 0.0;
-	double offset = 0.0;
 
-	temp = angle1*angle2;
-	if (temp > 0.0)
-	{
-		offset = fabs(angle1 - angle2);
-		//debug_print_info("offset = fabs(angle1=%lf - angle2=%lf) = %lf", angle1, angle2, offset);
-	}
-	else
-	{
-		temp = fabs(angle1) + fabs(angle2);
-		if (temp < 180.0)
-		{
-			offset = temp;
-			//debug_print_info("angle1=%lf; angle2=%lf; offset = temp = %lf", angle1, angle2, offset);
-		}
-		else if ((180.0 <= temp) && (temp <= 360.0))
-		{
-			offset = 360.0 - temp;
-			//debug_print_fatal("angle1=%lf; angle2=%lf; offset = 360.0 - temp(%lf) = %lf", angle1, angle2, temp, offset);
-		}
-		else if(temp > 360.0)
-		{
-			offset = fmod( temp, 360.0 );
-			//debug_print_warnning("angle1=%lf; angle2=%lf; offset = fmod( temp(%lf), 360.0 ) = %lf", angle1, angle2, temp, offset);
-		}
-	}
-	
-	return offset;
-}
-
-/*****************************************************************************
- 函 数 名: cfg_modulate.get_quadrant
- 功能描述  : 获取角度所在的象限
- 输入参数: double angle  
- 输出参数: 无
- 返 回 值: QUADRANT_ENUM
- 
- 修改历史:
-  1.日     期: 2017年11月21日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-QUADRANT_ENUM cfg_modulate::get_quadrant(double angle)
-{
-	QUADRANT_ENUM quadrant;
-	
-	if ((0.0 <= angle) && (angle <= 90.0))
-	{
-		quadrant = QUADRANT_1;
-	}
-	else if ((90.0 < angle) && (angle <= 180.0))
-	{
-		quadrant = QUADRANT_2;
-	}
-	else if ((-90.0 <= angle) && (angle < 0.0))
-	{
-		quadrant = QUADRANT_4;
-	}
-	else if ((-180.0 < angle) && (angle < -90.0))
-	{
-		quadrant = QUADRANT_3;
-	}
-	
-	return quadrant;
-}
-
-/*****************************************************************************
- 函 数 名: cfg_modulate.test_angle_rotate_direction_is_clockwise
- 功能描述  : 测试靠近目标角度是否为顺时针旋转最近
- 输入参数: double start   
-           double target  
- 输出参数: 无
- 返 回 值: bool
- 
- 修改历史:
-  1.日     期: 2017年11月21日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-bool cfg_modulate::test_angle_rotate_direction_is_clockwise(double start, double target)
-{
-	bool flag = false;
-	bool temp = 0.0;
-	QUADRANT_ENUM start_quadrant;
-	QUADRANT_ENUM target_quadrant;
-
-	if ((start >= 0.0) && (target >= 0.0))
-	{
-		if (start > target)
-		{
-			flag = true;
-		}
-	}
-	else if ((start < 0.0) && (target < 0.0))
-	{
-		if (start > target)
-		{
-			flag = true;
-		}
-	}
-	else
-	{
-		start_quadrant = get_quadrant(start);
-		target_quadrant = get_quadrant(target);
-		if ((QUADRANT_1 == start_quadrant) && (QUADRANT_4 == target_quadrant))
-		{
-			flag = true;
-		}
-		else if ((QUADRANT_4 == start_quadrant) && (QUADRANT_1 == target_quadrant))
-		{
-			flag = false;
-		}
-		else if ((QUADRANT_3 == start_quadrant) && (QUADRANT_2 == target_quadrant))
-		{
-			flag = true;
-		}
-		else if ((QUADRANT_2 == start_quadrant) && (QUADRANT_3 == target_quadrant))
-		{
-			flag = false;
-		}
-		else if ((QUADRANT_1 == start_quadrant) && (QUADRANT_3 == target_quadrant))
-		{
-			temp = fabs(start) + fabs(target);
-			if (180.0 > temp)
-			{
-				flag = true;
-			}
-		}
-		else if ((QUADRANT_3 == start_quadrant) && (QUADRANT_1 == target_quadrant))
-		{
-			temp = fabs(start) + fabs(target);
-			if (180.0 < temp)
-			{
-				flag = true;
-			}
-		}
-		else if ((QUADRANT_2 == start_quadrant) && (QUADRANT_4 == target_quadrant))
-		{
-			temp = fabs(start) + fabs(target);
-			if (180.0 > temp)
-			{
-				flag = true;
-			}
-		}
-		else if ((QUADRANT_4 == start_quadrant) && (QUADRANT_2 == target_quadrant))
-		{
-			temp = fabs(start) + fabs(target);
-			if (180.0 < temp)
-			{
-				flag = true;
-			}
-		}
-	}
-
-	return flag;
-}
-#endif
 /*****************************************************************************
  函 数 名: cfg_modulate.ajust_angular_velocity
  功能描述  : 调节角速度
@@ -627,19 +453,10 @@ bool cfg_modulate::ajust_angular_velocity(double real, double target, double &ve
 
 	offset = get_angle_differences(real, target);
 	
-	//PID_STRU pid;
-	//angular_velocity_pid_.get_pid(pid);
-	//rad = angular_velocity_pid_.pid_calc(pid, offset);
-
-	//angular_velocity_pid_.print_pid_data();
-
-	//printf("rad=%lf\n", rad);
-	
 	bool is_clockwise = test_angle_rotate_direction_is_clockwise(real, target);
 	if (true == is_clockwise)
 	{
 		rotate_trend = -rotate_trend;
-		//std::cout<<"effect="<<effect<<std::endl;
 	}
 
 	if (0.5 < offset)
@@ -716,53 +533,6 @@ void cfg_modulate::update_velocity(POSE_STRU curr, POSE_STRU ref, POSE_STRU targ
 		//endble_angular_velocity_ajust(rad);
 	//}
 }
-
-/*****************************************************************************
- 函 数 名: cfg_modulate.get_angle
- 功能描述  : 获取点（x1,y1）指向点（x2,y2）的角度
- 输入参数: double x1  
-           double y1  
-           double x2  
-           double y2  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年11月9日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-//double cfg_modulate::get_angle(double x1, double y1, double x2, double y2)
-//{
-//	double x = 0.0;
-//	double y = 0.0;
-//	double angle = 0.0;
-//	double radian = 0.0;
-//	
-//	x = x2 - x1;
-//	y = y2 - y1;
-//#if 0
-//	double temp = 0.0;
-//	double hypotenuse = 0.0;
-//	hypotenuse = sqrt(pow(x, 2) + pow(y, 2));            //斜边长度
-//	temp = x/hypotenuse;
-//	radian = acos(temp);                                 //求出弧度
-//	if (y<0)
-//	{
-//		angle = -angle;
-//	}
-//	else if ((y == 0) && (x < 0))
-//	{
-//		angle = 180.0;
-//	}
-//#else
-//	//atan2（y，x）求的是y/x的反正切，其返回值为[-π, +π]之间的一个数。
-//	radian = atan2(y, x);
-//	angle = 180.0/(M_PI/radian);                             //用弧度算出角度
-//
-//#endif /* #if 0 */
-//	return angle;
-//}
 
 /*****************************************************************************
  函 数 名: cfg_modulate.get_distance

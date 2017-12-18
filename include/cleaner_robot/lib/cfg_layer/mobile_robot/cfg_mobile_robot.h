@@ -255,26 +255,12 @@ public:
 
 	void update_obstatcle_safety_level(void);
 	void sensors_deal(void);
-
-	//double format_angle(double angle);
-	//double convert_degrees_to_radians(double degrees);
-	//double convert_radians_to_degrees(double radians);
-	//double convert_to_acute_angle(double angle);
 	
 	bool test_differences(double value, double reference, double precision);
 	
-	//double change_angle(double angle, double change_value);
-	
-	//double get_right_angle_clockwise(double angle);
-	//double get_right_angle_anticlockwise(double angle);
-	//double get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction);
-	//double get_reverse_angle(double angle);
 	double get_curr_pose_angle(void);
 	double get_curr_pose_reverse_angle(void);
 	double get_curr_pose_right_angle(ROTATE_DIRECTION_ENUM direction);
-
-	//bool test_angle_is_over_clockwise(double current, double target);
-	//bool test_angle_is_over_anticlockwise(double current, double target);
 	
 	bool test_rotate_is_over_clockwise(void);
 	bool test_rotate_is_over_anticlockwise(void);
