@@ -1294,7 +1294,7 @@ void cfg_mobile_robot::save_current_positions (double x, double y, double theta)
 	double real_yaw = theta;
 	double real_degree = 0.0;
 
-	real_degree = rad_to_degree(real_yaw);
+	real_degree = convert_radians_to_degrees(real_yaw);
 	pos.point.x = x;
 	pos.point.y = y;
 	pos.angle = real_degree;
@@ -1313,17 +1313,17 @@ void cfg_mobile_robot::save_current_positions (double x, double y, double theta)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::format_angle(double angle)
-{
-	//把角度规划到-180至180之间
-	const double pi_angle = 180.0;
-	if (angle > pi_angle)
-		angle = angle - 2*pi_angle;
-	else if (angle < (-1.0*pi_angle))
-		angle = angle + 2*pi_angle;
-	
-	return angle;
-}
+//double cfg_mobile_robot::format_angle(double angle)
+//{
+//	//把角度规划到-180至180之间
+//	const double pi_angle = 180.0;
+//	if (angle > pi_angle)
+//		angle = angle - 2*pi_angle;
+//	else if (angle < (-1.0*pi_angle))
+//		angle = angle + 2*pi_angle;
+//	
+//	return angle;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.convert_degrees_to_radians
@@ -1337,29 +1337,29 @@ double cfg_mobile_robot::format_angle(double angle)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::convert_degrees_to_radians(double degrees)
-{
-	double radians = (M_PI/180.0)*degrees;
-	return radians;
-}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.convert_radians_to_degrees
- 功能描述  : 弧度转化为角度
- 输入参数: double radians  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年11月17日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-double cfg_mobile_robot::convert_radians_to_degrees(double radians)
-{
-	double degrees = (180.0/M_PI)*radians;
-	return degrees;
-}
+//double cfg_mobile_robot::convert_degrees_to_radians(double degrees)
+//{
+//	double radians = (M_PI/180.0)*degrees;
+//	return radians;
+//}
+//
+///*****************************************************************************
+// 函 数 名: cfg_mobile_robot.convert_radians_to_degrees
+// 功能描述  : 弧度转化为角度
+// 输入参数: double radians  
+// 输出参数: 无
+// 返 回 值: double
+// 
+// 修改历史:
+//  1.日     期: 2017年11月17日
+//    作     者: Leon
+//    修改内容: 新生成函数
+//*****************************************************************************/
+//double cfg_mobile_robot::convert_radians_to_degrees(double radians)
+//{
+//	double degrees = (180.0/M_PI)*radians;
+//	return degrees;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.convert_to_acute_angle
@@ -1373,36 +1373,36 @@ double cfg_mobile_robot::convert_radians_to_degrees(double radians)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::convert_to_acute_angle(double angle)
-{
-	double ret = 0.0;
-	double temp = 0.0;
-	
-	temp = fabs(angle);
-	temp = fmod(angle, 360.0);
-	if (temp <= 90.0)
-	{
-		ret = temp;
-	}
-	else if ((90.0 < temp) && (temp <= 180.0))
-	{
-		ret = 180.0 - temp;
-	}
-	else if ((180.0 < temp) && (temp <= 270.0))
-	{
-		ret = temp - 180.0;
-	}
-	else if ((270.0 < temp) && (temp <= 360.0))
-	{
-		ret = temp - 270.0;
-	}
-	else if(temp > 360.0)
-	{
-		ret = fmod( temp, 360.0 );
-	}
-	
-	return ret;
-}
+//double cfg_mobile_robot::convert_to_acute_angle(double angle)
+//{
+//	double ret = 0.0;
+//	double temp = 0.0;
+//	
+//	temp = fabs(angle);
+//	temp = fmod(angle, 360.0);
+//	if (temp <= 90.0)
+//	{
+//		ret = temp;
+//	}
+//	else if ((90.0 < temp) && (temp <= 180.0))
+//	{
+//		ret = 180.0 - temp;
+//	}
+//	else if ((180.0 < temp) && (temp <= 270.0))
+//	{
+//		ret = temp - 180.0;
+//	}
+//	else if ((270.0 < temp) && (temp <= 360.0))
+//	{
+//		ret = temp - 270.0;
+//	}
+//	else if(temp > 360.0)
+//	{
+//		ret = fmod( temp, 360.0 );
+//	}
+//	
+//	return ret;
+//}
 
 
 /*****************************************************************************
@@ -1759,60 +1759,60 @@ void cfg_mobile_robot::sensors_deal(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::change_angle(double angle, double change_value)
-{
-	double temp = 0.0;
-	double ret = 0.0;
-	
-	temp = angle + change_value;
-	ret = format_angle(temp);
-	
-	return ret;
-}
+//double cfg_mobile_robot::change_angle(double angle, double change_value)
+//{
+//	double temp = 0.0;
+//	double ret = 0.0;
+//	
+//	temp = angle + change_value;
+//	ret = format_angle(temp);
+//	
+//	return ret;
+//}
 
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.get_right_angle_clockwise
- 功能描述  : 获取顺时针旋转一个直角的角度
- 输入参数: double angle  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年10月24日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-double cfg_mobile_robot::get_right_angle_clockwise(double angle)
-{
-	double ret = 0.0;
-	const double change_value = 90.0;
-	
-	ret = change_angle(angle, change_value);
-	
-	return ret;
-}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.get_right_angle_anticlockwise
- 功能描述  : 获取逆时针旋转一个直角的角度
- 输入参数: double angle  
- 输出参数: 无
- 返 回 值: double
- 
- 修改历史:
-  1.日     期: 2017年10月24日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-double cfg_mobile_robot::get_right_angle_anticlockwise(double angle)
-{
-	double ret = 0.0;
-	const double change_value = -90.0;
-	
-	ret = change_angle(angle, change_value);
-	
-	return ret;
-}
+///*****************************************************************************
+// 函 数 名: cfg_mobile_robot.get_right_angle_clockwise
+// 功能描述  : 获取顺时针旋转一个直角的角度
+// 输入参数: double angle  
+// 输出参数: 无
+// 返 回 值: double
+// 
+// 修改历史:
+//  1.日     期: 2017年10月24日
+//    作     者: Leon
+//    修改内容: 新生成函数
+//*****************************************************************************/
+//double cfg_mobile_robot::get_right_angle_clockwise(double angle)
+//{
+//	double ret = 0.0;
+//	const double change_value = 90.0;
+//	
+//	ret = change_angle(angle, change_value);
+//	
+//	return ret;
+//}
+//
+///*****************************************************************************
+// 函 数 名: cfg_mobile_robot.get_right_angle_anticlockwise
+// 功能描述  : 获取逆时针旋转一个直角的角度
+// 输入参数: double angle  
+// 输出参数: 无
+// 返 回 值: double
+// 
+// 修改历史:
+//  1.日     期: 2017年10月24日
+//    作     者: Leon
+//    修改内容: 新生成函数
+//*****************************************************************************/
+//double cfg_mobile_robot::get_right_angle_anticlockwise(double angle)
+//{
+//	double ret = 0.0;
+//	const double change_value = -90.0;
+//	
+//	ret = change_angle(angle, change_value);
+//	
+//	return ret;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.get_right_angle
@@ -1827,21 +1827,21 @@ double cfg_mobile_robot::get_right_angle_anticlockwise(double angle)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction)
-{
-	double ret = 0.0;
-	
-	if ( CLOCKWISE == direction )
-	{
-		ret = get_right_angle_clockwise(angle);
-	}
-	else if( ANTICLOCKWISE == direction )
-	{
-		ret = get_right_angle_anticlockwise(angle);
-	}
-	
-	return ret;
-}
+//double cfg_mobile_robot::get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction)
+//{
+//	double ret = 0.0;
+//	
+//	if ( CLOCKWISE == direction )
+//	{
+//		ret = get_right_angle_clockwise(angle);
+//	}
+//	else if( ANTICLOCKWISE == direction )
+//	{
+//		ret = get_right_angle_anticlockwise(angle);
+//	}
+//	
+//	return ret;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.get_reverse_angle
@@ -1855,15 +1855,15 @@ double cfg_mobile_robot::get_right_angle(double angle, ROTATE_DIRECTION_ENUM dir
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_mobile_robot::get_reverse_angle(double angle)
-{
-	double ret = 0.0;
-	const double change_value = 180.0;
-		
-	ret = change_angle(angle, change_value);
-		
-	return ret;
-}
+//double cfg_mobile_robot::get_reverse_angle(double angle)
+//{
+//	double ret = 0.0;
+//	const double change_value = 180.0;
+//		
+//	ret = change_angle(angle, change_value);
+//		
+//	return ret;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.get_curr_pose_angle
@@ -1956,82 +1956,82 @@ double cfg_mobile_robot::get_curr_pose_right_angle(ROTATE_DIRECTION_ENUM directi
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-bool cfg_mobile_robot::test_angle_is_over_clockwise(double current, double target)
-{
-	double temp = 0.0;
-	bool over_flag = false;
-	QUADRANT_ENUM curr_quadrant;
-	QUADRANT_ENUM target_quadrant;
-
-	curr_quadrant = get_quadrant(current);
-	target_quadrant = get_quadrant(target);
-	if ((current >= 0.0) && (target >= 0.0))
-	{
-		if (current < target)
-		{
-			over_flag = true;
-		}
-	}
-	else if ((current < 0.0) && (target < 0.0))
-	{
-		if (current < target)
-		{
-			over_flag = true;
-		}
-	}
-	else
-	{
-		temp = fabs(current) + fabs(target);
-		
-		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-		{
-			over_flag = false;
-		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-		{
-			over_flag = true;
-		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-		{
-			over_flag = false;
-		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-		{
-			over_flag = true;
-		}
-		
-		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-		{
-			if ( temp > 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-		{
-			if ( temp < 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-		{
-			if ( temp > 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-		{
-			if ( temp < 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-	}
-
-	return over_flag;
-}
+//bool cfg_mobile_robot::test_angle_is_over_clockwise(double current, double target)
+//{
+//	double temp = 0.0;
+//	bool over_flag = false;
+//	QUADRANT_ENUM curr_quadrant;
+//	QUADRANT_ENUM target_quadrant;
+//
+//	curr_quadrant = get_quadrant(current);
+//	target_quadrant = get_quadrant(target);
+//	if ((current >= 0.0) && (target >= 0.0))
+//	{
+//		if (current < target)
+//		{
+//			over_flag = true;
+//		}
+//	}
+//	else if ((current < 0.0) && (target < 0.0))
+//	{
+//		if (current < target)
+//		{
+//			over_flag = true;
+//		}
+//	}
+//	else
+//	{
+//		temp = fabs(current) + fabs(target);
+//		
+//		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+//		{
+//			over_flag = false;
+//		}
+//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+//		{
+//			over_flag = true;
+//		}
+//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+//		{
+//			over_flag = false;
+//		}
+//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+//		{
+//			over_flag = true;
+//		}
+//		
+//		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+//		{
+//			if ( temp > 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+//		{
+//			if ( temp < 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+//		{
+//			if ( temp > 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+//		{
+//			if ( temp < 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//	}
+//
+//	return over_flag;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.test_angle_is_over_anticlockwise
@@ -2046,82 +2046,82 @@ bool cfg_mobile_robot::test_angle_is_over_clockwise(double current, double targe
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-bool cfg_mobile_robot::test_angle_is_over_anticlockwise(double current, double target)
-{
-	double temp = 0.0;
-	bool over_flag = false;
-	QUADRANT_ENUM curr_quadrant;
-	QUADRANT_ENUM target_quadrant;
-
-	curr_quadrant = get_quadrant(current);
-	target_quadrant = get_quadrant(target);
-	if ((current >= 0.0) && (target >= 0.0))
-	{
-		if (current > target)
-		{
-			over_flag = true;
-		}
-	}
-	else if ((current < 0.0) && (target < 0.0))
-	{
-		if (current > target)
-		{
-			over_flag = true;
-		}
-	}
-	else
-	{
-		temp = fabs(current) + fabs(target);
-		
-		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-		{
-			over_flag = true;
-		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-		{
-			over_flag = false;
-		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-		{
-			over_flag = true;
-		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-		{
-			over_flag = false;
-		}
-		
-		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
-		{
-			if ( temp < 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
-		{
-			if ( temp > 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
-		{
-			if ( temp < 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
-		{
-			if ( temp > 180.0 ) 
-			{
-				over_flag = true;
-			}
-		}
-	}
-	
-	return over_flag;
-}
+//bool cfg_mobile_robot::test_angle_is_over_anticlockwise(double current, double target)
+//{
+//	double temp = 0.0;
+//	bool over_flag = false;
+//	QUADRANT_ENUM curr_quadrant;
+//	QUADRANT_ENUM target_quadrant;
+//
+//	curr_quadrant = get_quadrant(current);
+//	target_quadrant = get_quadrant(target);
+//	if ((current >= 0.0) && (target >= 0.0))
+//	{
+//		if (current > target)
+//		{
+//			over_flag = true;
+//		}
+//	}
+//	else if ((current < 0.0) && (target < 0.0))
+//	{
+//		if (current > target)
+//		{
+//			over_flag = true;
+//		}
+//	}
+//	else
+//	{
+//		temp = fabs(current) + fabs(target);
+//		
+//		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+//		{
+//			over_flag = true;
+//		}
+//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+//		{
+//			over_flag = false;
+//		}
+//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+//		{
+//			over_flag = true;
+//		}
+//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+//		{
+//			over_flag = false;
+//		}
+//		
+//		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+//		{
+//			if ( temp < 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+//		{
+//			if ( temp > 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+//		{
+//			if ( temp < 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+//		{
+//			if ( temp > 180.0 ) 
+//			{
+//				over_flag = true;
+//			}
+//		}
+//	}
+//	
+//	return over_flag;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.test_rotate_is_over_clockwise

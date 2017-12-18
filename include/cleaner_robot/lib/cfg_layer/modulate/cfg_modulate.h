@@ -37,6 +37,8 @@
 #include "cfg_base_type.h"
 #include "pid.h"
 
+#include "angle_base.h"
+
 //using namespace std;
 
 /******************************************************************************
@@ -62,13 +64,6 @@
 /******************************************************************************
  * 枚举类型
  ******************************************************************************/
-typedef enum QUADRANT
-{
-	QUADRANT_1,
-	QUADRANT_2,
-	QUADRANT_3,
-	QUADRANT_4,
-}QUADRANT_ENUM;
 
 /******************************************************************************
  * 结构体类型
@@ -93,7 +88,7 @@ typedef struct STRAIGHT_LINE_MOVING
  * 类声明
  ******************************************************************************/
 
-class cfg_modulate
+class cfg_modulate : public angel_base
 {
 public:
 	static cfg_modulate* get_instance(void);
@@ -120,14 +115,14 @@ public:
 	void disable_linear_velocity_ajust(void);
 	void endble_linear_velocity_ajust(double velocity);
 	
-	double get_angle_differences(double angle1, double angle2);
-	QUADRANT_ENUM get_quadrant(double angle);
-	bool test_angle_rotate_direction_is_clockwise(double start, double target);
+	//double get_angle_differences(double angle1, double angle2);
+	//QUADRANT_ENUM get_quadrant(double angle);
+	//bool test_angle_rotate_direction_is_clockwise(double start, double target);
 	
 	bool ajust_angular_velocity(double real, double target, double &velocity);
 	void update_velocity(POSE_STRU curr, POSE_STRU ref, POSE_STRU target);
 
-	double get_angle(double x1, double y1, double x2, double y2);
+	//double get_angle(double x1, double y1, double x2, double y2);
 	double get_distance(double x1, double y1, double x2, double y2);
 
 	void set_traight_line_moving_flag(const bool flag);

@@ -113,11 +113,11 @@ typedef enum MONITOR
 	MONITOR_RESPOND,
 }MONITOR_ENUM;
 
-typedef enum ROTATE_DIRECTION
-{
-	CLOCKWISE = 0,
-	ANTICLOCKWISE,
-}ROTATE_DIRECTION_ENUM;
+//typedef enum ROTATE_DIRECTION
+//{
+//	CLOCKWISE = 0,
+//	ANTICLOCKWISE,
+//}ROTATE_DIRECTION_ENUM;
 	
 typedef void (*PF_FUNC)(void);//定义一个函数指针类型 
 
@@ -169,7 +169,7 @@ typedef struct REFERENCE_DATA
  ******************************************************************************/
 
 //移动机器人状态数据类 
-class cfg_mobile_robot : public cfg_robot_data, public cfg_walk_plan, public cfg_modulate, public version
+class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan, public cfg_modulate
 {
 public:
 	static cfg_mobile_robot* get_instance();
@@ -256,25 +256,25 @@ public:
 	void update_obstatcle_safety_level(void);
 	void sensors_deal(void);
 
-	double format_angle(double angle);
-	double convert_degrees_to_radians(double degrees);
-	double convert_radians_to_degrees(double radians);
-	double convert_to_acute_angle(double angle);
+	//double format_angle(double angle);
+	//double convert_degrees_to_radians(double degrees);
+	//double convert_radians_to_degrees(double radians);
+	//double convert_to_acute_angle(double angle);
 	
 	bool test_differences(double value, double reference, double precision);
 	
-	double change_angle(double angle, double change_value);
+	//double change_angle(double angle, double change_value);
 	
-	double get_right_angle_clockwise(double angle);
-	double get_right_angle_anticlockwise(double angle);
-	double get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction);
-	double get_reverse_angle(double angle);
+	//double get_right_angle_clockwise(double angle);
+	//double get_right_angle_anticlockwise(double angle);
+	//double get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction);
+	//double get_reverse_angle(double angle);
 	double get_curr_pose_angle(void);
 	double get_curr_pose_reverse_angle(void);
 	double get_curr_pose_right_angle(ROTATE_DIRECTION_ENUM direction);
 
-	bool test_angle_is_over_clockwise(double current, double target);
-	bool test_angle_is_over_anticlockwise(double current, double target);
+	//bool test_angle_is_over_clockwise(double current, double target);
+	//bool test_angle_is_over_anticlockwise(double current, double target);
 	
 	bool test_rotate_is_over_clockwise(void);
 	bool test_rotate_is_over_anticlockwise(void);
@@ -417,26 +417,6 @@ public:
 	void register_msgs_callback(void);
 	void function_processor( void );
 
-	inline double angle_wrap(double angle)
-	{
-		//把角度规划到-pi至pi之间
-		if (angle > M_PI)
-			angle = angle-2*M_PI;
-		else if (angle < (-1.0*M_PI))
-			angle = angle+2*M_PI;
-		return angle;
-	}
-
-	inline double degree_to_rad(double x)
-	{
-		return ((x)/180.0*M_PI);//度数转化为弧度
-	}
-	
-	inline double rad_to_degree(double x)
-	{
-		return ((x)/M_PI*180.0);//弧度转化为度
-	}
-	
 	static pthread_mutex_t mutex;
 
 	double odometer_horizontal;

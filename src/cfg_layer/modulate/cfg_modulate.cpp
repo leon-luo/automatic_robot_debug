@@ -414,7 +414,7 @@ void cfg_modulate::endble_linear_velocity_ajust(double velocity)
 {
 	set_linear_velocity_ajust(true, velocity);
 }
-
+#if 0
 /*****************************************************************************
  函 数 名: cfg_modulate.get_angle_differences
  功能描述  : 获取连个方向的夹角（锐角）
@@ -588,7 +588,7 @@ bool cfg_modulate::test_angle_rotate_direction_is_clockwise(double start, double
 
 	return flag;
 }
-
+#endif
 /*****************************************************************************
  函 数 名: cfg_modulate.ajust_angular_velocity
  功能描述  : 调节角速度
@@ -732,37 +732,37 @@ void cfg_modulate::update_velocity(POSE_STRU curr, POSE_STRU ref, POSE_STRU targ
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double cfg_modulate::get_angle(double x1, double y1, double x2, double y2)
-{
-	double x = 0.0;
-	double y = 0.0;
-	double angle = 0.0;
-	double radian = 0.0;
-	
-	x = x2 - x1;
-	y = y2 - y1;
-#if 0
-	double temp = 0.0;
-	double hypotenuse = 0.0;
-	hypotenuse = sqrt(pow(x, 2) + pow(y, 2));            //斜边长度
-	temp = x/hypotenuse;
-	radian = acos(temp);                                 //求出弧度
-	if (y<0)
-	{
-		angle = -angle;
-	}
-	else if ((y == 0) && (x < 0))
-	{
-		angle = 180.0;
-	}
-#else
-	//atan2（y，x）求的是y/x的反正切，其返回值为[-π, +π]之间的一个数。
-	radian = atan2(y, x);
-	angle = 180.0/(M_PI/radian);                             //用弧度算出角度
-
-#endif /* #if 0 */
-	return angle;
-}
+//double cfg_modulate::get_angle(double x1, double y1, double x2, double y2)
+//{
+//	double x = 0.0;
+//	double y = 0.0;
+//	double angle = 0.0;
+//	double radian = 0.0;
+//	
+//	x = x2 - x1;
+//	y = y2 - y1;
+//#if 0
+//	double temp = 0.0;
+//	double hypotenuse = 0.0;
+//	hypotenuse = sqrt(pow(x, 2) + pow(y, 2));            //斜边长度
+//	temp = x/hypotenuse;
+//	radian = acos(temp);                                 //求出弧度
+//	if (y<0)
+//	{
+//		angle = -angle;
+//	}
+//	else if ((y == 0) && (x < 0))
+//	{
+//		angle = 180.0;
+//	}
+//#else
+//	//atan2（y，x）求的是y/x的反正切，其返回值为[-π, +π]之间的一个数。
+//	radian = atan2(y, x);
+//	angle = 180.0/(M_PI/radian);                             //用弧度算出角度
+//
+//#endif /* #if 0 */
+//	return angle;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_modulate.get_distance

@@ -84,6 +84,8 @@ public:
 	double convert_degrees_to_radians(double degrees);
 	double convert_radians_to_degrees(double radians);
 	
+	double convert_to_acute_angle(double angle);
+	
 	double format_angle(double angle);
 	
 	double get_angle(double x, double y);

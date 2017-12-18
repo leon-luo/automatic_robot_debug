@@ -129,6 +129,50 @@ double angel_base::convert_radians_to_degrees(double radians)
 }
 
 /*****************************************************************************
+ 函 数 名: angel_base.convert_to_acute_angle
+ 功能描述  : 转化为锐角
+ 输入参数: double angle  
+ 输出参数: 无
+ 返 回 值: double
+ 
+ 修改历史:
+  1.日     期: 2017年12月18日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+double angel_base::convert_to_acute_angle(double angle)
+{
+	double ret = 0.0;
+	double temp = 0.0;
+	
+	temp = fabs(angle);
+	temp = fmod(angle, 360.0);
+	if (temp <= 90.0)
+	{
+		ret = temp;
+	}
+	else if ((90.0 < temp) && (temp <= 180.0))
+	{
+		ret = 180.0 - temp;
+	}
+	else if ((180.0 < temp) && (temp <= 270.0))
+	{
+		ret = temp - 180.0;
+	}
+	else if ((270.0 < temp) && (temp <= 360.0))
+	{
+		ret = temp - 270.0;
+	}
+	else if(temp > 360.0)
+	{
+		ret = fmod( temp, 360.0 );
+	}
+	
+	return ret;
+}
+
+
+/*****************************************************************************
  函 数 名: angel_base.format_angle
  功能描述  : 格式化角度在合理的范围
  输入参数: double angle  
