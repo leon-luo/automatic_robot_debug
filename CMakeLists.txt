@@ -256,6 +256,10 @@ include_directories(
 	src/business_logic_layer/straight_line_moving
 )
 
+include_directories(
+	src/drv_layer/sensor
+)
+
 add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp
 
 								src/cfg_layer/mobile_robot/cfg_mobile_robot.cpp
@@ -269,6 +273,8 @@ add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp
 								
 								src/business_logic_layer/rotate/bll_rotate.cpp
 								src/business_logic_layer/straight_line_moving/bll_traight_line_moving.cpp
+
+								src/drv_layer/sensor/drv_sensor.cpp
 )
 
 

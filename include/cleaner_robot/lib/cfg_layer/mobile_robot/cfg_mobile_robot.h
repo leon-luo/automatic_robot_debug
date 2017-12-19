@@ -40,16 +40,10 @@
 #include "math.h"
 
 #include <ros/ros.h>
-#include <geometry_msgs/Twist.h>
+
 #include <std_msgs/Int16.h>
 #include <std_msgs/Float32.h>
 #include <std_msgs/Float64.h>
-#include <nav_msgs/Odometry.h>
-#include <sensor_msgs/LaserScan.h>
-
-#include <kobuki_msgs/CliffEvent.h>
-#include <kobuki_msgs/BumperEvent.h>
-#include <kobuki_msgs/WheelDropEvent.h>
 
 #include "version.h"
 #include "bll_traight_line_moving.h"
@@ -177,7 +171,7 @@ public:
 
 	void init(void);
 
-	void straight_and_rotate_moving(double velocity, double rad);
+	void straight_and_rotate_moving(double line_v, double angular_v);
 	void straight_moving(double velocity);
 	void rotate_moving(double rad);
 	
@@ -391,17 +385,9 @@ public:
 	void timer_callback(const ros::TimerEvent& event);
 	void retreat_callback(const ros::TimerEvent& event);
 	
-	void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg);
-	void cliff_event_callback(const kobuki_msgs::CliffEvent &msg);
-	void bumper_evnet_callback(const kobuki_msgs::BumperEvent &msg);
-	void wheel_drop_event_callback(const kobuki_msgs::WheelDropEvent &msg);
-	void ultrasonic_sensor_callback(const std_msgs::Int16& msg);
-	void wall_following_sensor_callback(const std_msgs::Int16& msg);
-
-	void laser_scan_callback( const sensor_msgs::LaserScan& msg );
-	void velocity_callback( const geometry_msgs::Twist& msg );
-
-	void register_msgs_callback(void);
+	void register_time_callback(void);
+	void register_msgs_and_timers(void);
+	
 	void function_processor( void );
 
 	static pthread_mutex_t mutex;
@@ -423,21 +409,10 @@ private:
 
 	static constexpr double collide_adjusted_angle_ = 30.0;        //碰撞调节角度
 
-	ros::Publisher pub_cmvl_;
-	ros::Publisher pub_path_;
-	
-	ros::Subscriber position_sub_;
-	ros::Subscriber cliff_sub_;
-	ros::Subscriber bumper_sub_;
-	ros::Subscriber wheel_drop_sub_;
-	ros::Subscriber velocity_sub_;
-	ros::Subscriber ultrasonic_sensor_sub_;
-	ros::Subscriber wall_following_sensor_sub_;
-	ros::Subscriber laser_scan_sub_;
-
 	ros::Timer timer_;
 	ros::Timer retreat_timer_;
 	
+	ros::Publisher pub_path_;
 	ACTION_STATUS_STRU action_;                                    //当前运动状态
 	REFERENCE_DATA_STRU ref_data_;
 
