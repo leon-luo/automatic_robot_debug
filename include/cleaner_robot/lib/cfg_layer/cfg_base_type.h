@@ -29,6 +29,7 @@
 /******************************************************************************
  * 包含头文件
  ******************************************************************************/
+#include "base_type.h"
 
 /******************************************************************************
  * 外部变量声明
@@ -58,90 +59,7 @@
 /******************************************************************************
  * 结构体类型
  ******************************************************************************/
-typedef struct POSITION
-{
-	double x;
-	double y;
-	
-	void init(double _x, double _y)
-	{
-		x = _x;
-		y = _y;
-	}
-	
-	POSITION()  //默认构造函数
-	{
-		x = 0.0;
-		y = 0.0;
-	}
-	
-	POSITION(double _x, double _y)//构造函数
-	{
-		x = _x;
-		y = _y;
-	}
-	
-	void set(POSITION* s1, POSITION* s2)//赋值函数
-	{
-		s1->x = s2->x;
-		s1->y = s2->y;
-	}
-	
-	POSITION& operator=(const POSITION& s)//重载运算符
-	{
-		set(this, (POSITION*)&s);
-	}
-	
-	POSITION(const POSITION& s)//复制构造函数
-	{
-		*this = s;
-	}
-}POSITION_STRU;
 
-typedef struct POSE
-{
-	POSITION_STRU point;
-	double angle;
-
-	void init(double _x, double _y, double _angle)//初始化函数
-	{
-		point.x = _x;
-		point.y = _y;
-		angle = _angle;
-	}
-
-	void set(POSE* s1, POSE* s2)//赋值函数
-	{
-		s1->point.x = s2->point.x;
-		s1->point.y = s2->point.y;
-		s1->angle = s2->angle;
-	}
-	
-	POSE()  //默认构造函数
-	{
-		point.x = 0.0;
-		point.y = 0.0;
-		angle = 0.0;
-	}
-	/*
-	POSE(double _x, double _y, double _angle)//构造函数
-	{
-		point.x = _x;
-		point.y = _y;
-		angle = _angle;
-	}
-	
-	POSE& operator=(const POSE& s)//重载运算符
-	{
-		set(this, (POSE)&s);
-	}
-	
-	POSE(const POSE& s)//复制构造函数
-	{
-		*this = s;
-	}
-	*/
-}POSE_STRU;
 
 /******************************************************************************
  * 类声明
