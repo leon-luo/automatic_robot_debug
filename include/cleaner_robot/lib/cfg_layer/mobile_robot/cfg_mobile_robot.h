@@ -52,6 +52,7 @@
 #include <kobuki_msgs/WheelDropEvent.h>
 
 #include "version.h"
+#include "bll_traight_line_moving.h"
 
 #include "cfg_robot_data.h"
 #include "cfg_walk_plan.h"
@@ -169,7 +170,7 @@ typedef struct REFERENCE_DATA
  ******************************************************************************/
 
 //移动机器人状态数据类 
-class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan, public cfg_modulate
+class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan, public cfg_modulate, public bll_traight_line_moving
 {
 public:
 	static cfg_mobile_robot* get_instance();

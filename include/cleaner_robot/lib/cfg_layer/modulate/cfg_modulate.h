@@ -76,13 +76,7 @@ typedef struct VELOCITY_AJUST
 	double linear_velocity;
 }VELOCITY_AJUST_STRU;
 
-typedef struct STRAIGHT_LINE_MOVING
-{
-	bool flag;
-	POSE_STRU start_pos;
-	POSE_STRU target_pos;
-	POSE_STRU current_pos;
-}STRAIGHT_LINE_MOVING_STRU;
+
 
 /******************************************************************************
  * 类声明
@@ -114,26 +108,6 @@ public:
 
 	void disable_linear_velocity_ajust(void);
 	void endble_linear_velocity_ajust(double velocity);
-
-	double get_distance(double x1, double y1, double x2, double y2);
-
-	void set_traight_line_moving_flag(const bool flag);
-	bool get_traight_line_moving_flag(void);
-
-	void set_traight_line_moving_start_pos(const POSE_STRU pos);
-	void get_traight_line_moving_start_pos(POSE_STRU &pos);
-
-	void set_traight_line_moving_target_pos(const POSE_STRU pos);
-	void get_traight_line_moving_target_pos(POSE_STRU &pos);
-
-	void set_traight_line_moving_current_pos(const POSE_STRU pos);
-	void get_traight_line_moving_current_pos(POSE_STRU &pos);
-	
-	void set_traight_line_moving_data(const STRAIGHT_LINE_MOVING_STRU data);
-	void get_traight_line_moving_data(STRAIGHT_LINE_MOVING_STRU &data);
-
-	double get_traight_line_moving_direction_angle(void);
-	void clear_traight_line_moving_data(void);
 	
 protected:
 	cfg_modulate();
@@ -147,8 +121,6 @@ private:
 	static pthread_mutex_t mutex_;
 	
 	VELOCITY_AJUST_STRU velocity_ajust_;
-
-	STRAIGHT_LINE_MOVING_STRU straight_line_moving_;
 
 	pid angular_velocity_pid_;
 };
