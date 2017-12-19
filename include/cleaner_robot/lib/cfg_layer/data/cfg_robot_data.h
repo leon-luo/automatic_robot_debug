@@ -32,7 +32,6 @@
 #include <iostream>
 #include <unistd.h>
 #include <pthread.h>
-#include <inttypes.h>
 
 #include "cfg_base_type.h"
 
