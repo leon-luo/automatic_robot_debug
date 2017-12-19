@@ -111,23 +111,10 @@ typedef struct AREA
 	LOCAL_MOVE_STATE_ENUM state;              //局域行驶状态
 	AREA_PART_ENUM area_part;                 //当前所在的半区
 	MOVE_DIRECTION_ENUM direction;            //行驶方向
-	double reference_x;
-	double reference_y;
 	double reference_angle;
 	double precision;
 }AREA_STRU;
 
-typedef struct STRAIGHT_MOVING
-{
-	POSE_STRU curr;
-	POSE_STRU start;
-	POSE_STRU target;
-	double direction;
-	double travel_distance;
-	bool all_route_done;
-	bool part_route_done;
-}STRAIGHT_MOVING_STRU;
-	
 /******************************************************************************
  * 类声明
  ******************************************************************************/
@@ -175,12 +162,6 @@ class cfg_walk_plan
 
 		void set_district_area(const AREA_STRU data);
 		void get_district_area(AREA_STRU &data);
-
-		void set_district_area_reference_x(const double data);
-		void get_district_area_reference_x(double &data);
-
-		void set_district_area_reference_y(const double data);
-		void get_district_area_reference_y(double &data);
 
 		void set_district_area_reference_angle(const double data);
 		void get_district_area_reference_angle(double &data);
