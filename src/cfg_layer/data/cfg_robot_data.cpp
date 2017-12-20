@@ -1027,6 +1027,40 @@ bool cfg_robot_data::test_robot_is_ok(void)
 	return ret;
 }
 
+/*****************************************************************************
+ 函 数 名: cfg_robot_data.update_velocity
+ 功能描述  : 更新速度
+ 输入参数: double &line_v     
+           double &angular_v  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2017年12月20日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_robot_data::update_velocity(double &line_v, double &angular_v)
+{
+	bool flag = false;
+
+	flag = get_adjust_velocity();
+	if (true == flag)
+	{
+		debug_print_warnning("111  line_v=%lf, angular_v=%lf", line_v, angular_v);
+		get_velocity(line_v, angular_v);
+		debug_print_warnning("222  line_v=%lf, angular_v=%lf", line_v, angular_v);
+		set_adjust_velocity(false);
+	}
+	else
+	{
+		//debug_print_warnning("vvvvv  line_v=%lf, angular_v=%lf", line_v, angular_v);
+	}
+	
+	set_velocity(line_v, angular_v);
+	
+	return flag;
+}
 
 /******************************************************************************
  * 内部函数声明

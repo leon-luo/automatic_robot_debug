@@ -56,7 +56,9 @@
 #include "base_type.h"
 #include "version.h"
 #include "cfg_walk_plan.h"
+#include "bll_motion_control.h"
 #include "drv_sensor.h"
+
 
 #include "debug_function.h"
 
@@ -167,7 +169,7 @@ void cfg_mobile_robot::init ( void )
 
 	cfg_modulate *p_modulate = cfg_modulate::get_instance();
 }
-
+#if 0
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.straight_and_rotate_moving
  功能描述  : 行走的同时转弯
@@ -493,7 +495,7 @@ void cfg_mobile_robot::auto_dock ( void )
 {
 
 }
-
+#endif 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.local_cover_movement
  功能描述  : 区域覆盖行驶
@@ -1366,19 +1368,19 @@ void cfg_mobile_robot::save_current_positions (double x, double y, double theta)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-bool cfg_mobile_robot::test_differences(double value, double reference, double precision)
-{
-	bool ret = false;
-	double temp = 0.0;
-	
-	temp = value - reference;
-	if (fabs(temp) < precision)
-	{
-		ret = true;
-	}
-	
-	return ret;
-}
+//bool cfg_mobile_robot::test_differences(double value, double reference, double precision)
+//{
+//	bool ret = false;
+//	double temp = 0.0;
+//	
+//	temp = value - reference;
+//	if (fabs(temp) < precision)
+//	{
+//		ret = true;
+//	}
+//	
+//	return ret;
+//}
 
 /*****************************************************************************
  函 数 名: cfg_mobile_robot.update_goal_positions
@@ -3023,16 +3025,15 @@ void cfg_mobile_robot::monitor_angle_adjust_velocity(void)
 		set_velocity(linear_velocity, angular_velocity);
 		set_adjust_velocity(flag);
 	
-		/*double curr = 0.0;
+		double curr = 0.0;
 		double respond = 0.0;
 		static double pre = 0.0;
 		curr = get_curr_pose_angle();
 		respond = get_monitor_angle_respond_goal();
 		if (pre != curr) {
 			pre = curr;
-			debug_print_info("flag = %d, ||curr(%lf) --> respond(%lf)||, linear_velocity(%lf); angular_velocity(%lf)",flag, curr, respond, linear_velocity, angular_velocity);
-		}*/
-		
+			debug_print_info("flag = %d, ||curr(%lf) --> respond(%lf)||, linear_v(%lf); angular_v(%lf)",flag, curr, respond, linear_velocity, angular_velocity);
+		}
 	}
 	else
 	{
@@ -3140,12 +3141,13 @@ void cfg_mobile_robot::monitor_angle_respond(void)
 *****************************************************************************/
 void cfg_mobile_robot::monitor_stop_rotate(void)
 {
-	double velocity = 0.0;
-	double rad = 0.0;
+	double line_v = 0.0;
+	double angular_v = 0.0;
 	
-	get_velocity(velocity, rad);
-	rad = 0.0;
-	straight_and_rotate_moving(velocity, rad);
+	get_velocity(line_v, angular_v);
+	angular_v = 0.0;
+	bll_motion_control* p_instance = bll_motion_control::get_instance();
+	p_instance->set_motion_control_velocity(line_v, angular_v);
 }
 
 void cfg_mobile_robot::smooth_decelerate_stop(void)
@@ -3294,7 +3296,8 @@ void cfg_mobile_robot::wheel_drop_sensor_respond_deal(void)
 		if ( true == last_is_normal )
 		{
 			save_running_status();
-			stop();
+			bll_motion_control* p_instance = bll_motion_control::get_instance();
+			p_instance->stop();
 		}
 	}
 	else
@@ -3344,49 +3347,48 @@ void cfg_mobile_robot::ultrasonic_sensor_respond_deal(void)
 void cfg_mobile_robot::functional_mode ( void )
 {
 	ACTION_STATUS_ENUM action;
+	bll_motion_control* p_instance = bll_motion_control::get_instance();
 	
 	print_change_action_status();
 	get_curr_action(action);
 	switch ( action )
 	{
 		case STOP:
-			stop();
+			p_instance->stop();
 			break;
 		case GO_FORWARD:
-			go_forward();
+			p_instance->go_forward();
 			break;
 		case GO_BACK:
-			go_back();
+			p_instance->go_back();
 			break;
 		case TURN_LEFT:
-			turn_left();
+			p_instance->turn_left();
 			break;
 		case TURN_RIGHT:
-			turn_right();
+			p_instance->turn_right();
 			break;
 		case PIVOT:
-			pivot();
+			p_instance->pivot();
 			break;
 		case TURN_BACK_CLOCKWISE :
-			turn_back_clockwise();
+			p_instance->turn_back_clockwise();
 			break;
 		case TURN_BACK_ANTICLOCKWISE :
-			turn_back_anticlockwise();
+			p_instance->turn_back_anticlockwise();
 			break;
 		case TURN_RIGHT_ANGLE_CLOCKWISE :
-			turn_right_angle_clockwise();
+			p_instance->turn_right_angle_clockwise();
 			break;
 		case TURN_RIGHT_ANGLE_ANTICLOCKWISE :
-			turn_right_angle_anticlockwise();
+			p_instance->turn_right_angle_anticlockwise();
 			break;
 		case EDGE_WAYS:
-			edge_ways();
 			break;
 		case AUTO_DOCK:
-			auto_dock();
 			break;
 		default:
-			//stop();
+			p_instance->stop();
 			break;
 	}
 }
@@ -3587,68 +3589,6 @@ void cfg_mobile_robot::change_rotate_direction(void)
 void cfg_mobile_robot::do_retreat ( void )
 {
 	set_curr_action(GO_BACK);
-}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.get_local_move_planning_pose_x
- 功能描述  : 获取X轴两头的坐标
- 输入参数: double &min  
-           double &max  
- 输出参数: 无
- 返 回 值: void
- 
- 修改历史:
-  1.日     期: 2017年10月30日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-void cfg_mobile_robot::get_local_move_planning_pose_x(double &min, double &max)
-{
-	const int piont_num = 4;
-	POSE_STRU pose[piont_num];
-	double l_x = 0.0, r_x = 0.0;
-	
-	for (int i = 0; i < piont_num; ++i)
-	{
-		get_local_move_planning_pose(pose[i], i);
-	}
-	
-	l_x = pose[1].point.x;
-	r_x = pose[3].point.x;
-	
-	max = GET_MAX(l_x, r_x);
-	min = GET_MIN(l_x, r_x);
-}
-
-/*****************************************************************************
- 函 数 名: cfg_mobile_robot.get_local_move_planning_pose_y
- 功能描述  : 获取Y轴两头的坐标
- 输入参数: double &min  
-           double &max  
- 输出参数: 无
- 返 回 值: void
- 
- 修改历史:
-  1.日     期: 2017年10月30日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-void cfg_mobile_robot::get_local_move_planning_pose_y(double &min, double &max)
-{
-	const int piont_num = 4;
-	POSE_STRU pose[piont_num];
-	double b_y = 0.0, t_y = 0.0;
-	
-	for (int i = 0; i < piont_num; ++i)
-	{
-		get_local_move_planning_pose(pose[i], i);
-	}
-	
-	b_y = pose[0].point.y;
-	t_y = pose[3].point.y;
-	
-	max = GET_MAX(b_y, t_y);
-	min = GET_MIN(b_y, t_y);
 }
 
 /*****************************************************************************

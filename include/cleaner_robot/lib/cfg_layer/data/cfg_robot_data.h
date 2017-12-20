@@ -218,10 +218,14 @@ public:
 
 	bool test_robot_is_ok(void);
 	
-	static pthread_mutex_t mutex;
+	bool update_velocity(double &line_v, double &angular_v);
+	
+protected:
 	cfg_robot_data();
+
 private:
 	static cfg_robot_data* p_instance_;
+	static pthread_mutex_t mutex;
 	
 	bool odometry_updated_;                                    //里程计是否已经更新
 	
@@ -248,6 +252,7 @@ private:
 	double linear_velocity_;                                   //当前的线速度
 	double angular_velocity_;                                  //当前的角速度
 	bool adjust_velocity_;
+	
 };
 
 /******************************************************************************

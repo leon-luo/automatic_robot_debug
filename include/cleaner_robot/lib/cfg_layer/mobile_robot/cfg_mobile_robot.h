@@ -100,7 +100,6 @@ typedef enum ACTION_STATUS_ID
 	LOCAL_AREA,                                //区域覆盖运行
 }ACTION_STATUS_ENUM;
 
-
 typedef enum MONITOR
 {
 	MONITOR_SLEEP = 0,
@@ -108,13 +107,6 @@ typedef enum MONITOR
 	MONITOR_RESPOND,
 }MONITOR_ENUM;
 
-//typedef enum ROTATE_DIRECTION
-//{
-//	CLOCKWISE = 0,
-//	ANTICLOCKWISE,
-//}ROTATE_DIRECTION_ENUM;
-	
-typedef void (*PF_FUNC)(void);//定义一个函数指针类型 
 
 typedef struct ANGLE_MONITOR
 {
@@ -171,28 +163,9 @@ public:
 
 	void init(void);
 
-	void straight_and_rotate_moving(double line_v, double angular_v);
-	void straight_moving(double velocity);
-	void rotate_moving(double rad);
-	
-	void shut_down(void);
-	void power_on(void);
-	
-	void stop(void);
-	void go_forward(void);
-	void go_back(void);
-	void turn_left(void);
-	void turn_right(void);
-	void pivot(void);
 	void edge_ways(void);
 	void auto_dock(void);
 	void local_cover_movement(void);
-
-	void turn_back_clockwise(void);
-	void turn_back_anticlockwise(void);
-
-	void turn_right_angle_clockwise(void);
-	void turn_right_angle_anticlockwise(void);
 
 	void set_action_status(const ACTION_STATUS_STRU status);
 	void get_action_status(ACTION_STATUS_STRU &status);
@@ -250,8 +223,6 @@ public:
 
 	void update_obstatcle_safety_level(void);
 	void sensors_deal(void);
-	
-	bool test_differences(double value, double reference, double precision);
 	
 	double get_curr_pose_angle(void);
 	double get_curr_pose_reverse_angle(void);
@@ -338,9 +309,6 @@ public:
 	void change_rotate_direction(void);
 	
 	void do_retreat(void);
-
-	void get_local_move_planning_pose_x(double &min, double &max);
-	void get_local_move_planning_pose_y(double &min, double &max);
 
 	void get_front_position(POSE_STRU &position);
 	double get_vertical_distance_curr_position_to_refer_line(void);
