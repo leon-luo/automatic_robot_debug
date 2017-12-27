@@ -46,6 +46,8 @@
 #include <std_msgs/Float64.h>
 
 #include "version.h"
+#include "angle_base.h"
+
 #include "bll_traight_line_moving.h"
 
 #include "cfg_robot_data.h"
@@ -100,27 +102,6 @@ typedef enum ACTION_STATUS_ID
 	LOCAL_AREA,                                //区域覆盖运行
 }ACTION_STATUS_ENUM;
 
-typedef enum MONITOR
-{
-	MONITOR_SLEEP = 0,
-	MONITOR_RUNNING,
-	MONITOR_RESPOND,
-}MONITOR_ENUM;
-
-
-typedef struct ANGLE_MONITOR
-{
-	double angle;                                            //检测角度
-	MONITOR_ENUM stage;                                      //监测阶段状态
-	//PF_FUNC pf_function;                                     //监测角度达标以后执行的动作
-	
-	ANGLE_MONITOR()  //默认构造函数
-	{
-		angle = 0.0;
-		stage = MONITOR_SLEEP;
-		//pf_function = NULL;
-	}
-}ANGLE_MONITOR_STRU;
 
 /******************************************************************************
  * 结构体类型
@@ -140,7 +121,6 @@ typedef struct PRIME_DIRECTION
 	bool valid;                                //是否已保存有效的正反向数据标志
 }PRIME_DIRECTION_STRU;
 
-
 typedef struct REFERENCE_DATA
 {
 	PRIME_DIRECTION_STRU fst_dir;
@@ -156,16 +136,12 @@ typedef struct REFERENCE_DATA
  ******************************************************************************/
 
 //移动机器人状态数据类 
-class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan, public cfg_modulate, public bll_traight_line_moving
+class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan, public bll_traight_line_moving
 {
 public:
 	static cfg_mobile_robot* get_instance();
 
-	void init(void);
-
-	void edge_ways(void);
-	void auto_dock(void);
-	void local_cover_movement(void);
+	void initialize(void);
 
 	void set_action_status(const ACTION_STATUS_STRU status);
 	void get_action_status(ACTION_STATUS_STRU &status);
@@ -178,127 +154,13 @@ public:
 
 	void save_running_status(void);
 	void recover_running_status(void);
-	
-	void set_reference_data(const REFERENCE_DATA_STRU &data);
-	void get_reference_data(REFERENCE_DATA_STRU &data);
 
-	bool check_reference_data_valid(void);
 
-	void set_reference_data_forward_angle(double data);
-	bool get_reference_data_forward_angle(double &data);
-	
-	void set_reference_data_reverse_angle(double data);
-	bool get_reference_data_reverse_angle(double &data);
-
-	void set_reference_data_inversion(bool data);
-	bool get_reference_data_inversion(void);
-
-	ROTATE_DIRECTION_ENUM get_curr_rotate_direction(void);
-
-	bool set_traight_line_moving(void);
-	bool test_is_traight_line_moving(void);
-
-	void get_rotate_action_type(ACTION_STATUS_ENUM &action);
-
-	double get_driving_direction_right_angle(void);
-	void get_turn_back_action_type(ACTION_STATUS_ENUM &action);
-	void get_turn_right_angle_action_type(ACTION_STATUS_ENUM &action);
-
-	double get_reference_angle(void);
-	
-	double get_turnt_to_reference_deriction_angle(void);
-	void get_turnt_to_reference_deriction_action_type(ACTION_STATUS_ENUM &action);
-
-	void save_first_line_refer_direction(void);
-	
 	void save_current_positions(double x, double y, double theta);
 
-	void update_goal_positions(void);
-	void update_ultrasonic_sensor_data (double value);
-	void update_wall_following_sensor_data (double value);
-
-	void upate_cliff_state(uint8_t id, uint8_t value);
-	void upate_bumper_state(uint8_t id, uint8_t value);
-	void upate_wheel_drop_state(uint8_t id, uint8_t value);
-
-	void update_obstatcle_safety_level(void);
-	void sensors_deal(void);
-	
 	double get_curr_pose_angle(void);
 	double get_curr_pose_reverse_angle(void);
 	double get_curr_pose_right_angle(ROTATE_DIRECTION_ENUM direction);
-	
-	bool test_rotate_is_over_clockwise(void);
-	bool test_rotate_is_over_anticlockwise(void);
-
-	bool test_angle_is_over(double current, double target, double &offset);
-	double get_curr_angle_difference_respond(void);
-
-	void set_monitor_angle_data(const ANGLE_MONITOR_STRU data);
-	void get_monitor_angle_data(ANGLE_MONITOR_STRU &data);
-	
-	void clear_monitor_angle_data(void);
-	
-	void set_monitor_angle_stage(const MONITOR_ENUM stage);
-	void get_monitor_angle_stage(MONITOR_ENUM &stage);
-	
-	void set_monitor_angle_respond_goal(const double angle);
-	double get_monitor_angle_respond_goal(void);
-	
-	void set_monitor_angle_respond_func(void(cfg_mobile_robot::*pf)(void));
-	void get_monitor_angle_respond_func(void(cfg_mobile_robot::*pf)(void));
-	
-	void set_monitor_angle_respond_goal_and_func(double angle, void(cfg_mobile_robot::*pf)(void));
-	
-
-	double get_monitor_angle_turn_back_angle(void);
-	void monitor_angle_turn_back_respond(void);
-	void monitor_angle_set_turn_back_deal(void);
-
-	void monitor_angle_pivot_respond(void);
-	void monitor_angle_set_pivot_deal(void);
-
-	void monitor_angle_turn_to_refer_line_respond(void);
-	void monitor_angle_turn_to_refer_line_deal(void);
-
-	void monitor_angle_turn_to_center_respond(void);
-	void monitor_angle_turn_to_center_deal(void);
-
-	double get_turnt_to_original_pose_angle(void);
-	void get_turnt_to_original_pose_action_type(ACTION_STATUS_ENUM &action);
-	void monitor_angle_turn_to_original_pose_respond(void);
-	void monitor_angle_turn_to_original_pose_deal(void);
-
-	double get_turnt_to_original_direction_angle(void);
-	void get_turnt_to_original_direction_action_type(ACTION_STATUS_ENUM &action);
-	void monitor_angle_turn_to_original_direction_respond(void);
-	void monitor_angle_turn_to_original_direction_deal(void);
-
-	void left_or_right_bumper_respond(void);
-	void monitor_angle_left_bumper_respond(void);
-	void monitor_angle_left_bumper_deal(void);
-	void monitor_angle_right_bumper_respond(void);
-	void monitor_angle_right_bumper_deal(void);
-
-	bool test_adjust_velocity(double &linear_velocity, double &angular_velocity);
-	
-	void monitor_angle_adjust_velocity(void);
-	void monitor_angle_running(void);
-	void monitor_angle_respond(void);
-	
-	void monitor_stop_rotate(void);
-	
-	void smooth_decelerate_stop(void);
-	
-	void set_monitor_angle_rotate_call_back(double angle, void(cfg_mobile_robot::*pf_call_back)(void));
-	
-
-	void bumper_sensor_respond_deal(void);
-	void cliff_sensor_respond_deal(void);
-	void wheel_drop_sensor_respond_deal(void);
-	void ultrasonic_sensor_respond_deal(void);
-
-	void functional_mode(void);
 
 	bool get_action_status_str(ACTION_STATUS_ENUM id, string& str);
 	void print_curr_action_status_str(void);
@@ -306,62 +168,11 @@ public:
 	void print_curr_pose_angle(void);
 
 	void change_curr_action(const ACTION_STATUS_ENUM action);
-	void change_rotate_direction(void);
-	
-	void do_retreat(void);
 
 	void get_front_position(POSE_STRU &position);
 	double get_vertical_distance_curr_position_to_refer_line(void);
 	
-	void set_current_position_to_refer_start_pose(void);
-	void straight_moving_ajust_velocity(void);
-
-	void straight_driving_adjust_angle(void);
-	void straight_driving_adjust_speed(void);
-	
-	void update_traight_line_moving_data(void);
-
-	double get_distance_to_start_point_pos(void);
-	double get_distance_to_end_point_pos(void);
-	double get_distance_to_traight_line_moving_start_pos(void);
-	double get_distance_to_traight_line_moving_target_pos(void);
-
-	double get_vertical_dimension_curr_pos_to_refer_line(void);
-
-	double get_refer_line_start_pos_to_curr_pos_angle(void);
-	double get_refer_line_end_pos_to_curr_pos_angle(void);
-	double get_center_pose_to_curr_pos_angle(void);
-
-	bool test_arrive_at_refer_line(void);
-	void update_refer_line_traight_line_moving_target_pos(void);
-	void traight_line_moving_dynamic_regulation(void);
-	
-	void local_move_start(void);
-	void local_move_pivot(void);
-	void local_move_fst_line_start(void);
-	void local_move_return_reference_line(void);
-	void local_move_return_center_pose(void);
-	void local_move_fst_half_area(void);
-	void local_move_sec_half_area(void);
-
-	void do_local_move(void);
-	void publish_trajectory(double x, double y, double th);
-	void show_trajectory(void);
-
-	bool test_detect_obstacle_turn_back(void);
-	
-	void timer_callback(const ros::TimerEvent& event);
-	void retreat_callback(const ros::TimerEvent& event);
-	
-	void register_time_callback(void);
-	void register_msgs_and_timers(void);
-	
-	void function_processor( void );
-
 	static pthread_mutex_t mutex;
-
-	double odometer_horizontal;
-	double odometer_vertical;
 
 private:
 	static cfg_mobile_robot* p_instance_;
@@ -375,17 +186,7 @@ private:
 	static constexpr double distance_precision_ = 0.01;            //距离精度
 	static constexpr double angle_precision_ = 0.2;                //角度精度
 
-	static constexpr double collide_adjusted_angle_ = 30.0;        //碰撞调节角度
-
-	ros::Timer timer_;
-	ros::Timer retreat_timer_;
-	
-	ros::Publisher pub_path_;
 	ACTION_STATUS_STRU action_;                                    //当前运动状态
-	REFERENCE_DATA_STRU ref_data_;
-
-	ANGLE_MONITOR_STRU angle_monitor_;                             //角度监测数据状态
-	void(cfg_mobile_robot::*pf_monitor_)();
 
 	cfg_mobile_robot();
 };

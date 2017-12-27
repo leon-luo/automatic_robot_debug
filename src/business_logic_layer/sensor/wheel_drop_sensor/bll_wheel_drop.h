@@ -3,47 +3,27 @@
   版权所有 (C), 2017-2028 惠州市蓝微电子有限公司
 
  ******************************************************************************
-  文件名称: drv_sensor.h
+  文件名称: bll_wheel_drop.h
   版本编号: 初稿
   作     者: Leon
-  生成日期: 2017年12月19日
+  生成日期: 2017年12月21日
   最近修改:
-  功能描述: drv_sensor.cpp 的头文件
+  功能描述: bll_wheel_drop.cpp 的头文件
   函数列表:
   修改历史:
-  1.日     期: 2017年12月19日
+  1.日     期: 2017年12月21日
     作     者: Leon
     修改内容: 创建文件
 ******************************************************************************/
-#ifndef __DRV_SENSOR_H__
-#define __DRV_SENSOR_H__
-
-/*****************************************************************************/
-#ifdef __cplusplus
-#if __cplusplus
-//extern "C"{
-#endif
-#endif /* __cplusplus */
-/*****************************************************************************/
+#ifndef __BLL_WHEEL_DROP_H__
+#define __BLL_WHEEL_DROP_H__
 
 /******************************************************************************
  * 包含头文件
  ******************************************************************************/
-#include "base_type.h"
-
 #include <pthread.h>
 
-#include <ros/ros.h>
-#include <geometry_msgs/Twist.h>
-#include <std_msgs/Int16.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/Float64.h>
-#include <nav_msgs/Odometry.h>
-#include <sensor_msgs/LaserScan.h>
-
-#include <kobuki_msgs/CliffEvent.h>
-#include <kobuki_msgs/BumperEvent.h>
-#include <kobuki_msgs/WheelDropEvent.h>
+#include "base_type.h"
 
 /******************************************************************************
  * 外部变量声明
@@ -76,48 +56,25 @@
 /******************************************************************************
  * 类声明
  ******************************************************************************/
-
-class drv_sensor
+class bll_wheel_drop
 {
 protected:
-	drv_sensor();
-	~drv_sensor();
-
+	bll_wheel_drop();
+	~bll_wheel_drop();
+	
 public:
-	static drv_sensor* get_instance(void);
+	static bll_wheel_drop* get_instance(void);
 	static void release_instance(void);
 
-	void initialize(void);
-	void set_run_velocity(double line_velocity, double angular_velocity);
+	void update_wheel_drop_state(uint8_t id, uint8_t value);
+	
+	void wheel_drop_sensor_respond_deal(void);
 	
 private:
-	void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg);
-	void cliff_event_callback(const kobuki_msgs::CliffEvent &msg);
-	void bumper_evnet_callback(const kobuki_msgs::BumperEvent &msg);
-	void wheel_drop_event_callback(const kobuki_msgs::WheelDropEvent &msg);
-	void ultrasonic_sensor_callback(const std_msgs::Int16& msg);
-	void wall_following_sensor_callback(const std_msgs::Int16& msg);
+	bll_wheel_drop(const bll_wheel_drop&){};
+	bll_wheel_drop& operator=(const bll_wheel_drop&){};
 
-	void laser_scan_callback( const sensor_msgs::LaserScan& msg );
-	void velocity_callback( const geometry_msgs::Twist& msg );
-
-	void register_sensor_msgs_callback(void);
-
-	drv_sensor(const drv_sensor&){};
-	drv_sensor& operator=(const drv_sensor&){};
-
-	ros::Publisher pub_cmvl_;
-	
-	ros::Subscriber position_sub_;
-	ros::Subscriber cliff_sub_;
-	ros::Subscriber bumper_sub_;
-	ros::Subscriber wheel_drop_sub_;
-	ros::Subscriber velocity_sub_;
-	ros::Subscriber ultrasonic_sensor_sub_;
-	ros::Subscriber wall_following_sensor_sub_;
-	ros::Subscriber laser_scan_sub_;
-	
-	static drv_sensor* p_instance_;
+	static bll_wheel_drop* p_instance_;
 	static pthread_mutex_t mutex_;
 };
 
@@ -130,9 +87,17 @@ private:
 /*****************************************************************************/
 #ifdef __cplusplus
 #if __cplusplus
-//}
+extern "C"{
 #endif
 #endif /* __cplusplus */
 /*****************************************************************************/
 
-#endif /* __DRV_SENSOR_H__ */
+/*****************************************************************************/
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif
+#endif /* __cplusplus */
+/*****************************************************************************/
+
+#endif /* __BLL_WHEEL_DROP_H__ */

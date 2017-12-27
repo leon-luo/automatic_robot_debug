@@ -25,6 +25,12 @@
 #include "cfg_mobile_robot.h"
 #include "debug_function.h"
 
+#include "bll_cliff.h"
+#include "bll_bumper.h"
+#include "bll_wheel_drop.h"
+#include "bll_ultrasonic.h"
+#include "bll_wall_following.h"
+
 /******************************************************************************
  * 外部变量声明
  ******************************************************************************/
@@ -146,6 +152,44 @@ void drv_sensor::release_instance(void)
 }
 
 /*****************************************************************************
+ 函 数 名: drv_sensor.initialize
+ 功能描述  : 初始化
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月25日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void drv_sensor::initialize(void)
+{
+	register_sensor_msgs_callback();
+}
+
+/*****************************************************************************
+ 函 数 名: drv_sensor.set_run_velocity
+ 功能描述  : 设置行驶速度
+ 输入参数: double line_velocity     
+           double angular_velocity  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2017年12月19日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void drv_sensor::set_run_velocity(double line_velocity, double angular_velocity)
+{
+	geometry_msgs::Twist twist;
+	twist.angular.z = angular_velocity;
+	twist.linear.x = line_velocity;
+	pub_cmvl_.publish(twist);
+}
+
+/*****************************************************************************
  函 数 名: drv_sensor.odometry_callback
  功能描述  : 里程计信息更新
  输入参数: const nav_msgs::Odometry::ConstPtr& msg
@@ -215,8 +259,8 @@ void drv_sensor::cliff_event_callback ( const kobuki_msgs::CliffEvent& msg )
 	uint8_t cliff_id = msg.sensor;
 	uint8_t cliff_state = msg.state;
 
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->upate_cliff_state(cliff_id, cliff_state);
+	bll_cliff* p_cliff = bll_cliff::get_instance();
+	p_cliff->upate_cliff_state(cliff_id, cliff_state);
 }
 
 /*****************************************************************************
@@ -254,8 +298,8 @@ void drv_sensor::bumper_evnet_callback ( const kobuki_msgs::BumperEvent& msg )
 	uint8_t bumper_id = msg.bumper;
 	uint8_t state = msg.state;
 
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->upate_bumper_state(bumper_id, state);
+	bll_bumper* p_bumper = bll_bumper::get_instance();
+	p_bumper->upate_bumper_state(bumper_id, state);
 }
 
 /*****************************************************************************
@@ -293,8 +337,8 @@ void drv_sensor::wheel_drop_event_callback ( const kobuki_msgs::WheelDropEvent& 
 	uint8_t wheel_id = msg.wheel;
 	uint8_t wheel_state = msg.state;
 
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->upate_wheel_drop_state(wheel_id, wheel_state);
+	bll_wheel_drop* p_wheel_drop = bll_wheel_drop::get_instance();
+	p_wheel_drop->update_wheel_drop_state(wheel_id, wheel_state);
 }
 
 /*****************************************************************************
@@ -313,8 +357,8 @@ void drv_sensor::ultrasonic_sensor_callback ( const std_msgs::Int16& msg )
 {
 	double value = ( double ) msg.data;
 
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->update_ultrasonic_sensor_data (value);
+	bll_ultrasoic* p_ultrasoic = bll_ultrasoic::get_instance();
+	p_ultrasoic->update_ultrasonic_sensor_data (value);
 }
 
 /*****************************************************************************
@@ -333,8 +377,8 @@ void drv_sensor::wall_following_sensor_callback ( const std_msgs::Int16& msg )
 {
 	double value = ( double ) msg.data;
 
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->update_wall_following_sensor_data (value);
+	bll_wall_following* p_wall_following = bll_wall_following::get_instance();
+	p_wall_following->update_wall_following_sensor_data (value);
 }
 
 /*****************************************************************************
@@ -514,27 +558,6 @@ void drv_sensor::register_sensor_msgs_callback(void)
 	//定时器
 	//timer_ = node_h.createTimer(ros::Duration(2), &drv_sensor::timer_callback, p_instance_);
 	//retreat_timer_ = node_h.createTimer(ros::Duration(0.01), &drv_sensor::retreat_callback, p_instance_);
-}
-
-/*****************************************************************************
- 函 数 名: drv_sensor.set_run_velocity
- 功能描述  : 设置行驶速度
- 输入参数: double line_velocity     
-           double angular_velocity  
- 输出参数: 无
- 返 回 值: void
- 
- 修改历史:
-  1.日     期: 2017年12月19日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-void drv_sensor::set_run_velocity(double line_velocity, double angular_velocity)
-{
-	geometry_msgs::Twist twist;
-	twist.angular.z = angular_velocity;
-	twist.linear.x = line_velocity;
-	pub_cmvl_.publish(twist);
 }
 
 /******************************************************************************

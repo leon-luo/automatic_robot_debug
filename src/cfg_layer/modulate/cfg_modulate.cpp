@@ -21,6 +21,8 @@
  ******************************************************************************/
 #include "cfg_modulate.h"
 
+#include "cfg_mobile_robot.h"
+
 #include <stdlib.h>
 
 #include "debug_function.h"
@@ -125,16 +127,16 @@ void cfg_modulate::release_instance(void)
 *****************************************************************************/
 cfg_modulate::cfg_modulate()
 {
-	PID_STRU pid;
+	//PID_STRU pid;
 	//debug_print_error("+++++++++++++");
-	pid.goal_value = 0.0;               // 设定目标 desired value
-	pid.proportion = 0.1;               // 比例常数 proportional const
-	pid.integral = 0.0;                 // 积分常数 integral const
-	pid.derivative = 0.4;               // 微分常数 derivative const
-	pid.last_error = 0.0;               // error[-1]
-	pid.prev_error = 0.0;               // error[-2]
-	pid.sum_error = 0.0;                // sums of errors
-	angular_velocity_pid_.set_pid(pid);
+//	pid.goal_value = 0.0;               // 设定目标 desired value
+//	pid.proportion = 0.1;               // 比例常数 proportional const
+//	pid.integral = 0.0;                 // 积分常数 integral const
+//	pid.derivative = 0.4;               // 微分常数 derivative const
+//	pid.last_error = 0.0;               // error[-1]
+//	pid.prev_error = 0.0;               // error[-2]
+//	pid.sum_error = 0.0;                // sums of errors
+//	angular_velocity_pid_.set_pid(pid);
 
 	//angular_velocity_pid_.print_pid_data();
 	//debug_print_error("-------------");
@@ -415,6 +417,44 @@ void cfg_modulate::endble_linear_velocity_ajust(double velocity)
 	set_linear_velocity_ajust(true, velocity);
 }
 
+/*****************************************************************************
+ 函 数 名: cfg_modulate.update_velocity
+ 功能描述  : 检测更新调整速度
+ 输入参数: double &line_v     
+           double &angular_v  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2017年12月20日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+//bool cfg_modulate::update_velocity(double &line_v, double &angular_v)
+//{
+//	bool ret = false;
+//	bool line_v_flag = false;
+//	bool angular_v_flag = false;
+//	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
+//
+//	line_v_flag = get_linear_velocity_ajust(line_v);
+//	if ( true == line_v_flag )
+//	{
+//		p_instance->set_linear_velocity(line_v, angular_v);
+//		disable_linear_velocity_ajust();
+//		ret = true;
+//	}
+//
+//	angular_v_flag = get_angular_velocity_ajust(angular_v);
+//	if ( true == angular_v_flag )
+//	{
+//		p_instance->set_angular_velocity(line_v, angular_v);
+//		disable_angular_velocity_ajust();
+//		ret = true;
+//	}
+//	
+//	return ret;
+//}
 
 /******************************************************************************
  * 内部函数声明

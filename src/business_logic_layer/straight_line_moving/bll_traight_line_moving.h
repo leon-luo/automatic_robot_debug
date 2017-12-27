@@ -31,6 +31,8 @@
  ******************************************************************************/
 #include "base_type.h"
 
+#include <pthread.h>
+
 /******************************************************************************
  * 外部变量声明
  ******************************************************************************/
@@ -76,9 +78,18 @@ typedef struct STRAIGHT_LINE_MOVING
 
 class bll_traight_line_moving
 {
-public:
+protected:
 	bll_traight_line_moving();
 	~bll_traight_line_moving();
+	
+public:
+	static bll_traight_line_moving* get_instance(void);
+	static void release_instance(void);
+
+	bool set_traight_line_moving(void);
+	bool test_is_traight_line_moving(void);
+
+	void update_traight_line_moving_data(void);
 	
 	void set_traight_line_moving_flag(const bool flag);
 	bool get_traight_line_moving_flag(void);
@@ -110,23 +121,36 @@ public:
 	double get_traight_line_moving_direction_angle(void);
 	void clear_traight_line_moving_data(void);
 
-	double get_distance(double x1, double y1, double x2, double y2);
+	void straight_driving_adjust_angle(void);
+	void straight_driving_adjust_speed(void);
 
-//protected:
+	double get_distance_to_traight_line_moving_start_pos(void);
+	double get_distance_to_traight_line_moving_target_pos(void);
 
+	void set_straight_moving_refer_start_pose(const POSE_STRU data);
+	void get_straight_moving_refer_start_pose(POSE_STRU &data);
+
+	void set_straight_moving_refer_target_pose(const POSE_STRU data);
+	void get_straight_moving_refer_target_pose(POSE_STRU &data);
+
+	void get_straight_moving_refer_pose(POSE_STRU &start,POSE_STRU &target);
 
 private:
 	bll_traight_line_moving(const bll_traight_line_moving&){};             //禁止拷贝
 	bll_traight_line_moving& operator=(const bll_traight_line_moving&){};  //禁止赋值
 
 	STRAIGHT_LINE_MOVING_STRU straight_line_moving_;
+
+	POSE_STRU start_pose_;
+	POSE_STRU target_pose_;
+
+	static bll_traight_line_moving* p_instance_;
+	static pthread_mutex_t mutex_;
 };
 
 /******************************************************************************
  * 内部函数声明
  ******************************************************************************/
-
-
 
 /*****************************************************************************/
 #ifdef __cplusplus

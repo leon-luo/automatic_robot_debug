@@ -32,14 +32,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <pthread.h>
-#include <inttypes.h>
+//#include <inttypes.h>
 
 #include "cfg_base_type.h"
 #include "pid.h"
-
-#include "angle_base.h"
-
-//using namespace std;
 
 /******************************************************************************
  * 外部变量声明
@@ -76,13 +72,11 @@ typedef struct VELOCITY_AJUST
 	double linear_velocity;
 }VELOCITY_AJUST_STRU;
 
-
-
 /******************************************************************************
  * 类声明
  ******************************************************************************/
 
-class cfg_modulate : public angel_base
+class cfg_modulate
 {
 public:
 	static cfg_modulate* get_instance(void);
@@ -108,6 +102,8 @@ public:
 
 	void disable_linear_velocity_ajust(void);
 	void endble_linear_velocity_ajust(double velocity);
+
+	//bool update_velocity(double &line_v, double &angular_v);
 	
 protected:
 	cfg_modulate();
@@ -122,7 +118,7 @@ private:
 	
 	VELOCITY_AJUST_STRU velocity_ajust_;
 
-	pid angular_velocity_pid_;
+	//pid angular_velocity_pid_;
 };
 
 

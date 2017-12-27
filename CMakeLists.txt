@@ -228,6 +228,7 @@ include_directories(
 	include/${PROJECT_NAME}/lib/common/angle
 	include/${PROJECT_NAME}/lib/common/algorithm
 	include/${PROJECT_NAME}/lib/common/algorithm/pid
+	include/${PROJECT_NAME}/lib/common/version
 )
 
 include_directories(
@@ -248,13 +249,32 @@ include_directories(
 
 include_directories(
 	src/common/angle
+	src/common/algorithm/pid
+	src/common/line
 	src/common/version
 )
 
 include_directories(
+	src/business_logic_layer/timer
 	src/business_logic_layer/rotate
+	src/business_logic_layer/trajectory
 	src/business_logic_layer/motion_control
+	src/business_logic_layer/partial_cleaning
+	src/business_logic_layer/processing_function
 	src/business_logic_layer/straight_line_moving
+	src/business_logic_layer/sensor/cliff_sensor
+	src/business_logic_layer/sensor/bumper_sensor
+	src/business_logic_layer/sensor/ultrasonic_sensor
+	src/business_logic_layer/sensor/wheel_drop_sensor
+	src/business_logic_layer/sensor/wall_following_sensor
+	
+)
+
+include_directories(
+	src/cfg_layer/data
+	src/cfg_layer/mobile_robot
+	src/cfg_layer/modulate
+	src/cfg_layer/walk_plan
 )
 
 include_directories(
@@ -270,13 +290,30 @@ add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp
 								
 								src/common/algorithm/pid/pid.cpp
 								src/common/angle/angle_base.cpp
+								src/common/line/line_base.cpp
 								src/common/version/version.cpp
 								
 								src/business_logic_layer/rotate/bll_rotate.cpp
 								src/business_logic_layer/motion_control/bll_motion_control.cpp
 								src/business_logic_layer/straight_line_moving/bll_traight_line_moving.cpp
-
+								src/business_logic_layer/partial_cleaning/bll_partial_cleaning.cpp
+								src/business_logic_layer/processing_function/bll_processing_function.cpp
+								
+								src/business_logic_layer/sensor/bumper_sensor/bll_bumper.cpp
+								src/business_logic_layer/sensor/cliff_sensor/bll_cliff.cpp
+								src/business_logic_layer/sensor/ultrasonic_sensor/bll_ultrasonic.cpp
+								src/business_logic_layer/sensor/wall_following_sensor/bll_wall_following.cpp
+								src/business_logic_layer/sensor/wheel_drop_sensor/bll_wheel_drop.cpp
+								
+								src/business_logic_layer/timer/bll_timer.cpp
+								src/business_logic_layer/trajectory/bll_trajectory.cpp
+								src/business_logic_layer/processing_function/bll_processing_function.cpp
+								
 								src/drv_layer/sensor/drv_sensor.cpp
+
+								include/${PROJECT_NAME}/lib/cfg_layer/mobile_robot/cfg_if_mobile_robot.cpp
+								include/${PROJECT_NAME}/lib/cfg_layer/modulate/cfg_if_modulate.cpp
+								include/${PROJECT_NAME}/lib/common/version/cfg_if_version.cpp
 )
 
 

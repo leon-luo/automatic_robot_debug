@@ -138,13 +138,13 @@ class cfg_walk_plan
 		void set_local_move_area_part(const AREA_PART_ENUM data);
 		void get_local_move_area_part(AREA_PART_ENUM &data);
 		bool test_local_move_area_part_is_left(void);
-		bool test_local_move_area_part_is_right(void);
 		void switch_local_move_area_part(void);
 
 		void set_local_move_direction(const MOVE_DIRECTION_ENUM data);
 		void get_local_move_direction(MOVE_DIRECTION_ENUM &data);
+		
 		bool test_local_move_direction_is_forward(void);
-		bool test_local_move_direction_is_backward(void);
+
 		void switch_local_move_direction(void);
 		void print_local_move_direction(void);
 
@@ -153,12 +153,6 @@ class cfg_walk_plan
 
 		void set_local_move_planning_pose(const POSE_STRU &data, int index);
 		void get_local_move_planning_pose(POSE_STRU &data, int index);
-		
-		double get_local_move_edge_length(void);
-		double get_local_move_half_edge_length(void);
-		
-		void set_map_frame_area(const AREA_STRU data);
-		void get_map_frame_area(AREA_STRU &data);
 
 		void set_district_area(const AREA_STRU data);
 		void get_district_area(AREA_STRU &data);
@@ -168,35 +162,11 @@ class cfg_walk_plan
 		
 		void get_district_area_precision(double &data);
 
-		void updata_district_area(const POSE_STRU &data);
-
-		void set_refer_line_start_point_pose(const POSE_STRU data);
-		void get_refer_line_start_point_pose(POSE_STRU &data);
-		
-		void set_refer_line_end_point_pose(const POSE_STRU data);
-		void get_refer_line_end_point_pose(POSE_STRU &data);
-
-		void set_straight_moving_refer_start_pose(const POSE_STRU data);
-		void get_straight_moving_refer_start_pose(POSE_STRU &data);
-
-		void set_straight_moving_refer_target_pose(const POSE_STRU data);
-		void get_straight_moving_refer_target_pose(POSE_STRU &data);
-
-		void get_straight_moving_refer_pose(POSE_STRU &start,POSE_STRU &target);
-
 	private:
 		static pthread_mutex_t mutex_;
 		static cfg_walk_plan* p_instance_;
-		static constexpr double local_erea_edge_length_ = 1.4;//1.6;2.0;//      //局域清扫边长(单位:m)
 		
-		AREA_STRU map_frame_;
 		AREA_STRU district_;
-
-		POSE_STRU ref_start_point_;
-		POSE_STRU ref_end_point_;
-		
-		POSE_STRU start_pose_;
-		POSE_STRU target_pose_;
 };
 
 /******************************************************************************

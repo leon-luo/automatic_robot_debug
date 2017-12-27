@@ -1047,16 +1047,16 @@ bool cfg_robot_data::update_velocity(double &line_v, double &angular_v)
 	flag = get_adjust_velocity();
 	if (true == flag)
 	{
-		debug_print_warnning("111  line_v=%lf, angular_v=%lf", line_v, angular_v);
+		//debug_print_warnning("111  line_v=%lf, angular_v=%lf", line_v, angular_v);
 		get_velocity(line_v, angular_v);
-		debug_print_warnning("222  line_v=%lf, angular_v=%lf", line_v, angular_v);
+		//debug_print_warnning("222  line_v=%lf, angular_v=%lf", line_v, angular_v);
 		set_adjust_velocity(false);
 	}
 	else
 	{
 		//debug_print_warnning("vvvvv  line_v=%lf, angular_v=%lf", line_v, angular_v);
 	}
-	
+
 	set_velocity(line_v, angular_v);
 	
 	return flag;
