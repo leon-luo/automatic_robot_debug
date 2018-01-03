@@ -1,5 +1,52 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(cleaner_robot)
+message("=======================================================")
+message("Application name is " ${PROJECT_NAME})
+message(PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
+message(PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR})
+
+#if 0
+#告知当前使用的是交叉编译方式，必须配置
+#set(CMAKE_SYSTEM_NAME Linux)
+
+#指定C交叉编译器,必须配置
+#或交叉编译器使用绝对地址
+#SET(CMAKE_C_COMPILER "arm-linux-gcc")
+#SET(CMAKE_C_COMPILER E:\my-studio-tool\Linaro\gcc-linaro-arm-linux-gnueabihf-4.8-2014.04\bin\arm-linux-gnueabihf-gcc.exe)
+#set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
+#SET(CMAKE_C_COMPILER /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin/arm-rockchip-linux-gnueabihf-gcc)
+#指定C++交叉编译器
+#SET(CMAKE_CXX_COMPILER "arm-linux-g++")
+#SET(CMAKE_CXX_COMPILER E:\my-studio-tool\Linaro\gcc-linaro-arm-linux-gnueabihf-4.8-2014.04\bin\arm-linux-gnueabihf-g++.exe)
+#set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
+#SET(CMAKE_CXX_COMPILER /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin/arm-rockchip-linux-gnueabihf-g++)
+
+#不一定需要设置
+#指定交叉编译环境安装目录
+#set(CMAKE_FIND_ROOT_PATH /path/to/cross/compile/build/environment)
+
+# Have to set this one to BOTH, to allow CMake to find rospack
+#从来不在指定目录下查找工具程序
+#set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+#只在指定目录下查找库文件
+#set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+#只在指定目录下查找头文件
+#set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+#set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+#endif
+#原来以为可以在 CMak eLists.txt中做如下设置：
+#set(CMAKE_BUILD_TYPE Debug)  
+#但是，这样的设置却是没有效果的。
+#必须改成如下的才行：
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")  
+#还可以在命令行设置：
+#cmake  -DCMAKE_BUILD_TYPE=Debug .. 
+
+message("Build Type:"${CMAKE_BUILD_TYPE} ${CMAKE_CXX_FLAGS})
+
+message("CMAKE_FIND_ROOT_PATH:"${CMAKE_FIND_ROOT_PATH})
+
+message("=======================================================")
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11 -g)
@@ -240,6 +287,10 @@ include_directories(
 )
 
 include_directories(
+	include/${PROJECT_NAME}/lib/bll_layer
+)
+
+include_directories(
 	include/${PROJECT_NAME}/lib/drv_layer
 )
 
@@ -315,7 +366,6 @@ add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp
 								include/${PROJECT_NAME}/lib/cfg_layer/modulate/cfg_if_modulate.cpp
 								include/${PROJECT_NAME}/lib/common/version/cfg_if_version.cpp
 )
-
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}

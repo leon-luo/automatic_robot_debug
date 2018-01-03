@@ -21,6 +21,8 @@
  ******************************************************************************/
 #include "cfg_if_mobile_robot.h"
 
+#include "drv_sensor.h"
+
 /******************************************************************************
  * 外部变量定义
  ******************************************************************************/
@@ -56,6 +58,23 @@
 /******************************************************************************
  * 内部函数定义
  ******************************************************************************/
+/*****************************************************************************
+ 函 数 名: cfg_if_print_change_action
+ 功能描述  : 打印改变的运动状态
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2018年1月3日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void cfg_if_print_change_action(void)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->print_change_action_status();
+}
 
 /*****************************************************************************
  函 数 名: cfg_if_set_current_position
@@ -971,8 +990,46 @@ void cfg_if_get_velocity(double &line_v, double &angular_v)
 *****************************************************************************/
 bool cfg_if_update_velocity(double &line_v, double &angular_v)
 {
-	cfg_mobile_robot* p_cfg_instance = cfg_mobile_robot::get_instance();
-	return p_cfg_instance->update_velocity(line_v, angular_v);
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	return p_mobile_robot->update_velocity(line_v, angular_v);
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_if_set_adjust_velocity_flag
+ 功能描述  : 设置调整速度
+ 输入参数: bool flag  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2017年12月28日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_if_set_adjust_velocity_flag(bool flag)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	
+	p_mobile_robot->set_adjust_velocity(flag);
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_if_set_run_velocity
+ 功能描述  : 配置运行速度
+ 输入参数: double &line_v     
+           double &angular_v  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2017年12月28日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_if_set_run_velocity(double &line_v, double &angular_v)
+{
+	drv_sensor* p_drv_instance = drv_sensor::get_instance();
+	p_drv_instance->set_run_velocity(line_v, angular_v);
 }
 
 /*****************************************************************************

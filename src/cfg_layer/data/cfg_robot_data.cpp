@@ -74,13 +74,18 @@ cfg_robot_data::cfg_robot_data()
 {
 	ULTRASONIC_SENSOR_STRU ultrasonic_sensor = {35.0, 25.0, 15.0, false, SAFETY_LEVEL_SAFE};
 	set_ultrasonic_sensor_state(ultrasonic_sensor);
-
+	
+	set_adjust_velocity(false);
+	
 	set_bumper_state(LEFT_BUMPER, false);
 	set_bumper_state(CENTER_BUMPER, false);
 	set_bumper_state(RIGHT_BUMPER, false);
 
 	set_cliff_state(LEFT_CLIFF, false);
 	set_cliff_state(RIGHT_CLIFF, false);
+
+	set_wheel_drop_state(LEFT_WHEEL, false);
+	set_wheel_drop_state(RIGHT_WHEEL, false);
 }
 
 /*****************************************************************************
@@ -556,6 +561,7 @@ bool cfg_robot_data::test_wheel_sensor_is_normal(void)
 		get_wheel_drop_state((WHEEL_ID_ENUM)i, state);
 		if ( true == state )
 		{
+			debug_print_error("i=%d state=%d", i, state);
 			return false;
 		}
 	}

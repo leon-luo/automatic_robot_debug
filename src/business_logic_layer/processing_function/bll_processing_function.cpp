@@ -33,6 +33,7 @@
 
 #include "cfg_if_mobile_robot.h"
 #include "cfg_if_version.h"
+#include "debug_function.h"
 
 /******************************************************************************
  * 外部变量定义
@@ -213,7 +214,7 @@ void bll_processing_function::initialize_version(void)
 	uint8_t i = 0;
 	uint32_t fields = 0;
 	uint32_t firmware_value[8] = {0,0,0,0,0,0,0,1};
-	uint32_t hardware_value[8] = {0,0,0,0,0,0,0,1};
+	uint32_t hardware_value[8] = {0,0,0,0,0,0,0,0};
 	
 	fields = cfg_if_get_version_fields();
 	for (i = 0; i < fields; ++i)
@@ -226,9 +227,9 @@ void bll_processing_function::initialize_version(void)
 		cfg_if_set_hardware_version_info(i, hardware_value[i]);
 	}
 
-	cfg_if_set_serial_number("1234567890");
-	cfg_if_set_uboot_version("u-boot");
-	cfg_if_set_kernerl_version("linux");
+	cfg_if_set_serial_number("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	cfg_if_set_uboot_version("U-Boot 2014.10-RK3288-02 (Mar 20 2017 - 14:29:00);#Boot ver: 2017-03-20#2.17");
+	cfg_if_set_kernerl_version("Linux firefly 3.10.0 #7 SMP PREEMPT Thu Apr 20 10:53:28 CST 2017 armv7l armv7l armv7l GNU/Linux;Ubuntu 14.04.1 LTS");
 	
 	cfg_if_print_version();
 }
@@ -300,8 +301,8 @@ void bll_processing_function::functional_mode ( void )
 {
 	ACTION_STATUS_ENUM action;
 	bll_motion_control* p_motion_control = bll_motion_control::get_instance();
-	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->print_change_action_status();
+	
+	cfg_if_print_change_action();
 	action = cfg_if_get_curr_action();
 	switch ( action )
 	{
@@ -336,6 +337,7 @@ void bll_processing_function::functional_mode ( void )
 			p_motion_control->turn_right_angle_anticlockwise();
 			break;
 		default:
+			debug_print_warnning("p_motion_control->stop() action=%d", action);
 			p_motion_control->stop();
 			break;
 	}

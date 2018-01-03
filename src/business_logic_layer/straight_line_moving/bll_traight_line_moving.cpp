@@ -628,8 +628,7 @@ void bll_traight_line_moving::straight_driving_adjust_angle(void)
 			angular_velocity = -angular_velocity;
 		}
 		
-		cfg_modulate* p_modulate = cfg_modulate::get_instance();
-		p_modulate->endble_angular_velocity_ajust(angular_velocity);
+		cfg_if_endble_angular_velocity_ajust(angular_velocity);
 	}
 }
 

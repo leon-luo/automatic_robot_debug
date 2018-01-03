@@ -22,8 +22,9 @@
 #include "bll_motion_control.h"
 
 #include "cfg_if_mobile_robot.h"
+#include "cfg_if_modulate.h"
 
-#include "drv_sensor.h"
+#include "debug_function.h"
 
 /******************************************************************************
  * 外部变量定义
@@ -161,10 +162,19 @@ void bll_motion_control::release_instance(void)
 *****************************************************************************/
 void bll_motion_control::set_motion_control_velocity(double line_v, double angular_v)
 {
-	cfg_if_update_velocity(line_v, angular_v);
-
-	drv_sensor* p_drv_instance = drv_sensor::get_instance();
-	p_drv_instance->set_run_velocity(line_v, angular_v);
+	bool flag = false;
+	double line = line_v;
+	double angular = angular_v;
+	flag = cfg_if_update_velocity(line_v, angular_v);
+	if (true == flag)
+	{
+		//debug_print_warnning("line=%lf --> line_v=%lf;  angular=%lf --> angular_v=%lf\n", line, line_v, angular, angular_v);
+	}
+	else
+	{
+		//debug_print_info("line=%lf --> line_v=%lf;  angular=%lf --> angular_v=%lf\n", line, line_v, angular, angular_v);
+	}
+	cfg_if_set_run_velocity(line_v, angular_v);
 }
 
 /*****************************************************************************
@@ -184,12 +194,19 @@ void bll_motion_control::straight_moving( double line_v )
 	double angular_v = 0.0;
 	bool linear_flag = false;
 	bool angular_flag = false;
+	double line = line_v;
+	double angular = angular_v;
 
-	#ifdef ENABLE_MOUDLATE
-	cfg_modulate *p_modulate = cfg_modulate::get_instance();
-	angular_flag = p_modulate->get_angular_velocity_ajust(angular_v);
-	linear_flag = p_modulate->get_linear_velocity_ajust(line_v);
-	#endif /* ENABLE_MOUDLATE */
+	linear_flag = cfg_if_get_linear_velocity_ajust(line_v);
+	if (true == linear_flag)
+	{
+		//debug_print_warnning("line=%lf  -->  line_v=%lf\n", line, line_v);
+	}
+	angular_flag = cfg_if_get_angular_velocity_ajust(angular_v);
+	if (true == angular_flag)
+	{
+		//debug_print_warnning("angular=%lf  -->  angular_v=%lf\n", angular,angular_v);
+	}
 	
 	set_motion_control_velocity(line_v, angular_v);
 }
@@ -209,7 +226,6 @@ void bll_motion_control::straight_moving( double line_v )
 void bll_motion_control::rotate_moving ( double angular_v )
 {
 	const double line_v = 0.0;
-	
 	set_motion_control_velocity(line_v, angular_v);
 }
 
@@ -331,6 +347,7 @@ void bll_motion_control::turn_back_clockwise ( void )
 {
 	const double line_v = Linear_velocity_clockwise_;
 	const double angular_v = -Angular_velocity_clockwise_;
+	
 	set_motion_control_velocity(line_v, angular_v);
 }
 
@@ -350,7 +367,7 @@ void bll_motion_control::turn_back_anticlockwise ( void )
 {
 	const double line_v = Linear_velocity_clockwise_;
 	const double angular_v = Angular_velocity_clockwise_;
-
+	
 	set_motion_control_velocity(line_v, angular_v);
 }
 

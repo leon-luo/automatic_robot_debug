@@ -3,20 +3,20 @@
   版权所有 (C), 2017-2028 惠州市蓝微电子有限公司
 
  ******************************************************************************
-  文件名称: cfg_if_modulate.h
+  文件名称: mobile_robot_type.h
   版本编号: 初稿
   作     者: Leon
-  生成日期: 2017年12月27日
+  生成日期: 2018年1月2日
   最近修改:
-  功能描述: cfg_if_modulate.cpp 的头文件
+  功能描述: mobile_robot_type.h 的头文件
   函数列表:
   修改历史:
-  1.日     期: 2017年12月27日
+  1.日     期: 2018年1月2日
     作     者: Leon
     修改内容: 创建文件
 ******************************************************************************/
-#ifndef __CFG_IF_MODULATE_H__
-#define __CFG_IF_MODULATE_H__
+#ifndef __MOBILE_ROBOT_TYPE_H__
+#define __MOBILE_ROBOT_TYPE_H__
 
 /******************************************************************************
  * 包含头文件
@@ -45,6 +45,41 @@
 /******************************************************************************
  * 枚举类型
  ******************************************************************************/
+//移动机器人行动状态
+typedef enum ACTION_STATUS_ID
+{
+	STOP = 0,                                  //停止运行
+	GO_FORWARD,                                //向前运行
+	GO_BACK,                                   //后退运行
+	TURN_LEFT,                                 //左转
+	TURN_RIGHT,                                //右转
+	PIVOT,                                     //原地向后旋转180度
+	TURN_BACK_CLOCKWISE,                       //顺时针向后转180度
+	TURN_BACK_ANTICLOCKWISE,                   //逆时针向后转180度
+	TURN_RIGHT_ANGLE_CLOCKWISE,                //原地顺时针旋转90度
+	TURN_RIGHT_ANGLE_ANTICLOCKWISE,            //原地逆时针旋转90度
+	EDGE_WAYS,                                 //沿边运行
+	AUTO_DOCK,                                 //自动返程
+	LOCAL_AREA,                                //区域覆盖运行
+}ACTION_STATUS_ENUM;
+
+typedef enum LOCAL_MOVE_STATE
+{
+	LOCAL_MOVE_STOP,//0
+	LOCAL_MOVE_START,
+	LOCAL_MOVE_PIVOT,
+	LOCAL_MOVE_FST_LINE_START,
+	LOCAL_MOVE_FST_HALF,
+	LOCAL_MOVE_FST_HALF_DONE,//5
+	LOCAL_MOVE_RETURN_REFER_LINE,
+	LOCAL_MOVE_SEC_HALF_START,
+	LOCAL_MOVE_SEC_HALF,
+	LOCAL_MOVE_SEC_HALF_DONE,
+	LOCAL_MOVE_TURN_TO_CENTER_DIR,//10
+	LOCAL_MOVE_RETURN_CENTER_POS,
+	LOCAL_MOVE_TURN_TO_ORIGINAL_DIR,
+	LOCAL_MOVE_ALL_DONE,
+}LOCAL_MOVE_STATE_ENUM;
 
 /******************************************************************************
  * 结构体类型
@@ -57,14 +92,7 @@
 /******************************************************************************
  * 内部函数声明
  ******************************************************************************/
-void cfg_if_disable_linear_velocity_ajust(void);
-void cfg_if_endble_linear_velocity_ajust(double velocity);
 
-void cfg_if_disable_angular_velocity_ajust(void);
-void cfg_if_endble_angular_velocity_ajust(double velocity);
-
-bool cfg_if_get_linear_velocity_ajust(double &velocity);
-bool cfg_if_get_angular_velocity_ajust(double &velocity);
 
 
 /*****************************************************************************/
@@ -83,4 +111,4 @@ extern "C"{
 #endif /* __cplusplus */
 /*****************************************************************************/
 
-#endif /* __CFG_IF_MODULATE_H__ */
+#endif /* __MOBILE_ROBOT_TYPE_H__ */

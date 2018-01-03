@@ -32,27 +32,12 @@
 #include <iostream>
 #include <string>
 
-#include <unistd.h>
-#include <pthread.h>
-#include <inttypes.h>
-#include <sys/types.h>
-
-#include "math.h"
-
-#include <ros/ros.h>
-
-#include <std_msgs/Int16.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/Float64.h>
+#include "cfg_base_type.h"
 
 #include "version.h"
 #include "angle_base.h"
-
-#include "bll_traight_line_moving.h"
-
 #include "cfg_robot_data.h"
 #include "cfg_walk_plan.h"
-#include "cfg_modulate.h"
 
 using namespace std;
 
@@ -84,47 +69,11 @@ using namespace std;
 /******************************************************************************
  * 枚举类型
  ******************************************************************************/
-//移动机器人行动状态
-typedef enum ACTION_STATUS_ID
-{
-	STOP = 0,                                  //停止运行
-	GO_FORWARD,                                //向前运行
-	GO_BACK,                                   //后退运行
-	TURN_LEFT,                                 //左转
-	TURN_RIGHT,                                //右转
-	PIVOT,                                     //原地向后旋转180度
-	TURN_BACK_CLOCKWISE,                       //顺时针向后转180度
-	TURN_BACK_ANTICLOCKWISE,                   //逆时针向后转180度
-	TURN_RIGHT_ANGLE_CLOCKWISE,                //原地顺时针旋转90度
-	TURN_RIGHT_ANGLE_ANTICLOCKWISE,            //原地逆时针旋转90度
-	EDGE_WAYS,                                 //沿边运行
-	AUTO_DOCK,                                 //自动返程
-	LOCAL_AREA,                                //区域覆盖运行
-}ACTION_STATUS_ENUM;
 
 
 /******************************************************************************
  * 结构体类型
  ******************************************************************************/
-
-typedef struct ACTION_STATUS
-{
-	ACTION_STATUS_ENUM curr_action;
-	ACTION_STATUS_ENUM last_action;
-}ACTION_STATUS_STRU;
-
-typedef struct PRIME_DIRECTION
-{
-	double forward;                            //执行弓形行走时开始行走的正向
-	double reverse;                            //执行弓形行走时开始行走的反向
-	bool inversion;                            //颠倒调转
-	bool valid;                                //是否已保存有效的正反向数据标志
-}PRIME_DIRECTION_STRU;
-
-typedef struct REFERENCE_DATA
-{
-	PRIME_DIRECTION_STRU fst_dir;
-}REFERENCE_DATA_STRU;
 
 
 /******************************************************************************
@@ -136,7 +85,7 @@ typedef struct REFERENCE_DATA
  ******************************************************************************/
 
 //移动机器人状态数据类 
-class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan, public bll_traight_line_moving
+class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan
 {
 public:
 	static cfg_mobile_robot* get_instance();

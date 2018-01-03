@@ -274,7 +274,7 @@ void bll_ultrasoic::update_ultrasonic_sensor_data(double value)
 	}
 	else
 	{
-		debug_print_warnning("value=%lf", value);
+		//debug_print_warnning("data.enable=, value=%lf", data.enable, value);
 	}
 }
 

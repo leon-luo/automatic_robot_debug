@@ -130,4 +130,40 @@ void cfg_if_endble_angular_velocity_ajust(double velocity)
 	p_modulate->endble_angular_velocity_ajust(velocity);
 }
 
+/*****************************************************************************
+ 函 数 名: cfg_if_get_linear_velocity_ajust
+ 功能描述  : 获取调整后的线速度
+ 输入参数: double &velocity  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2017年12月29日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_if_get_linear_velocity_ajust(double &velocity)
+{
+	cfg_modulate *p_modulate = cfg_modulate::get_instance();
+	return p_modulate->get_linear_velocity_ajust(velocity);
+}
+
+/*****************************************************************************
+ 函 数 名: cfg_if_get_angular_velocity_ajust
+ 功能描述  : 获取调整后的角速度
+ 输入参数: double &velocity  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2017年12月29日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool cfg_if_get_angular_velocity_ajust(double &velocity)
+{
+	cfg_modulate *p_modulate = cfg_modulate::get_instance();
+	return p_modulate->get_angular_velocity_ajust(velocity);
+}
+
 

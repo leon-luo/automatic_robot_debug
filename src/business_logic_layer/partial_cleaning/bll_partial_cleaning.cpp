@@ -21,11 +21,17 @@
  ******************************************************************************/
 #include "bll_partial_cleaning.h"
 
+#include <math.h>
+
 #include "line_base.h"
-#include "debug_function.h"
+
 #include "cfg_if_modulate.h"
 #include "cfg_if_mobile_robot.h"
 
+#include "bll_rotate.h"
+#include "bll_traight_line_moving.h"
+
+#include "debug_function.h"
 
 
 /******************************************************************************
@@ -578,23 +584,23 @@ bool bll_partial_cleaning::test_arrive_at_refer_line(void)
 bool bll_partial_cleaning::test_detect_obstacle_turn_back(void)
 {
 	bool flag = false;
-	ULTRASONIC_SENSOR_STRU state;
-	
-	cfg_if_get_ultrasonic_sensor(state);
-	if (SAFETY_LEVEL_WARN == state.level)
-	{
-		flag = true;
-		debug_print_warnning("flag = true;");
-	}
-	else if (SAFETY_LEVEL_FATAL == state.level)
-	{
-		flag = true;
-		debug_print_fatal("flag = true;");
-	}
-	else
-	{
-		flag = false;
-	}
+//	ULTRASONIC_SENSOR_STRU state;
+//	
+//	cfg_if_get_ultrasonic_sensor(state);
+//	if (SAFETY_LEVEL_WARN == state.level)
+//	{
+//		flag = true;
+//		debug_print_warnning("flag = true;");
+//	}
+//	else if (SAFETY_LEVEL_FATAL == state.level)
+//	{
+//		flag = true;
+//		debug_print_fatal("flag = true;");
+//	}
+//	else
+//	{
+//		flag = false;
+//	}
 	
 	return flag;
 }
@@ -870,10 +876,8 @@ void bll_partial_cleaning::local_move_fst_half_area(void)
 	flag = p_traight_line_moving->test_is_traight_line_moving();
 	if (true == flag)
 	{
-		#ifdef ENABLE_MOUDLATE
 		p_traight_line_moving->update_traight_line_moving_data();
 		traight_line_moving_dynamic_regulation();
-		#endif /* ENABLE_MOUDLATE */
 		
 		distance = p_traight_line_moving->get_distance_to_traight_line_moving_start_pos();
 		length = get_local_move_edge_length();
@@ -896,7 +900,7 @@ void bll_partial_cleaning::local_move_fst_half_area(void)
 		}
 		else
 		{
-			test_detect_obstacle_turn_back();
+			flag = test_detect_obstacle_turn_back();
 			if (true == flag)
 			{
 				if (true == half_done_flag)
@@ -942,12 +946,7 @@ void bll_partial_cleaning::local_move_sec_half_area(void)
 	flag = p_traight_line_moving->test_is_traight_line_moving();
 	if (true == flag)
 	{
-		#ifdef ENABLE_MOUDLATE
-		if (true == flag)
-		{
-			traight_line_moving_dynamic_regulation();
-		}
-		#endif /* ENABLE_MOUDLATE */
+		traight_line_moving_dynamic_regulation();
 
 		distance = p_traight_line_moving->get_distance_to_traight_line_moving_start_pos();
 		length = get_local_move_edge_length();
@@ -965,7 +964,7 @@ void bll_partial_cleaning::local_move_sec_half_area(void)
 		}
 		else
 		{
-			test_detect_obstacle_turn_back();
+			flag = test_detect_obstacle_turn_back();
 			if (true == flag)
 			{
 				change_rotate_direction();
@@ -1241,7 +1240,6 @@ void bll_partial_cleaning::monitor_angle_turn_to_refer_line_deal(void)
 		angle = get_driving_direction_right_angle();
 		pf = &bll_rotate::monitor_angle_turn_to_refer_line_respond;
 		p_rotate->set_monitor_angle_rotate_call_back(angle, pf);
-		debug_print_warnning("||||||||||||||||||||| angle=%lf; action=%d", angle, action);
 	}
 }
 
@@ -1301,7 +1299,6 @@ double bll_partial_cleaning::get_turnt_to_original_pose_angle(void)
 	angel_base angel_base_instance;
 	angle = angel_base_instance.get_angle(current_pos.point.x, current_pos.point.y, original_pos.point.x, original_pos.point.y);
 
-	//debug_print_warnning("(%lf, %lf) -> (%lf, %lf) angle=%lf", current_pos.point.x, current_pos.point.y, original_pos.point.x, original_pos.point.y, angle);
 	return angle;
 }
 
@@ -1418,7 +1415,6 @@ void bll_partial_cleaning::monitor_angle_turn_to_original_direction_deal(void)
 		
 		angle = get_turnt_to_original_direction_angle();
 		get_turnt_to_original_direction_action_type(action);
-		//debug_print_info("  action = %d   angle = %lf", action, angle);
 		cfg_if_change_curr_action(action);
 		pf = &bll_rotate::monitor_angle_turn_to_original_direction_respond;
 		p_rotate->set_monitor_angle_rotate_call_back(angle, pf);
@@ -1696,12 +1692,10 @@ double bll_partial_cleaning::get_reference_angle(void)
 	if (true == direction_is_forward)
 	{
 		get_reference_data_forward_angle(angle);
-		//debug_print_info("---------------------->>>>>>(angle=%lf)", angle);
 	}
 	else
 	{
 		get_reference_data_reverse_angle(angle);
-		//debug_print_info("<<<<<<<<---------------------(angle=%lf)", angle);
 	}
 
 	return angle;

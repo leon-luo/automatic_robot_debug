@@ -22,14 +22,15 @@
 #include "drv_sensor.h"
 
 #include "tf/LinearMath/Matrix3x3.h"
-#include "cfg_mobile_robot.h"
-#include "debug_function.h"
 
 #include "bll_cliff.h"
 #include "bll_bumper.h"
 #include "bll_wheel_drop.h"
 #include "bll_ultrasonic.h"
 #include "bll_wall_following.h"
+
+#include "cfg_if_mobile_robot.h"
+#include "debug_function.h"
 
 /******************************************************************************
  * 外部变量声明
@@ -216,8 +217,7 @@ void drv_sensor::odometry_callback ( const nav_msgs::Odometry::ConstPtr& msg )
 	pos.point.y = msg->pose.pose.position.y;
 	pos.angle = yaw;
 
-	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-	p_instance->save_current_positions(pos.point.x, pos.point.y, pos.angle);
+	cfg_if_save_current_position(pos.point.x, pos.point.y, pos.angle);
 }
 
 /*****************************************************************************
@@ -414,7 +414,6 @@ float32[] ranges            # 距离数组(长度360)
 float32[] intensities       # 与设备有关,强度数组(长度360)
 leon@ubuntu:~$ 
 */
-	debug_print_info("++++++++++++++++");
 	float angle_min = msg.angle_min;
 	float angle_max = msg.angle_max;
 	float angle_increment = msg.angle_increment;
@@ -445,8 +444,6 @@ leon@ubuntu:~$
 //	cout<<"intensities_length:"<<intensities_length<<endl;
 //	cout<<"st_intensities:"<<st_intensities<<endl;
 	cout<<"intensities:"<<intensities.size()<<endl;
-
-	debug_print_info("----------------");
 }
 
 /*****************************************************************************

@@ -178,7 +178,11 @@ void bll_wheel_drop::update_wheel_drop_state(uint8_t id, uint8_t value)
 		debug_print_warnning("value = %d", value);
 		return;
 	}
-
+	
+	if (true == wheel_state)
+	{
+		debug_print_error("id=%d,wheel_id=%d;value=%d, wheel_state=%d", id, wheel_id, value, wheel_state);
+	}
 	cfg_if_set_wheel_drop_state(wheel_id, wheel_state);
 }
 

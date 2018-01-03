@@ -25,7 +25,9 @@
 #include "drv_sensor.h"
 #include "bll_processing_function.h"
 #include "debug_function.h"
+#include <string>
 
+using namespace std;
 /******************************************************************************
  * 外部变量声明
  ******************************************************************************/
@@ -77,9 +79,10 @@
 *****************************************************************************/
 int main(int argc, char** argv)
 {
-	ROS_INFO ( "[%s():%d:]inter main()", __FUNCTION__, __LINE__);
+	string name_str ("cleaner_robot");
+	ROS_INFO ( "[%s():%d:]Application(%s) running !", __FUNCTION__, __LINE__, name_str.c_str());
 	
-	ros::init ( argc, argv, "cleaner_robot" );
+	ros::init ( argc, argv, name_str );
 	
 	drv_sensor* p_sensor_instance = drv_sensor::get_instance();
 	p_sensor_instance->initialize();

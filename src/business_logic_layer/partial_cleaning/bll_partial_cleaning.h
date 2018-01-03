@@ -22,9 +22,9 @@
  * 包含头文件
  ******************************************************************************/
 #include <pthread.h>
-#include "cfg_walk_plan.h"
-#include "cfg_mobile_robot.h"
-#include "bll_rotate.h"
+
+#include "bll_base_type.h"
+
 
 /******************************************************************************
  * 外部变量声明
@@ -53,6 +53,18 @@
 /******************************************************************************
  * 结构体类型
  ******************************************************************************/
+typedef struct PRIME_DIRECTION
+{
+	double forward;                            //执行弓形行走时开始行走的正向
+	double reverse;                            //执行弓形行走时开始行走的反向
+	bool inversion;                            //颠倒调转
+	bool valid;                                //是否已保存有效的正反向数据标志
+}PRIME_DIRECTION_STRU;
+
+typedef struct REFERENCE_DATA
+{
+	PRIME_DIRECTION_STRU fst_dir;
+}REFERENCE_DATA_STRU;
 
 /******************************************************************************
  * 类声明

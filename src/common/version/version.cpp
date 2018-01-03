@@ -451,7 +451,7 @@ void version::print_version(void)
 	string firmware_version("* Firmware Version : ");
 	string hardware_version("* Hardware Version : ");
 	string serial_version  ("* Serial Version   : ");
-	string cut_off_rule("**********************************************");
+	string cut_off_rule("*******************************************************");
 	std::cout<<cut_off_rule<<std::endl;
 	std::cout<<uboot_version<<uboot_version_<<std::endl;
 	std::cout<<kernerl_version<<kernerl_version_<<std::endl;

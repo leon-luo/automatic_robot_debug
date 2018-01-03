@@ -23,10 +23,13 @@
 
 #include "bll_motion_control.h"
 #include "bll_partial_cleaning.h"
+#include "bll_traight_line_moving.h"
 
 #include "cfg_if_modulate.h"
 #include "cfg_if_mobile_robot.h"
 #include "debug_function.h"
+
+#include <math.h>
 
 /******************************************************************************
  * 外部变量定义
@@ -704,16 +707,13 @@ void bll_rotate::monitor_angle_adjust_velocity(void)
 	bool flag = false;
 	double linear_velocity = 0.0;
 	double angular_velocity = 0.0;
-	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+
 	cfg_if_get_velocity(linear_velocity, angular_velocity);
 	flag = test_adjust_velocity(linear_velocity, angular_velocity);
 	if ( true == flag) {
 		cfg_if_set_velocity(linear_velocity, angular_velocity);
-		p_mobile_robot->set_adjust_velocity(flag);
-		//cfg_modulate* p_modulate_instance = cfg_modulate::get_instance();
-		//p_modulate_instance->endble_angular_velocity_ajust(linear_velocity);
-		//p_modulate_instance->endble_linear_velocity_ajust(angular_velocity);
-	
+		cfg_if_set_adjust_velocity_flag(flag);
+
 //		double curr = 0.0;
 //		double respond = 0.0;
 //		static double pre = 0.0;
@@ -746,7 +746,6 @@ void bll_rotate::monitor_stop_rotate(void)
 {
 	double line_v = 0.0;
 	double angular_v = 0.0;
-	
 	cfg_if_get_velocity(line_v, angular_v);
 	angular_v = 0.0;//停止旋转
 	bll_motion_control* p_instance = bll_motion_control::get_instance();
@@ -933,14 +932,12 @@ void bll_rotate::monitor_angle_turn_back_respond(void)
 		
 		cfg_if_switch_move_direction();
 		
-		#ifdef ENABLE_MOUDLATE
 		bll_partial_cleaning* p_partial_cleaning = bll_partial_cleaning::get_instance();
 		p_partial_cleaning->set_current_position_to_refer_start_pose();
 		
 		cfg_if_disable_linear_velocity_ajust();
 		p_traight_line_moving->get_straight_moving_refer_target_pose(pos);
 		p_traight_line_moving->set_traight_line_moving_target_pos(pos);
-		#endif /* ENABLE_MOUDLATE */
 	}
 }
 
@@ -976,9 +973,7 @@ void bll_rotate::monitor_angle_pivot_respond(void)
 
 	cfg_if_switch_move_direction();
 	
-	#ifdef ENABLE_MOUDLATE
 	p_partial_cleaning->set_current_position_to_refer_start_pose();
-	#endif /* ENABLE_MOUDLATE */
 }
 
 /*****************************************************************************

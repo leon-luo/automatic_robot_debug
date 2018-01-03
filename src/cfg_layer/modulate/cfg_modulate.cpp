@@ -127,19 +127,8 @@ void cfg_modulate::release_instance(void)
 *****************************************************************************/
 cfg_modulate::cfg_modulate()
 {
-	//PID_STRU pid;
-	//debug_print_error("+++++++++++++");
-//	pid.goal_value = 0.0;               // 设定目标 desired value
-//	pid.proportion = 0.1;               // 比例常数 proportional const
-//	pid.integral = 0.0;                 // 积分常数 integral const
-//	pid.derivative = 0.4;               // 微分常数 derivative const
-//	pid.last_error = 0.0;               // error[-1]
-//	pid.prev_error = 0.0;               // error[-2]
-//	pid.sum_error = 0.0;                // sums of errors
-//	angular_velocity_pid_.set_pid(pid);
-
-	//angular_velocity_pid_.print_pid_data();
-	//debug_print_error("-------------");
+	disable_linear_velocity_ajust();
+	disable_angular_velocity_ajust();
 }
 
 /*****************************************************************************

@@ -21,39 +21,6 @@
  ******************************************************************************/
 #include "cfg_mobile_robot.h"
 
-#include <ros/ros.h>
-#include <std_msgs/Int16.h>
-#include <std_msgs/String.h>
-#include <geometry_msgs/Twist.h>
-#include <nav_msgs/Odometry.h>
-#include <nav_msgs/Path.h>
-#include <std_msgs/String.h>
-#include <geometry_msgs/Quaternion.h>
-#include <geometry_msgs/PoseStamped.h>
-#include <tf/transform_broadcaster.h>
-#include <tf/tf.h>
-
-#include <kobuki_msgs/CliffEvent.h>
-#include <kobuki_msgs/BumperEvent.h>
-#include <kobuki_msgs/WheelDropEvent.h>
-#include "tf/LinearMath/Matrix3x3.h"
-#include <vector>
-
-#include <move_base_msgs/MoveBaseAction.h>
-#include <actionlib/client/simple_action_client.h>
-#include <tf/transform_broadcaster.h>
-#include <sstream>
-
-#include <signal.h>
-#include <iostream>
-#include <string>
-#include <unistd.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "math.h"
-
-#include "base_type.h"
 #include "version.h"
 
 #include "cfg_walk_plan.h"

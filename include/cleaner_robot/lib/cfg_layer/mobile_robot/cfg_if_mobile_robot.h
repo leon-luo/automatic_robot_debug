@@ -65,6 +65,8 @@
 /******************************************************************************
  * 内部函数声明
  ******************************************************************************/
+void cfg_if_print_change_action(void);
+
 void cfg_if_set_current_position(const POSE_STRU pos);
 void cfg_if_get_current_position(POSE_STRU &pos);
 
@@ -130,6 +132,8 @@ void cfg_if_set_velocity(double line_v, double angular_v);
 void cfg_if_get_velocity(double &line_v, double &angular_v);
 
 bool cfg_if_update_velocity(double &line_v, double &angular_v);
+bool cfg_if_set_adjust_velocity_flag(bool flag);
+bool cfg_if_set_run_velocity(double &line_v, double &angular_v);
 
 void cfg_if_set_local_move_planning_pose(const POSE_STRU &data, int index);
 void cfg_if_get_local_move_planning_pose(POSE_STRU &data, int index);
