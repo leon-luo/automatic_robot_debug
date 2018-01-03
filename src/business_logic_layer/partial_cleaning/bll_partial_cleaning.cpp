@@ -199,7 +199,6 @@ void bll_partial_cleaning::get_front_position(POSE_STRU &position)
 *****************************************************************************/
 double bll_partial_cleaning::get_vertical_distance_curr_position_to_refer_line(void)
 {
-#if 1
 	POSE_STRU curr;
 	POSE_STRU point1;
 	POSE_STRU point2;
@@ -223,37 +222,6 @@ double bll_partial_cleaning::get_vertical_distance_curr_position_to_refer_line(v
 	line_base line_base_instance;
 	ret = line_base_instance.get_vertical_distance(x, y, x1, y1, x2, y2);
 	return ret;
-#else
-	POSE_STRU curr;
-	POSE_STRU original;
-	double temp = 0.0;
-	double radian = 0.0;
-	double angle = 0.0;
-	double diff_angle = 0.0;
-	double acute_angle = 0.0;
-	double refer_angle = 0.0;
-	double opposite = 0.0;    //三角形对边
-	double hypotenuse = 0.0;  //三角形斜边
-	
-	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	cfg_if_get_current_position(curr);
-	get_local_move_original_pose(original);
-	//printf("{curr.pos (%lf, %lf) : %lf}\n", curr.point.x, curr.point.y, curr.angle);
-	//printf("{original.pos (%lf, %lf) : %lf}\n", original.point.x, original.point.y, original.angle);
-	line_base line_base_instance;
-	hypotenuse = line_base_instance.get_distance(original.point.x, original.point.y, curr.point.x, curr.point.y);
-	refer_angle = get_reference_angle();
-	angel_base angel_base_instance;
-	angle = angel_base_instance.get_angle(original.point.x, original.point.y, curr.point.x, curr.point.y);
-	diff_angle = angel_base_instance.get_angle_differences(angle, refer_angle);
-	//printf("diff_angle = get_angle_differences(angle=%lf, refer_angle=%lf) = %lf\n", angle, refer_angle, diff_angle);
-	acute_angle = angel_base_instance.convert_to_acute_angle(diff_angle);
-	radian = angel_base_instance.convert_degrees_to_radians(acute_angle);
-	temp = sin(radian);
-	opposite = hypotenuse*temp;
-	//printf("hypotenuse=%lf; acute_angle=%lf; sin(radian=%lf)=%lf; opposite=%lf\n", hypotenuse, acute_angle, radian, temp, opposite);
-	return opposite;
-#endif
 }
 
 /*****************************************************************************
@@ -584,23 +552,23 @@ bool bll_partial_cleaning::test_arrive_at_refer_line(void)
 bool bll_partial_cleaning::test_detect_obstacle_turn_back(void)
 {
 	bool flag = false;
-//	ULTRASONIC_SENSOR_STRU state;
-//	
-//	cfg_if_get_ultrasonic_sensor(state);
-//	if (SAFETY_LEVEL_WARN == state.level)
-//	{
-//		flag = true;
-//		debug_print_warnning("flag = true;");
-//	}
-//	else if (SAFETY_LEVEL_FATAL == state.level)
-//	{
-//		flag = true;
-//		debug_print_fatal("flag = true;");
-//	}
-//	else
-//	{
-//		flag = false;
-//	}
+	ULTRASONIC_SENSOR_STRU state;
+	
+	cfg_if_get_ultrasonic_sensor(state);
+	if (SAFETY_LEVEL_WARN == state.level)
+	{
+		flag = true;
+		debug_print_warnning("flag = true;");
+	}
+	else if (SAFETY_LEVEL_FATAL == state.level)
+	{
+		flag = true;
+		debug_print_fatal("flag = true;");
+	}
+	else
+	{
+		flag = false;
+	}
 	
 	return flag;
 }

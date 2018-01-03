@@ -783,14 +783,6 @@ void bll_rotate::monitor_angle_running(void)
 			
 		offset = get_curr_angle_difference_respond();
 
-		//if (offset != pre_offset)
-		//{
-		//	std::cout<<std::endl;
-		//	pre_offset = offset;
-		//	debug_print_info("[NO MONITOR_RESPOND] :offset(%lf) = [curr_angle(%lf) - respond_angle(%lf)] < precision(%lf)", offset, curr_angle, respond_angle, precision);
-		//	std::cout<<std::endl;
-		//}
-		
 		if (fabs(offset) < precision)
 		{
 			stage = MONITOR_RESPOND;
@@ -800,10 +792,6 @@ void bll_rotate::monitor_angle_running(void)
 			std::cout<<std::endl;
 			debug_print_warnning("[MONITOR_RESPOND] :offset(%lf) = [curr_angle(%lf) - respond_angle(%lf)] < precision(%lf)", offset, curr_angle, respond_angle, precision);
 			std::cout<<std::endl;
-		}
-		else
-		{
-			//debug_print_info("[NO MONITOR_RESPOND] :offset(%lf) = [curr_angle(%lf) - respond_angle(%lf)] < precision(%lf)", offset, curr_angle, respond_angle, precision);
 		}
 	}
 }
