@@ -100,8 +100,6 @@ public:
 	void disable_linear_velocity_ajust(void);
 	void endble_linear_velocity_ajust(double velocity);
 
-	//bool update_velocity(double &line_v, double &angular_v);
-	
 protected:
 	cfg_modulate();
 	~cfg_modulate();

@@ -406,45 +406,6 @@ void cfg_modulate::endble_linear_velocity_ajust(double velocity)
 	set_linear_velocity_ajust(true, velocity);
 }
 
-/*****************************************************************************
- 函 数 名: cfg_modulate.update_velocity
- 功能描述  : 检测更新调整速度
- 输入参数: double &line_v     
-           double &angular_v  
- 输出参数: 无
- 返 回 值: bool
- 
- 修改历史:
-  1.日     期: 2017年12月20日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-//bool cfg_modulate::update_velocity(double &line_v, double &angular_v)
-//{
-//	bool ret = false;
-//	bool line_v_flag = false;
-//	bool angular_v_flag = false;
-//	cfg_mobile_robot* p_instance = cfg_mobile_robot::get_instance();
-//
-//	line_v_flag = get_linear_velocity_ajust(line_v);
-//	if ( true == line_v_flag )
-//	{
-//		p_instance->set_linear_velocity(line_v, angular_v);
-//		disable_linear_velocity_ajust();
-//		ret = true;
-//	}
-//
-//	angular_v_flag = get_angular_velocity_ajust(angular_v);
-//	if ( true == angular_v_flag )
-//	{
-//		p_instance->set_angular_velocity(line_v, angular_v);
-//		disable_angular_velocity_ajust();
-//		ret = true;
-//	}
-//	
-//	return ret;
-//}
-
 /******************************************************************************
  * 内部函数声明
  ******************************************************************************/
