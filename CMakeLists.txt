@@ -38,7 +38,7 @@ MESSAGE(STATUS "#############################################################|")
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
 message(STATUS "|------------------------------------------------------------")
-message(STATUS " CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\"")
+message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\"")
 
 #告知当前使用的是交叉编译方式，必须配置
 set(CMAKE_SYSTEM_NAME Linux)
@@ -110,6 +110,9 @@ set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
 ## BUILD_SHARED_LIBS：Switch between shared and static libraries
 
 ## message([STATUS | SEND_ERROR |  FATAL_ERROR] "message to display" ...)
+## STATUS,输出前缀为-的信息。
+## SEND_ERROR，产生错误，生成过程被跳过。
+## FATAL_ERROR，立即终止所有cmake过程。
 message(STATUS "|==============================================================")
 message(STATUS "UNIX is \"${UNIX}\"")
 message(STATUS "WIN32 is \"${WIN32}\"")
@@ -123,6 +126,8 @@ message(STATUS "CMAKE_SYSTEM is \"${CMAKE_SYSTEM}\"")
 message(STATUS "CMAKE_SYSTEM_NAME is \"${CMAKE_SYSTEM_NAME}\"")
 message(STATUS "CMAKE_SYSTEM_VERSION is \"${CMAKE_SYSTEM_VERSION}\"")
 message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\"")
+message(STATUS "CMAKE_C_COMPILER is \"${CMAKE_C_COMPILER}\"")
+message(STATUS "CMAKE_CXX_COMPILER is \"${CMAKE_CXX_COMPILER}\"")
 message(STATUS "CMAKE_C_FLAGS is \"${CMAKE_C_FLAGS}\"")
 message(STATUS "CMAKE_CXX_FLAGS is \"${CMAKE_CXX_FLAGS}\"")
 message(STATUS "Build Type CMAKE_BUILD_TYPE is \"${CMAKE_BUILD_TYPE}\"")
