@@ -1,25 +1,63 @@
+##CMAKE_MINIMUM_REQUIRED(VERSION 2.5 FATAL_ERROR) 
+##如果 cmake 版本小与 2.5，则出现严重错误，整个过程中止。
 cmake_minimum_required(VERSION 2.8.3)
-project(cleaner_robot)
-message("=======================================================")
-message("Application name is " ${PROJECT_NAME})
-message(PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR})
-message(PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR})
 
-#if 0
+#项目程序名称
+project(cleaner_robot)
+
+
+##判断当前操作系统平台
+MESSAGE(STATUS "|#############################################################")
+
+MESSAGE(STATUS "operation system is ${CMAKE_SYSTEM}")
+
+IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+	MESSAGE(STATUS "current platform: Linux ")
+ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Windows")
+	MESSAGE(STATUS "current platform: Windows")
+ELSEIF (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+	MESSAGE(STATUS "current platform: FreeBSD")
+ELSE ()
+	MESSAGE(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
+ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+
+MESSAGE(STATUS "-------------------------------------------------------------")
+
+IF (WIN32)
+	MESSAGE(STATUS "Now is windows")
+ELSEIF (APPLE)
+	MESSAGE(STATUS "Now is Apple systens.")
+ELSEIF (UNIX)
+	MESSAGE(STATUS "Now is UNIX-like OS's. Including aPPLE os x and CygWin")
+ENDIF ()
+MESSAGE(STATUS "#############################################################|")
+
+##BUILD_SHARED_LIBS这个开关用来控制默认的库编译方式，如果不进行设置，使用 ADD_LIBRARY 并没有指定库
+##类型的情况下，默认编译生成的库都是静态库。
+##如果 SET(BUILD_SHARED_LIBS ON)后，默认生成的为动态库。
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+message(STATUS "|------------------------------------------------------------")
+message(STATUS " CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\"")
+
 #告知当前使用的是交叉编译方式，必须配置
-#set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_NAME Linux)
+message(STATUS "CMAKE_SYSTEM_NAME is \"${CMAKE_SYSTEM_NAME}\"")
 
 #指定C交叉编译器,必须配置
 #或交叉编译器使用绝对地址
 #SET(CMAKE_C_COMPILER "arm-linux-gcc")
 #SET(CMAKE_C_COMPILER E:\my-studio-tool\Linaro\gcc-linaro-arm-linux-gnueabihf-4.8-2014.04\bin\arm-linux-gnueabihf-gcc.exe)
-#set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
+set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
 #SET(CMAKE_C_COMPILER /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin/arm-rockchip-linux-gnueabihf-gcc)
+
 #指定C++交叉编译器
 #SET(CMAKE_CXX_COMPILER "arm-linux-g++")
 #SET(CMAKE_CXX_COMPILER E:\my-studio-tool\Linaro\gcc-linaro-arm-linux-gnueabihf-4.8-2014.04\bin\arm-linux-gnueabihf-g++.exe)
-#set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
+set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
 #SET(CMAKE_CXX_COMPILER /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin/arm-rockchip-linux-gnueabihf-g++)
+message(STATUS "CMAKE_C_COMPILER is \"${CMAKE_C_COMPILER}\"")
+message(STATUS "CMAKE_CXX_COMPILER is \"${CMAKE_CXX_COMPILER}\"")
 
 #不一定需要设置
 #指定交叉编译环境安装目录
@@ -27,26 +65,69 @@ message(PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR})
 
 # Have to set this one to BOTH, to allow CMake to find rospack
 #从来不在指定目录下查找工具程序
-#set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+message(STATUS "CMAKE_FIND_ROOT_PATH_MODE_PROGRAM is \"${CMAKE_FIND_ROOT_PATH_MODE_PROGRAM}\"")
+
 #只在指定目录下查找库文件
-#set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+message(STATUS "CMAKE_FIND_ROOT_PATH_MODE_LIBRARY is \"${CMAKE_FIND_ROOT_PATH_MODE_LIBRARY}\"")
+
 #只在指定目录下查找头文件
-#set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-#set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
-#endif
-#原来以为可以在 CMak eLists.txt中做如下设置：
-#set(CMAKE_BUILD_TYPE Debug)  
-#但是，这样的设置却是没有效果的。
-#必须改成如下的才行：
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+message(STATUS "CMAKE_FIND_ROOT_PATH_MODE_INCLUDE is \"${CMAKE_FIND_ROOT_PATH_MODE_INCLUDE}\"")
+
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+message(STATUS "CMAKE_FIND_ROOT_PATH_MODE_PACKAGE is \"${CMAKE_FIND_ROOT_PATH_MODE_INCLUDE}\"")
+message(STATUS "------------------------------------------------------------|")
+
+endif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+
+##CMAKE_BUILD_TYPE:build类型(Debug,Release,…),CMAKE_BUILD_TYPE=Debug;
+#set(CMAKE_BUILD_TYPE Debug)
+#但是，这样的设置却是没有效果的。必须改成如下的才行：
 set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")  
 #还可以在命令行设置：
 #cmake  -DCMAKE_BUILD_TYPE=Debug .. 
 
-message("Build Type:"${CMAKE_BUILD_TYPE} ${CMAKE_CXX_FLAGS})
+## CMAKE_MAJOR_VERSION，CMAKE 主版本号，比如 2.4.6 中的 2 
+## CMAKE_MINOR_VERSION，CMAKE 次版本号，比如 2.4.6 中的 4 
+## CMAKE_PATCH_VERSION，CMAKE 补丁等级，比如 2.4.6 中的 6 
+## CMAKE_SYSTEM，系统名称，比如 Linux-2.6.22 
+## CMAKE_SYSTEM_NAME，不包含版本的系统名，比如 Linux 
+## CMAKE_SYSTEM_VERSION，系统版本，比如 2.6.22 
+## CMAKE_SYSTEM_PROCESSOR，处理器名称，比如 i686. armv7l
+## UNIX，在所有的类 UNIX 平台为 TRUE，包括 OS X 和 cygwin 
+## WIN32，在所有的 win32 平台为 TRUE，包括 cygwin
+## CMAKE_BINARY_DIR 工程顶层目录
+## CMAKE_SOURCE_DIR 工程顶层目录
+## PROJECT_BINARY_DIR 应用程序存放的位置
+## PROJECT_NAME 返回通过 PROJECT 指令定义的项目名称。
+## 使用$ENV{NAME}指令就可以调用系统的环境变量了。比如MESSAGE(STATUS “HOME dir: $ENV{HOME}”) 
+## 设置环境变量的方式是：SET(ENV{变量名} 值) 
+## EXECUTABLE_OUTPUT_PATH：可执行文件的存放路径
+## LIBRARY_OUTPUT_PATH：库文件路径
+## CMAKE_BUILD_TYPE:：build 类型(Debug, Release, ...)，CMAKE_BUILD_TYPE=Debug
+## BUILD_SHARED_LIBS：Switch between shared and static libraries
 
-message("CMAKE_FIND_ROOT_PATH:"${CMAKE_FIND_ROOT_PATH})
-
-message("=======================================================")
+## message([STATUS | SEND_ERROR |  FATAL_ERROR] "message to display" ...)
+message(STATUS "|==============================================================")
+message(STATUS "UNIX is \"${UNIX}\"")
+message(STATUS "WIN32 is \"${WIN32}\"")
+message(STATUS "Application name is \"${PROJECT_NAME}\"")
+message(STATUS "PROJECT_SOURCE_DIR is \"${PROJECT_SOURCE_DIR}\"")
+message(STATUS "PROJECT_BINARY_DIR is \"${PROJECT_BINARY_DIR}\"")
+message(STATUS "<projectname>_BINARY_DIR is \"${${PROJECT_NAME}_SOURCE_DIR}\"")
+message(STATUS "<projectname>_BINARY_DIR is \"${${PROJECT_NAME}_BINARY_DIR}\"")
+message(STATUS "CMAKE VERSION is \"cmake version ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}\"")
+message(STATUS "CMAKE_SYSTEM is \"${CMAKE_SYSTEM}\"")
+message(STATUS "CMAKE_SYSTEM_NAME is \"${CMAKE_SYSTEM_NAME}\"")
+message(STATUS "CMAKE_SYSTEM_VERSION is \"${CMAKE_SYSTEM_VERSION}\"")
+message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\"")
+message(STATUS "CMAKE_C_FLAGS is \"${CMAKE_C_FLAGS}\"")
+message(STATUS "CMAKE_CXX_FLAGS is \"${CMAKE_CXX_FLAGS}\"")
+message(STATUS "Build Type CMAKE_BUILD_TYPE is \"${CMAKE_BUILD_TYPE}\"")
+message(STATUS "CMAKE_FIND_ROOT_PATH is \"${CMAKE_FIND_ROOT_PATH}\"")
+message(STATUS "==============================================================|")
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11 -g)
@@ -65,15 +146,15 @@ find_package(catkin REQUIRED COMPONENTS
 
   dynamixel_msgs
   geometry_msgs
-  joy
   nav_msgs
   roscpp
   rospy
   sensor_msgs
   std_msgs
   tf
-  pcl_conversions
-  pcl_ros
+#  joy
+#  pcl_conversions
+#  pcl_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -178,11 +259,11 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
-	include
-	${catkin_INCLUDE_DIRS}
-	#/opt/ros/indigo/include/ros/
-)
+#include_directories(
+#	include
+#	${catkin_INCLUDE_DIRS}
+#	#/opt/ros/indigo/include/ros/
+#)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
