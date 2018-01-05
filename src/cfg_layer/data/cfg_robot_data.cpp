@@ -75,8 +75,6 @@ cfg_robot_data::cfg_robot_data()
 	ULTRASONIC_SENSOR_STRU ultrasonic_sensor = {35.0, 25.0, 15.0, false, SAFETY_LEVEL_SAFE};
 	set_ultrasonic_sensor_state(ultrasonic_sensor);
 	
-	set_adjust_velocity(false);
-	
 	set_bumper_state(LEFT_BUMPER, false);
 	set_bumper_state(CENTER_BUMPER, false);
 	set_bumper_state(RIGHT_BUMPER, false);
@@ -925,40 +923,6 @@ void cfg_robot_data::get_velocity(double &velocity, double &rad)
 }
 
 /*****************************************************************************
- 函 数 名: cfg_robot_data.set_adjust_velocity
- 功能描述  : 设置是否进行速度调整
- 输入参数: bool flag  
- 输出参数: 无
- 返 回 值: void
- 
- 修改历史:
-  1.日     期: 2017年11月23日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-void cfg_robot_data::set_adjust_velocity(bool flag)
-{
-	adjust_velocity_ = flag;
-}
-
-/*****************************************************************************
- 函 数 名: cfg_robot_data.get_adjust_velocity
- 功能描述  : 获取调整的速度
- 输入参数: void  
- 输出参数: 无
- 返 回 值: bool
- 
- 修改历史:
-  1.日     期: 2017年11月23日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-bool cfg_robot_data::get_adjust_velocity(void)
-{
-	return adjust_velocity_;
-}
-
-/*****************************************************************************
  函 数 名: cfg_robot_data.get_curr_x_axis_coordinate
  功能描述  : 获取当前位置的X轴坐标
  输入参数: void  
@@ -1048,20 +1012,7 @@ bool cfg_robot_data::test_robot_is_ok(void)
 *****************************************************************************/
 bool cfg_robot_data::update_velocity(double &line_v, double &angular_v)
 {
-	bool flag = false;
-
-	flag = get_adjust_velocity();
-	if (true == flag)
-	{
-		//debug_print_warnning("111  line_v=%lf, angular_v=%lf", line_v, angular_v);
-		get_velocity(line_v, angular_v);
-		//debug_print_warnning("222  line_v=%lf, angular_v=%lf", line_v, angular_v);
-		set_adjust_velocity(false);
-	}
-	else
-	{
-		//debug_print_warnning("vvvvv  line_v=%lf, angular_v=%lf", line_v, angular_v);
-	}
+	bool flag = true;
 
 	set_velocity(line_v, angular_v);
 	

@@ -132,7 +132,6 @@ void cfg_if_set_velocity(double line_v, double angular_v);
 void cfg_if_get_velocity(double &line_v, double &angular_v);
 
 bool cfg_if_update_velocity(double &line_v, double &angular_v);
-bool cfg_if_set_adjust_velocity_flag(bool flag);
 bool cfg_if_set_run_velocity(double &line_v, double &angular_v);
 
 void cfg_if_set_local_move_planning_pose(const POSE_STRU &data, int index);

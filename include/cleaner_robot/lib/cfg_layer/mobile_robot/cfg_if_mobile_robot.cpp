@@ -995,25 +995,6 @@ bool cfg_if_update_velocity(double &line_v, double &angular_v)
 }
 
 /*****************************************************************************
- 函 数 名: cfg_if_set_adjust_velocity_flag
- 功能描述  : 设置调整速度
- 输入参数: bool flag  
- 输出参数: 无
- 返 回 值: 
- 
- 修改历史:
-  1.日     期: 2017年12月28日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-bool cfg_if_set_adjust_velocity_flag(bool flag)
-{
-	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	
-	p_mobile_robot->set_adjust_velocity(flag);
-}
-
-/*****************************************************************************
  函 数 名: cfg_if_set_run_velocity
  功能描述  : 配置运行速度
  输入参数: double &line_v     

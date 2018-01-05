@@ -252,15 +252,15 @@ void bll_partial_cleaning::set_current_position_to_refer_start_pose(void)
 	bool area_part_is_left = false;
 
 	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
-	//std::cout<<std::endl;
-	//debug_print_warnning("++++++++++++");
+	std::cout<<std::endl;
+	debug_print_warnning("++++++++++++");
 	cfg_if_get_current_position(curr);
 	p_traight_line_moving->set_straight_moving_refer_start_pose(curr);
-	//printf("set curr.pos {(%lf, %lf) : %lf}\n", curr.point.x, curr.point.y, curr.angle);
+	debug_print_error("set_straight_moving_refer_start_pose(curr){(%lf, %lf) : %lf}\n", curr.point.x, curr.point.y, curr.angle);
 	
 	vertical_distance = get_vertical_distance_curr_position_to_refer_line();
 	hypotenuse = vertical_distance;
-	
+	printf("vertical_distance(%lf) = hypotenuse= %lf;\n", vertical_distance, hypotenuse);
 	refer_angle = get_reference_angle();
 	angel_base angel_base_instance;
 	acute_angle = angel_base_instance.convert_to_acute_angle(refer_angle);
@@ -268,29 +268,30 @@ void bll_partial_cleaning::set_current_position_to_refer_start_pose(void)
 	x_deviation = hypotenuse*sin(radian);
 	y_deviation = hypotenuse*cos(radian);
 
-	//printf("refer_angle(%lf)  ==>  acute_angle(%lf) ==> radian(%lf)\n", refer_angle, acute_angle, radian);
-	//printf("sin(%lf) = %lf;   ", radian, sin(radian));
-	//printf("cos(%lf) = %lf;\n", radian, cos(radian));
-	//printf("hypotenuse  = %lf\n", hypotenuse);
-	//printf("x_deviation = %lf,       y_deviation = %lf\n", x_deviation, y_deviation);
+	printf("refer_angle(%lf)  ==>  acute_angle(%lf) ==> radian(%lf)\n", refer_angle, acute_angle, radian);
+	printf("sin(%lf) = %lf;   ", radian, sin(radian));
+	printf("cos(%lf) = %lf;\n", radian, cos(radian));
+	printf("hypotenuse  = %lf\n", hypotenuse);
+	printf("x_deviation = %lf,       y_deviation = %lf\n", x_deviation, y_deviation);
 	
 	area_part_is_left = cfg_if_test_partial_cleaning_part_is_left();
 	if (false == area_part_is_left)
 	{
 		y_trend = -y_trend;
-		//debug_print_fatal("area_part_is_left =%d ;y_trend=%lf", area_part_is_left, y_trend);
+		debug_print_fatal("area_part_is_left =%d ;y_trend=%lf", area_part_is_left, y_trend);
 	}
 
 	get_front_position(front_pos);
+	printf("get_front_position(front_pos){ (%lf, %lf) : %lf}\n", front_pos.point.x, front_pos.point.y, front_pos.angle);
 	target.angle = refer_angle;
 	target.point.x = front_pos.point.x - x_deviation;
 	target.point.y = front_pos.point.y + y_deviation*y_trend;
 	
 	p_traight_line_moving->set_straight_moving_refer_target_pose(target);
 	
-	//printf("set target.pos{ (%lf, %lf) : %lf}\n", target.point.x, target.point.y, target.angle);
-	//debug_print_warnning("------------");
-	//std::cout<<std::endl;
+	debug_print_error("set_straight_moving_refer_target_pose(target){ (%lf, %lf) : %lf}\n", target.point.x, target.point.y, target.angle);
+	debug_print_warnning("------------");
+	std::cout<<std::endl;
 }
 
 /*****************************************************************************
@@ -554,22 +555,22 @@ bool bll_partial_cleaning::test_detect_obstacle_turn_back(void)
 	bool flag = false;
 	ULTRASONIC_SENSOR_STRU state;
 	
-	cfg_if_get_ultrasonic_sensor(state);
-	if (SAFETY_LEVEL_WARN == state.level)
-	{
-		flag = true;
-		debug_print_warnning("flag = true;");
-	}
-	else if (SAFETY_LEVEL_FATAL == state.level)
-	{
-		flag = true;
-		debug_print_fatal("flag = true;");
-	}
-	else
-	{
-		flag = false;
-	}
-	
+//	cfg_if_get_ultrasonic_sensor(state);
+//	if (SAFETY_LEVEL_WARN == state.level)
+//	{
+//		flag = true;
+//		debug_print_warnning("flag = true;");
+//	}
+//	else if (SAFETY_LEVEL_FATAL == state.level)
+//	{
+//		flag = true;
+//		debug_print_fatal("flag = true;");
+//	}
+//	else
+//	{
+//		flag = false;
+//	}
+//	
 	return flag;
 }
 
@@ -625,6 +626,10 @@ void bll_partial_cleaning::traight_line_moving_dynamic_regulation(void)
 	{
 		p_traight_line_moving->straight_driving_adjust_angle();
 		p_traight_line_moving->straight_driving_adjust_speed();
+	}
+	else
+	{
+		debug_print_error("test_is_traight_line_moving() false == flag =%d",flag);
 	}
 }
 
@@ -799,6 +804,8 @@ void bll_partial_cleaning::local_move_return_center_pose(void)
 {
 	bool flag = false;
 	
+	traight_line_moving_dynamic_regulation();
+	
 	flag = test_arrive_at_refer_line();
 	if (true == flag)
 	{
@@ -807,10 +814,66 @@ void bll_partial_cleaning::local_move_return_center_pose(void)
 		bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
 		p_traight_line_moving->clear_traight_line_moving_data();
 	}
-	else
+}
+
+/*****************************************************************************
+ 函 数 名: bll_partial_cleaning.local_move_parallel_lines
+ 功能描述  : 平行往返行驶
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2018年1月4日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool bll_partial_cleaning::local_move_parallel_lines(void)
+{
+	bool ret = false;
+	bool flag = false;
+	bool half_done_flag = false;
+	double length = 0.0;
+	double half_length = 0.0;
+	double distance = 0.0;
+	double vertical_dimension = 0.0;
+
+	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
+	flag = p_traight_line_moving->test_is_traight_line_moving();
+	if (true == flag)
 	{
 		traight_line_moving_dynamic_regulation();
+
+		distance = p_traight_line_moving->get_distance_to_traight_line_moving_start_pos();
+		length = get_local_move_edge_length();
+		half_length = length/2;
+		vertical_dimension = get_vertical_dimension_curr_pos_to_refer_line();
+		if (vertical_dimension > half_length)
+		{
+			half_done_flag = true;
+		}
+		
+		flag = false;
+		if (distance >= length)
+		{
+			flag = true;
+		}
+		else
+		{
+			flag = test_detect_obstacle_turn_back();
+		}
+
+		if (true == flag)
+		{
+			if (true == half_done_flag)
+			{
+				return true;
+			}
+			change_rotate_direction();
+		}
 	}
+	
+	return ret;
 }
 
 /*****************************************************************************
@@ -827,58 +890,11 @@ void bll_partial_cleaning::local_move_return_center_pose(void)
 *****************************************************************************/
 void bll_partial_cleaning::local_move_fst_half_area(void)
 {
-	bool flag = false;
-	bool half_done_flag = false;
-	double l_x = 0.0;
-	double r_x = 0.0;
-	double length = 0.0;
-	double half_length = 0.0;
-	double distance = 0.0;
-	double ref_value = 0.0;
-	double precision = 0.01;
-	double vertical_dimension = 0.0;
-	POSE_STRU curr_pos;
-	POSE_STRU original_pose;
-	
-	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
-	flag = p_traight_line_moving->test_is_traight_line_moving();
-	if (true == flag)
+	bool ret = false;
+	ret = local_move_parallel_lines();
+	if (true == ret)
 	{
-		p_traight_line_moving->update_traight_line_moving_data();
-		traight_line_moving_dynamic_regulation();
-		
-		distance = p_traight_line_moving->get_distance_to_traight_line_moving_start_pos();
-		length = get_local_move_edge_length();
-
-		half_length = length/2;
-		vertical_dimension = get_vertical_dimension_curr_pos_to_refer_line();
-		if (vertical_dimension > half_length)
-		{
-			half_done_flag = true;
-		}
-		
-		if (distance >= length)
-		{
-			if (true == half_done_flag)
-			{
-				set_partial_cleaning_state(LOCAL_MOVE_FST_HALF_DONE);
-				return;
-			}
-			change_rotate_direction();
-		}
-		else
-		{
-			flag = test_detect_obstacle_turn_back();
-			if (true == flag)
-			{
-				if (true == half_done_flag)
-				{
-					set_partial_cleaning_state(LOCAL_MOVE_FST_HALF_DONE);
-					return;
-				}
-				change_rotate_direction();
-			}
-		}
+		set_partial_cleaning_state(LOCAL_MOVE_FST_HALF_DONE);
 	}
 }
 
@@ -896,48 +912,11 @@ void bll_partial_cleaning::local_move_fst_half_area(void)
 *****************************************************************************/
 void bll_partial_cleaning::local_move_sec_half_area(void)
 {
-	bool flag = false;
-	double l_x = 0.0;
-	double r_x = 0.0;
-	double temp = 0.0;
-	double length = 0.0;
-	double half_length = 0.0;
-	double distance = 0.0;
-	double ref_value = 0.0;
-	double precision = 0.01;
-	double vertical_dimension = 0.0;
-	POSE_STRU curr_pos;
-	POSE_STRU original_pose;
-	ACTION_STATUS_ENUM curr_action;
-
-	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
-	flag = p_traight_line_moving->test_is_traight_line_moving();
-	if (true == flag)
+	bool ret = false;
+	ret = local_move_parallel_lines();
+	if (true == ret)
 	{
-		traight_line_moving_dynamic_regulation();
-
-		distance = p_traight_line_moving->get_distance_to_traight_line_moving_start_pos();
-		length = get_local_move_edge_length();
-		if (distance >= length)
-		{
-			half_length = length/2;
-			vertical_dimension = get_vertical_dimension_curr_pos_to_refer_line();
-			if (vertical_dimension > half_length)
-			{
-				set_partial_cleaning_state(LOCAL_MOVE_TURN_TO_CENTER_DIR);
-				return;
-			}
-			
-			change_rotate_direction();
-		}
-		else
-		{
-			flag = test_detect_obstacle_turn_back();
-			if (true == flag)
-			{
-				change_rotate_direction();
-			}
-		}
+		set_partial_cleaning_state(LOCAL_MOVE_TURN_TO_CENTER_DIR);
 	}
 }
 
@@ -1108,7 +1087,6 @@ double bll_partial_cleaning::get_monitor_angle_turn_back_angle(void)
 		else
 		{
 			respond_angle = cfg_if_get_current_position_reverse_angle();
-			debug_print_warnning("current position reverse angle=%lf", respond_angle);
 		}
 	}
 	
@@ -1317,6 +1295,7 @@ void bll_partial_cleaning::monitor_angle_turn_to_original_pose_deal(void)
 		cfg_if_change_curr_action(action);
 		pf = &bll_rotate::monitor_angle_turn_to_original_pose_respond;
 		p_rotate->set_monitor_angle_rotate_call_back(angle, pf);
+		debug_print_fatal("MMMMMMMMMMMMMMMMMMM");
 	}
 }
 

@@ -209,9 +209,6 @@ public:
 	void set_velocity(double velocity, double rad);
 	void get_velocity(double &velocity, double &rad);
 
-	void set_adjust_velocity(bool flag);
-	bool get_adjust_velocity(void);
-
 	double get_curr_x_axis_coordinate(void);
 	double get_curr_y_axis_coordinate(void);
 	double get_curr_pos_angle(void);
@@ -251,7 +248,7 @@ private:
 
 	double linear_velocity_;                                   //当前的线速度
 	double angular_velocity_;                                  //当前的角速度
-	bool adjust_velocity_;
+	//bool adjust_velocity_;
 	
 };
 

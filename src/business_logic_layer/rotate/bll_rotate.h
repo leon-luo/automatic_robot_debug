@@ -69,13 +69,11 @@ typedef struct ANGLE_MONITOR
 {
 	double angle;                                            //检测角度
 	MONITOR_ENUM stage;                                      //监测阶段状态
-	//PF_FUNC pf_function;                                     //监测角度达标以后执行的动作
 	
 	ANGLE_MONITOR()  //默认构造函数
 	{
 		angle = 0.0;
 		stage = MONITOR_SLEEP;
-		//pf_function = NULL;
 	}
 }ANGLE_MONITOR_STRU;
 

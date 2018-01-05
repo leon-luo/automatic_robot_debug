@@ -705,28 +705,24 @@ bool bll_rotate::test_adjust_velocity(double &linear_velocity, double &angular_v
 void bll_rotate::monitor_angle_adjust_velocity(void)
 {
 	bool flag = false;
+	double linear_v = 0.0;
+	double angular_v = 0.0;
 	double linear_velocity = 0.0;
 	double angular_velocity = 0.0;
 
 	cfg_if_get_velocity(linear_velocity, angular_velocity);
-	flag = test_adjust_velocity(linear_velocity, angular_velocity);
-	if ( true == flag) {
-		cfg_if_set_velocity(linear_velocity, angular_velocity);
-		cfg_if_set_adjust_velocity_flag(flag);
-
-//		double curr = 0.0;
-//		double respond = 0.0;
-//		static double pre = 0.0;
-//		curr = cfg_if_get_current_position_angle();
-//		respond = get_monitor_angle_respond_goal();
-//		if (pre != curr) {
-//			pre = curr;
-//			debug_print_info("flag = %d, ||curr(%lf) --> respond(%lf)||, linear_v(%lf); angular_v(%lf)",flag, curr, respond, linear_velocity, angular_velocity);
-//		}
-	}
-	else
+	flag = test_adjust_velocity(linear_v, angular_v);
+	if ( true == flag) 
 	{
-		//debug_print_fatal("flag=%d", flag);
+		if (linear_velocity != linear_v)
+		{
+			cfg_if_endble_linear_velocity_ajust(linear_v);
+		}
+		
+		if (angular_velocity != angular_v)
+		{
+			cfg_if_endble_angular_velocity_ajust(angular_v);
+		}
 	}
 }
 

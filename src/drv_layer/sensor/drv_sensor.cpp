@@ -551,10 +551,6 @@ void drv_sensor::register_sensor_msgs_callback(void)
 	ultrasonic_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/dock_us", 100, &drv_sensor::ultrasonic_sensor_callback, p_instance_);
 	wall_following_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/edge_ir", 100, &drv_sensor::wall_following_sensor_callback, p_instance_);
 	laser_scan_sub_ = node_h.subscribe ( "/scan", 100, &drv_sensor::laser_scan_callback, p_instance_);
-
-	//定时器
-	//timer_ = node_h.createTimer(ros::Duration(2), &drv_sensor::timer_callback, p_instance_);
-	//retreat_timer_ = node_h.createTimer(ros::Duration(0.01), &drv_sensor::retreat_callback, p_instance_);
 }
 
 /******************************************************************************

@@ -25,6 +25,7 @@
 #include "line_base.h"
 #include "cfg_if_modulate.h"
 #include "cfg_if_mobile_robot.h"
+#include "debug_function.h"
 
 /******************************************************************************
  * 外部变量定义
@@ -217,7 +218,6 @@ void bll_traight_line_moving::update_traight_line_moving_data(void)
 		{
 			set_traight_line_moving_flag(true);
 			set_traight_line_moving_start_pos(pos);
-			//debug_print_warnning("traight_line_moving_start_pos{(%lf, %lf) : %lf}", pos.point.x, pos.point.y, pos.angle);
 		}
 		else
 		{
@@ -690,6 +690,12 @@ void bll_traight_line_moving::straight_driving_adjust_speed(void)
 
 	if (true == flag)
 	{
+		static double last = 0.0;
+		if (last != distance)
+		{
+			last = distance;
+			debug_print_warnning("distance=%lf  linear_velocity=%lf", distance, linear_velocity);
+		}
 		cfg_if_endble_linear_velocity_ajust(linear_velocity);
 	}
 }
@@ -742,7 +748,17 @@ double bll_traight_line_moving::get_distance_to_traight_line_moving_target_pos(v
 	get_traight_line_moving_target_pos(pos);
 	line_base line_base_instance;
 	distance = line_base_instance.get_distance(curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
-	//debug_print_info("distance(%lf) = |curr_pos.point=(%lf, %lf)<-->pos.point=(%lf, %lf)|", distance, curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
+	//LOCAL_MOVE_STATE_ENUM state;
+	//static double last = 0.0;
+	//cfg_if_get_partial_cleaning_state(state);
+	//if (LOCAL_MOVE_SEC_HALF == state)
+	//{
+	//	if (last != distance)
+	//	{
+	//		last = distance;
+	//		debug_print_info("distance(%lf) = |curr_pos.point=(%lf, %lf)<-->pos.point=(%lf, %lf)|", distance, curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
+	//	}
+	//}
 	return distance;
 }
 

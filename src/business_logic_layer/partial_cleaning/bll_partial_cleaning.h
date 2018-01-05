@@ -100,6 +100,7 @@ public:
 	void local_move_fst_line_start(void);
 	void local_move_return_reference_line(void);
 	void local_move_return_center_pose(void);
+	bool local_move_parallel_lines(void);
 	void local_move_fst_half_area(void);
 	void local_move_sec_half_area(void);
 
@@ -171,7 +172,7 @@ private:
 	bll_partial_cleaning(const bll_partial_cleaning&){};
 	bll_partial_cleaning& operator=(const bll_partial_cleaning&){};
 
-	static constexpr double local_erea_edge_length_ = 1.2;//1.6;2.0;//      //局域清扫边长(单位:m)
+	static constexpr double local_erea_edge_length_ = 1.6;//1.6;2.0;//      //局域清扫边长(单位:m)
 
 	POSE_STRU ref_start_point_;
 	POSE_STRU ref_end_point_;

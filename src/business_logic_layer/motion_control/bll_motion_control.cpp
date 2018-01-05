@@ -21,6 +21,8 @@
  ******************************************************************************/
 #include "bll_motion_control.h"
 
+#include "bll_traight_line_moving.h"
+
 #include "cfg_if_mobile_robot.h"
 #include "cfg_if_modulate.h"
 
@@ -163,17 +165,34 @@ void bll_motion_control::release_instance(void)
 void bll_motion_control::set_motion_control_velocity(double line_v, double angular_v)
 {
 	bool flag = false;
+	bool ret = false;
+	bool line_v_flag = false;
+	bool angular_v_flag = false;
 	double line = line_v;
 	double angular = angular_v;
+	
 	flag = cfg_if_update_velocity(line_v, angular_v);
-	if (true == flag)
+
+	line_v_flag = cfg_if_get_linear_velocity_ajust(line_v);
+	if ( true == line_v_flag )
 	{
-		//debug_print_warnning("line=%lf --> line_v=%lf;  angular=%lf --> angular_v=%lf\n", line, line_v, angular, angular_v);
+//		bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
+//		flag = p_traight_line_moving->test_is_traight_line_moving();
+//		if (true == flag)
+//		{
+//			debug_print_error("line_v_flag=%d; flag=%d; line=%lf; line_v=%lf",line_v_flag, flag, line, line_v);
+//		}
+		cfg_if_disable_linear_velocity_ajust();
+		ret = true;
 	}
-	else
+
+	angular_v_flag = cfg_if_get_angular_velocity_ajust(angular_v);
+	if ( true == angular_v_flag )
 	{
-		//debug_print_info("line=%lf --> line_v=%lf;  angular=%lf --> angular_v=%lf\n", line, line_v, angular, angular_v);
+		cfg_if_disable_angular_velocity_ajust();
+		ret = true;
 	}
+	
 	cfg_if_set_run_velocity(line_v, angular_v);
 }
 
@@ -192,22 +211,6 @@ void bll_motion_control::set_motion_control_velocity(double line_v, double angul
 void bll_motion_control::straight_moving( double line_v )
 {
 	double angular_v = 0.0;
-	bool linear_flag = false;
-	bool angular_flag = false;
-	double line = line_v;
-	double angular = angular_v;
-
-	linear_flag = cfg_if_get_linear_velocity_ajust(line_v);
-	if (true == linear_flag)
-	{
-		//debug_print_warnning("line=%lf  -->  line_v=%lf\n", line, line_v);
-	}
-	angular_flag = cfg_if_get_angular_velocity_ajust(angular_v);
-	if (true == angular_flag)
-	{
-		//debug_print_warnning("angular=%lf  -->  angular_v=%lf\n", angular,angular_v);
-	}
-	
 	set_motion_control_velocity(line_v, angular_v);
 }
 
