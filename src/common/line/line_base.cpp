@@ -191,7 +191,7 @@ double line_base::get_vertical_distance(double x, double y, double x1, double y1
 	}
 	
 	diff_angle = angel_base_instance.get_angle_differences(line_angel, hypotenuse_angel);
-	debug_print_info("| line_angel(%lf) - hypotenuse_angel(%lf) | = diff_angle(%lf)}", line_angel, hypotenuse_angel, diff_angle);
+	//debug_print_info("| line_angel(%lf) - hypotenuse_angel(%lf) | = diff_angle(%lf)}", line_angel, hypotenuse_angel, diff_angle);
 	acute_angle = angel_base_instance.convert_to_acute_angle(diff_angle);
 	radian = angel_base_instance.convert_degrees_to_radians(acute_angle);
 	debug_print_info("diff_angle(%lf) => acute_angle(%lf) => radian(%lf)", acute_angle, diff_angle, radian);

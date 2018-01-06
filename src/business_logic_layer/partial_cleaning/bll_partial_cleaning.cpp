@@ -252,15 +252,15 @@ void bll_partial_cleaning::set_current_position_to_refer_start_pose(void)
 	bool area_part_is_left = false;
 
 	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
-	std::cout<<std::endl;
-	debug_print_warnning("++++++++++++");
+	//std::cout<<std::endl;
+	//debug_print_warnning("++++++++++++");
 	cfg_if_get_current_position(curr);
 	p_traight_line_moving->set_straight_moving_refer_start_pose(curr);
-	debug_print_error("set_straight_moving_refer_start_pose(curr){(%lf, %lf) : %lf}\n", curr.point.x, curr.point.y, curr.angle);
+	//debug_print_error("set_straight_moving_refer_start_pose(curr){(%lf, %lf) : %lf}\n", curr.point.x, curr.point.y, curr.angle);
 	
 	vertical_distance = get_vertical_distance_curr_position_to_refer_line();
 	hypotenuse = vertical_distance;
-	printf("vertical_distance(%lf) = hypotenuse= %lf;\n", vertical_distance, hypotenuse);
+	//printf("vertical_distance(%lf) = hypotenuse= %lf;\n", vertical_distance, hypotenuse);
 	refer_angle = get_reference_angle();
 	angel_base angel_base_instance;
 	acute_angle = angel_base_instance.convert_to_acute_angle(refer_angle);
@@ -268,30 +268,30 @@ void bll_partial_cleaning::set_current_position_to_refer_start_pose(void)
 	x_deviation = hypotenuse*sin(radian);
 	y_deviation = hypotenuse*cos(radian);
 
-	printf("refer_angle(%lf)  ==>  acute_angle(%lf) ==> radian(%lf)\n", refer_angle, acute_angle, radian);
-	printf("sin(%lf) = %lf;   ", radian, sin(radian));
-	printf("cos(%lf) = %lf;\n", radian, cos(radian));
-	printf("hypotenuse  = %lf\n", hypotenuse);
-	printf("x_deviation = %lf,       y_deviation = %lf\n", x_deviation, y_deviation);
+	//printf("refer_angle(%lf)  ==>  acute_angle(%lf) ==> radian(%lf)\n", refer_angle, acute_angle, radian);
+	//printf("sin(%lf) = %lf;   ", radian, sin(radian));
+	//printf("cos(%lf) = %lf;\n", radian, cos(radian));
+	//printf("hypotenuse  = %lf\n", hypotenuse);
+	//printf("x_deviation = %lf,       y_deviation = %lf\n", x_deviation, y_deviation);
 	
 	area_part_is_left = cfg_if_test_partial_cleaning_part_is_left();
 	if (false == area_part_is_left)
 	{
 		y_trend = -y_trend;
-		debug_print_fatal("area_part_is_left =%d ;y_trend=%lf", area_part_is_left, y_trend);
+		//debug_print_fatal("area_part_is_left =%d ;y_trend=%lf", area_part_is_left, y_trend);
 	}
 
 	get_front_position(front_pos);
-	printf("get_front_position(front_pos){ (%lf, %lf) : %lf}\n", front_pos.point.x, front_pos.point.y, front_pos.angle);
+	//printf("get_front_position(front_pos){ (%lf, %lf) : %lf}\n", front_pos.point.x, front_pos.point.y, front_pos.angle);
 	target.angle = refer_angle;
 	target.point.x = front_pos.point.x - x_deviation;
 	target.point.y = front_pos.point.y + y_deviation*y_trend;
 	
 	p_traight_line_moving->set_straight_moving_refer_target_pose(target);
 	
-	debug_print_error("set_straight_moving_refer_target_pose(target){ (%lf, %lf) : %lf}\n", target.point.x, target.point.y, target.angle);
-	debug_print_warnning("------------");
-	std::cout<<std::endl;
+	//debug_print_error("set_straight_moving_refer_target_pose(target){ (%lf, %lf) : %lf}\n", target.point.x, target.point.y, target.angle);
+	//debug_print_warnning("------------");
+	//std::cout<<std::endl;
 }
 
 /*****************************************************************************

@@ -579,7 +579,7 @@ void bll_traight_line_moving::clear_traight_line_moving_data(void)
 
 /*****************************************************************************
  函 数 名: bll_traight_line_moving.straight_driving_adjust_angle
- 功能描述  : 直行调整角度
+ 功能描述  : 直行调整直行方向角度
  输入参数: void  
  输出参数: 无
  返 回 值: void
@@ -681,21 +681,21 @@ void bll_traight_line_moving::straight_driving_adjust_speed(void)
 	}
 	else if ((distance < 0.02) && (distance >= 0.0))
 	{
-		if (temp >= 0.1)
+		if (temp >= 0.08)
 		{
-			linear_velocity = 0.1;
+			linear_velocity = 0.08;
 			flag = true;
 		}
 	}
 
 	if (true == flag)
 	{
-		static double last = 0.0;
+		/*static double last = 0.0;
 		if (last != distance)
 		{
 			last = distance;
 			debug_print_warnning("distance=%lf  linear_velocity=%lf", distance, linear_velocity);
-		}
+		}*/
 		cfg_if_endble_linear_velocity_ajust(linear_velocity);
 	}
 }
