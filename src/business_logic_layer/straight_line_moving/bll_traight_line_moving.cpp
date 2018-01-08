@@ -690,12 +690,6 @@ void bll_traight_line_moving::straight_driving_adjust_speed(void)
 
 	if (true == flag)
 	{
-		/*static double last = 0.0;
-		if (last != distance)
-		{
-			last = distance;
-			debug_print_warnning("distance=%lf  linear_velocity=%lf", distance, linear_velocity);
-		}*/
 		cfg_if_endble_linear_velocity_ajust(linear_velocity);
 	}
 }
@@ -748,7 +742,7 @@ double bll_traight_line_moving::get_distance_to_traight_line_moving_start_pos(vo
 	get_traight_line_moving_start_pos(pos);
 	line_base line_base_instance;
 	distance = line_base_instance.get_distance(curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
-	//debug_print_info("distance(%lf) = |curr_pos.point=(%lf, %lf)<-->pos.point=(%lf, %lf)|", distance, curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
+
 	return distance;
 }
 
@@ -774,17 +768,7 @@ double bll_traight_line_moving::get_distance_to_traight_line_moving_target_pos(v
 	get_traight_line_moving_target_pos(pos);
 	line_base line_base_instance;
 	distance = line_base_instance.get_distance(curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
-	//LOCAL_MOVE_STATE_ENUM state;
-	//static double last = 0.0;
-	//cfg_if_get_partial_cleaning_state(state);
-	//if (LOCAL_MOVE_SEC_HALF == state)
-	//{
-	//	if (last != distance)
-	//	{
-	//		last = distance;
-	//		debug_print_info("distance(%lf) = |curr_pos.point=(%lf, %lf)<-->pos.point=(%lf, %lf)|", distance, curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
-	//	}
-	//}
+
 	return distance;
 }
 
