@@ -93,6 +93,8 @@ public:
 	bool test_detect_obstacle_turn_back(void);
 	bool test_reach_refer_target_position(void);
 	bool test_finish_half_area(void);
+	bool test_finish_traight_line_moving(void);
+	
 	void update_refer_line_traight_line_moving_target_pos(void);
 	void traight_line_moving_dynamic_regulation(void);
 

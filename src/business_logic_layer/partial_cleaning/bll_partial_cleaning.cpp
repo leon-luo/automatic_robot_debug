@@ -635,6 +635,40 @@ bool bll_partial_cleaning::test_finish_half_area(void)
 }
 
 /*****************************************************************************
+ 函 数 名: bll_partial_cleaning.test_traight_line_moving_finish
+ 功能描述  : 检测直行行驶是否结束
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2018年1月8日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool bll_partial_cleaning::test_finish_traight_line_moving(void)
+{
+	bool ret = false;
+	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
+
+	ret = p_traight_line_moving->test_is_traight_line_moving();
+	if (true == ret)
+	{
+		traight_line_moving_dynamic_regulation();
+		
+		ret = false;
+		ret = test_reach_refer_target_position();
+		if (true != ret)
+		{
+			ret = test_detect_obstacle_turn_back();
+		}
+	}
+
+	return ret;
+}
+
+
+/*****************************************************************************
  函 数 名: bll_partial_cleaning.update_refer_line_traight_line_moving_target_pos
  功能描述  : 更新目标坐标点位置
  输入参数: void  
@@ -749,22 +783,11 @@ void bll_partial_cleaning::local_move_start(void)
 void bll_partial_cleaning::local_move_pivot(void)
 {
 	bool flag = false;
-	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
 
-	flag = p_traight_line_moving->test_is_traight_line_moving();
+	flag = test_finish_traight_line_moving();
 	if (true == flag)
 	{
-		flag = false;
-		flag = test_reach_refer_target_position();
-		if (true != flag)
-		{
-			flag = test_detect_obstacle_turn_back();
-		}
-
-		if (true == flag)
-		{
-			monitor_angle_set_pivot_deal();
-		}
+		monitor_angle_set_pivot_deal();
 	}
 }
 
@@ -783,32 +806,12 @@ void bll_partial_cleaning::local_move_pivot(void)
 void bll_partial_cleaning::local_move_fst_line_start(void)
 {
 	bool flag = false;
-	double length = 0.0;
-	double distance = 0.0;
 
-	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
-	
-	flag = p_traight_line_moving->test_is_traight_line_moving();
+	flag = test_finish_traight_line_moving();
 	if (true == flag)
 	{
-		traight_line_moving_dynamic_regulation();
-
-		length = get_local_move_edge_length();
-		distance = get_distance_to_end_point_pos();
-		if (distance >= length)
-		{
-			flag = true;
-		}
-		else
-		{
-			flag = test_detect_obstacle_turn_back();
-		}
-
-		if (true == flag)
-		{
-			change_rotate_direction();
-			set_partial_cleaning_state(LOCAL_MOVE_FST_HALF);
-		}
+		change_rotate_direction();
+		set_partial_cleaning_state(LOCAL_MOVE_FST_HALF);
 	}
 }
 
@@ -885,32 +888,17 @@ void bll_partial_cleaning::local_move_return_center_pose(void)
 bool bll_partial_cleaning::local_move_parallel_lines(void)
 {
 	bool flag = false;
-	bool half_done_flag = false;
-	double length = 0.0;
-	double vertical_dimension = 0.0;
 
-	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
-	flag = p_traight_line_moving->test_is_traight_line_moving();
+	flag = test_finish_traight_line_moving();
 	if (true == flag)
 	{
-		traight_line_moving_dynamic_regulation();
-
 		flag = false;
-		flag = test_reach_refer_target_position();
-		if (true != flag)
-		{
-			flag = test_detect_obstacle_turn_back();
-		}
-
+		flag = test_finish_half_area();
 		if (true == flag)
 		{
-			half_done_flag = test_finish_half_area();
-			if (true == half_done_flag)
-			{
-				return true;
-			}
-			change_rotate_direction();
+			return true;
 		}
+		change_rotate_direction();
 	}
 	
 	return false;
