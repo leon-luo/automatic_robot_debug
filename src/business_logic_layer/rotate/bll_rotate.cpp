@@ -786,7 +786,7 @@ void bll_rotate::monitor_angle_running(void)
 			set_monitor_angle_stage(stage);
 			
 			std::cout<<std::endl;
-			debug_print_warnning("[MONITOR_RESPOND] :offset(%lf) = [curr_angle(%lf) - respond_angle(%lf)] < precision(%lf)", offset, curr_angle, respond_angle, precision);
+			debug_print_info("[MONITOR_RESPOND] :offset(%lf) = [curr_angle(%lf) - respond_angle(%lf)] < precision(%lf)", offset, curr_angle, respond_angle, precision);
 			std::cout<<std::endl;
 		}
 	}

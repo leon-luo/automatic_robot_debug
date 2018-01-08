@@ -91,6 +91,8 @@ public:
 	double get_center_pose_to_curr_pos_angle(void);
 	bool test_arrive_at_refer_line(void);
 	bool test_detect_obstacle_turn_back(void);
+	bool test_reach_refer_target_position(void);
+	bool test_finish_half_area(void);
 	void update_refer_line_traight_line_moving_target_pos(void);
 	void traight_line_moving_dynamic_regulation(void);
 
@@ -109,6 +111,7 @@ public:
 
 	void smooth_decelerate_stop(void);
 
+	double get_parallel_moving_direction_angle(void);
 	double get_monitor_angle_turn_back_angle(void);
 	void monitor_angle_set_turn_back_deal(void);
 

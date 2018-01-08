@@ -701,6 +701,32 @@ void bll_traight_line_moving::straight_driving_adjust_speed(void)
 }
 
 /*****************************************************************************
+ 函 数 名: bll_traight_line_moving.get_current_pos_to_target_pos_angle
+ 功能描述  : 获取当前位置点指向目标点的角度方向
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: double
+ 
+ 修改历史:
+  1.日     期: 2018年1月8日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+double bll_traight_line_moving::get_current_pos_to_target_pos_angle(void)
+{
+	POSE_STRU pos;
+	POSE_STRU curr_pos;
+	double angle = 0.0;
+	
+	cfg_if_get_current_position(curr_pos);
+	get_traight_line_moving_target_pos(pos);
+	angel_base angel_base_instance;
+	angle = angel_base_instance.get_angle(curr_pos.point.x, curr_pos.point.y, pos.point.x, pos.point.y);
+
+	return angle;
+}
+
+/*****************************************************************************
  函 数 名: bll_traight_line_moving.get_distance_to_traight_line_moving_start_pos
  功能描述  : 获取当前位置到开始直行位置的距离
  输入参数: void  

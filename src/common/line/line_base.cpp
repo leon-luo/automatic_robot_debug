@@ -172,7 +172,7 @@ double line_base::get_vertical_distance(double x, double y, double x1, double y1
 	double opposite = 0.0;    //三角形对边
 	double hypotenuse = 0.0;  //三角形斜边
 	angel_base angel_base_instance;
-	debug_print_info("P0(%lf, %lf) to line{P1(%lf, %lf)---P2(%lf, %lf)}", x, y, x1, y1, x2, y2);
+	//debug_print_info("P0(%lf, %lf) to line{P1(%lf, %lf)---P2(%lf, %lf)}", x, y, x1, y1, x2, y2);
 	len1 = get_distance(x, y, x1, y1);
 	len2 = get_distance(x, y, x2, y2);
 	if (len1 >= len2)
@@ -180,24 +180,24 @@ double line_base::get_vertical_distance(double x, double y, double x1, double y1
 		line_angel = angel_base_instance.get_angle(x1, y1, x2, y2);
 		hypotenuse_angel = angel_base_instance.get_angle(x1, y1, x, y);
 		hypotenuse = len1;
-		debug_print_warnning("len1(%lf)>=len2(%lf) --- hypotenuse(%lf)}", len1, len2, hypotenuse);
+		//debug_print_warnning("len1(%lf)>=len2(%lf) --- hypotenuse(%lf)}", len1, len2, hypotenuse);
 	}
 	else
 	{
 		line_angel = angel_base_instance.get_angle(x2, y2, x1, y1);
 		hypotenuse_angel = angel_base_instance.get_angle(x2, y2, x, y);
 		hypotenuse = len2;
-		debug_print_warnning("len1(%lf)<len2(%lf) --- hypotenuse(%lf)}", len1, len2, hypotenuse);
+		//debug_print_warnning("len1(%lf)<len2(%lf) --- hypotenuse(%lf)}", len1, len2, hypotenuse);
 	}
 	
 	diff_angle = angel_base_instance.get_angle_differences(line_angel, hypotenuse_angel);
 	//debug_print_info("| line_angel(%lf) - hypotenuse_angel(%lf) | = diff_angle(%lf)}", line_angel, hypotenuse_angel, diff_angle);
 	acute_angle = angel_base_instance.convert_to_acute_angle(diff_angle);
 	radian = angel_base_instance.convert_degrees_to_radians(acute_angle);
-	debug_print_info("diff_angle(%lf) => acute_angle(%lf) => radian(%lf)", acute_angle, diff_angle, radian);
+	//debug_print_info("diff_angle(%lf) => acute_angle(%lf) => radian(%lf)", acute_angle, diff_angle, radian);
 	temp = sin(radian);
 	opposite = hypotenuse*temp;
-	debug_print_info("opposite = hypotenuse*sin(radian=%lf) = %lf * %lf = %lf;",radian, hypotenuse, temp, opposite);
+	//debug_print_info("opposite = hypotenuse*sin(radian=%lf) = %lf * %lf = %lf;",radian, hypotenuse, temp, opposite);
 	return opposite;
 }
 

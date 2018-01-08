@@ -124,6 +124,8 @@ public:
 	void straight_driving_adjust_angle(void);
 	void straight_driving_adjust_speed(void);
 
+	double get_current_pos_to_target_pos_angle(void);
+
 	double get_distance_to_traight_line_moving_start_pos(void);
 	double get_distance_to_traight_line_moving_target_pos(void);
 
