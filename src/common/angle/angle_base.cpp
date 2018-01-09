@@ -468,54 +468,6 @@ double angel_base::get_angle_differences(double angle1, double angle2)
 }
 
 /*****************************************************************************
- 函 数 名: angel_base.is_acute_angle
- 功能描述  : 检测角度是不是锐角
- 输入参数: double angle  
- 输出参数: 无
- 返 回 值: bool
- 
- 修改历史:
-  1.日     期: 2018年1月9日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-bool angel_base::is_acute_angle(double angle)
-{
-	bool ret = false;
-	
-	if ((0.0 < angle) && (angle < 90.0))
-	{
-		ret = true;
-	}
-	
-	return ret;
-}
-
-/*****************************************************************************
- 函 数 名: angel_base.is_obtuse_angle
- 功能描述  : 检测角度是不是钝角
- 输入参数: double angle  
- 输出参数: 无
- 返 回 值: bool
- 
- 修改历史:
-  1.日     期: 2018年1月9日
-    作     者: Leon
-    修改内容: 新生成函数
-*****************************************************************************/
-bool angel_base::is_obtuse_angle(double angle)
-{
-	bool ret = false;
-	
-	if ((90.0 < angle) && (angle < 180.0))
-	{
-		ret = true;
-	}
-	
-	return ret;
-}
-
-/*****************************************************************************
  函 数 名: angel_base.test_angle_is_over_clockwise
  功能描述  : 设置顺时针旋转方向角度是否已经超过目标角度
  输入参数: double current  

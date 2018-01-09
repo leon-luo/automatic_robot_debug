@@ -100,9 +100,6 @@ public:
 	double get_right_angle(double angle, ROTATE_DIRECTION_ENUM direction);
 	
 	double get_angle_differences(double angle1, double angle2);
-
-	bool is_acute_angle(double angle);
-	bool is_obtuse_angle(double angle);
 	
 	bool test_angle_is_over_clockwise(double current, double target);
 	bool test_angle_is_over_anticlockwise(double current, double target);
