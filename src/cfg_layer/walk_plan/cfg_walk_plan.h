@@ -63,23 +63,8 @@
  * 结构体类型
  ******************************************************************************/
 
-typedef enum LOCAL_MOVE_MODE
-{
-	AMBIENT_NO_OBSTACLE,
-	AMBIENT_HAS_OBSTACLE,
-}LOCAL_MOVE_MODE_ENUM;
 
-typedef enum MOVE_DIRECTION
-{
-	FORWARD,                                 //向前行走
-	BACKWARD,                                //向前行走
-}MOVE_DIRECTION_ENUM;
 
-typedef enum AREA_PART
-{
-	AREA_PART_LEFT,                          //左边区域
-	AREA_PART_RIGHT,                         //右边区域
-}AREA_PART_ENUM;
 
 typedef struct AREA
 {
@@ -88,8 +73,8 @@ typedef struct AREA
 	double max_y;                             //局域最大Y轴向距离
 	POSE_STRU original_pose;                  //局域原始规划原始点
 	POSE_STRU planning_pose[4];               //根据起始点规划出局域块四个角的点
-	LOCAL_MOVE_MODE_ENUM mode;                //局域模式.以四周一定范围内有无障碍物来判断
-	LOCAL_MOVE_STATE_ENUM state;              //局域行驶状态
+	PARTITION_DRIVING_ENUM mode;                //局域模式.以四周一定范围内有无障碍物来判断
+	PARTITION_DRIVING_STATE_ENUM state;              //局域行驶状态
 	AREA_PART_ENUM area_part;                 //当前所在的半区
 	MOVE_DIRECTION_ENUM direction;            //行驶方向
 	double reference_angle;
@@ -108,32 +93,32 @@ class cfg_walk_plan
 
 		void enable_local_move(void);
 		void disable_local_move(void);
-		bool test_local_move_is_enable(void);
+		bool test_partition_driving_is_enable(void);
 
-		void set_local_move_mode(const LOCAL_MOVE_MODE_ENUM data);
-		void get_local_move_mode(LOCAL_MOVE_MODE_ENUM &data);
+		void set_partition_driving_mode(const PARTITION_DRIVING_ENUM data);
+		void get_partition_driving_mode(PARTITION_DRIVING_ENUM &data);
 
-		void set_local_move_state(const LOCAL_MOVE_STATE_ENUM data);
-		void get_local_move_state(LOCAL_MOVE_STATE_ENUM &data);
+		void set_partition_driving_state(const PARTITION_DRIVING_STATE_ENUM data);
+		void get_partition_driving_state(PARTITION_DRIVING_STATE_ENUM &data);
 		
-		void set_local_move_area_part(const AREA_PART_ENUM data);
-		void get_local_move_area_part(AREA_PART_ENUM &data);
-		bool test_local_move_area_part_is_left(void);
-		void switch_local_move_area_part(void);
+		void set_partition_driving_area_part(const AREA_PART_ENUM data);
+		void get_partition_driving_area_part(AREA_PART_ENUM &data);
+		bool test_partition_driving_area_part_is_left(void);
+		void switch_partition_driving_area_part(void);
 
-		void set_local_move_direction(const MOVE_DIRECTION_ENUM data);
-		void get_local_move_direction(MOVE_DIRECTION_ENUM &data);
+		void set_partition_driving_direction(const MOVE_DIRECTION_ENUM data);
+		void get_partition_driving_direction(MOVE_DIRECTION_ENUM &data);
 		
-		bool test_local_move_direction_is_forward(void);
+		bool test_partition_driving_direction_is_forward(void);
 
-		void switch_local_move_direction(void);
-		void print_local_move_direction(void);
+		void switch_partition_driving_direction(void);
+		void print_partition_driving_direction(void);
 
-		void set_local_move_original_pose(const POSE_STRU data);
-		void get_local_move_original_pose(POSE_STRU &data);
+		void set_partition_driving_original_pose(const POSE_STRU data);
+		void get_partition_driving_original_pose(POSE_STRU &data);
 
-		void set_local_move_planning_pose(const POSE_STRU &data, int index);
-		void get_local_move_planning_pose(POSE_STRU &data, int index);
+		void set_partition_driving_planning_pose(const POSE_STRU &data, int index);
+		void get_partition_driving_planning_pose(POSE_STRU &data, int index);
 
 		void set_district_area(const AREA_STRU data);
 		void get_district_area(AREA_STRU &data);

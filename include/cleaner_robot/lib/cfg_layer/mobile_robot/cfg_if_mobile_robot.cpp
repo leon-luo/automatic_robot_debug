@@ -637,7 +637,7 @@ void cfg_if_get_wall_following_sensor(WALL_FOLLOWING_SENSOR_STRU &data)
 void cfg_if_switch_move_direction(void)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->switch_local_move_direction();
+	p_mobile_robot->switch_partition_driving_direction();
 }
 
 /*****************************************************************************
@@ -655,7 +655,7 @@ void cfg_if_switch_move_direction(void)
 void cfg_if_switch_partial_cleaning_part(void)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->switch_local_move_area_part();
+	p_mobile_robot->switch_partition_driving_area_part();
 }
 
 /*****************************************************************************
@@ -675,7 +675,7 @@ bool cfg_if_test_move_direction_is_forward(void)
 	bool ret = false;
 	
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	ret = p_mobile_robot->test_local_move_direction_is_forward();
+	ret = p_mobile_robot->test_partition_driving_direction_is_forward();
 	
 	return ret;
 }
@@ -697,7 +697,7 @@ bool cfg_if_test_partial_cleaning_part_is_left(void)
 	bool ret = false;
 	
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	ret = p_mobile_robot->test_local_move_area_part_is_left();
+	ret = p_mobile_robot->test_partition_driving_area_part_is_left();
 	
 	return ret;
 }
@@ -753,13 +753,13 @@ void cfg_if_disable_partial_cleaning(void)
 bool cfg_if_test_partial_cleaning_is_enable(void)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->test_local_move_is_enable();
+	p_mobile_robot->test_partition_driving_is_enable();
 }
 
 /*****************************************************************************
  函 数 名: cfg_if_set_partial_cleaning_mode
  功能描述  : 设置局部清扫模式
- 输入参数: const LOCAL_MOVE_MODE_ENUM data  
+ 输入参数: const PARTITION_DRIVING_ENUM data  
  输出参数: 无
  返 回 值: 
  
@@ -768,16 +768,16 @@ bool cfg_if_test_partial_cleaning_is_enable(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_if_set_partial_cleaning_mode(const LOCAL_MOVE_MODE_ENUM data)
+void cfg_if_set_partial_cleaning_mode(const PARTITION_DRIVING_ENUM data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->set_local_move_mode(data);
+	p_mobile_robot->set_partition_driving_mode(data);
 }
 
 /*****************************************************************************
  函 数 名: cfg_if_get_partial_cleaning_mode
  功能描述  : 获取局部清扫模式
- 输入参数: LOCAL_MOVE_MODE_ENUM &data  
+ 输入参数: PARTITION_DRIVING_ENUM &data  
  输出参数: 无
  返 回 值: 
  
@@ -786,16 +786,16 @@ void cfg_if_set_partial_cleaning_mode(const LOCAL_MOVE_MODE_ENUM data)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_if_get_partial_cleaning_mode(LOCAL_MOVE_MODE_ENUM &data)
+void cfg_if_get_partial_cleaning_mode(PARTITION_DRIVING_ENUM &data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->get_local_move_mode(data);
+	p_mobile_robot->get_partition_driving_mode(data);
 }
 
 /*****************************************************************************
  函 数 名: cfg_if_set_partial_cleaning_state
  功能描述  : 设置局部清扫阶段
- 输入参数: const LOCAL_MOVE_STATE_ENUM data  
+ 输入参数: const PARTITION_DRIVING_STATE_ENUM data  
  输出参数: 无
  返 回 值: 
  
@@ -804,16 +804,16 @@ void cfg_if_get_partial_cleaning_mode(LOCAL_MOVE_MODE_ENUM &data)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_if_set_partial_cleaning_state(const LOCAL_MOVE_STATE_ENUM data)
+void cfg_if_set_partial_cleaning_state(const PARTITION_DRIVING_STATE_ENUM data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->set_local_move_state(data);
+	p_mobile_robot->set_partition_driving_state(data);
 }
 
 /*****************************************************************************
  函 数 名: cfg_if_get_partial_cleaning_state
  功能描述  : 获取局部清扫阶段
- 输入参数: LOCAL_MOVE_STATE_ENUM &data  
+ 输入参数: PARTITION_DRIVING_STATE_ENUM &data  
  输出参数: 无
  返 回 值: 
  
@@ -822,10 +822,10 @@ void cfg_if_set_partial_cleaning_state(const LOCAL_MOVE_STATE_ENUM data)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_if_get_partial_cleaning_state(LOCAL_MOVE_STATE_ENUM &data)
+void cfg_if_get_partial_cleaning_state(PARTITION_DRIVING_STATE_ENUM &data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->get_local_move_state(data);
+	p_mobile_robot->get_partition_driving_state(data);
 }
 
 /*****************************************************************************
@@ -843,7 +843,7 @@ void cfg_if_get_partial_cleaning_state(LOCAL_MOVE_STATE_ENUM &data)
 void cfg_if_set_partial_cleaning_area_part(const AREA_PART_ENUM data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->set_local_move_area_part(data);
+	p_mobile_robot->set_partition_driving_area_part(data);
 }
 
 /*****************************************************************************
@@ -861,7 +861,7 @@ void cfg_if_set_partial_cleaning_area_part(const AREA_PART_ENUM data)
 void cfg_if_get_partial_cleaning_area_part(AREA_PART_ENUM &data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->get_local_move_area_part(data);
+	p_mobile_robot->get_partition_driving_area_part(data);
 }
 
 /*****************************************************************************
@@ -879,7 +879,7 @@ void cfg_if_get_partial_cleaning_area_part(AREA_PART_ENUM &data)
 void cfg_if_set_partial_cleaning_direction(const MOVE_DIRECTION_ENUM data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->set_local_move_direction(data);
+	p_mobile_robot->set_partition_driving_direction(data);
 }
 
 /*****************************************************************************
@@ -897,7 +897,7 @@ void cfg_if_set_partial_cleaning_direction(const MOVE_DIRECTION_ENUM data)
 void cfg_if_get_partial_cleaning_direction(MOVE_DIRECTION_ENUM &data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->get_local_move_direction(data);
+	p_mobile_robot->get_partition_driving_direction(data);
 }
 
 /*****************************************************************************
@@ -915,7 +915,7 @@ void cfg_if_get_partial_cleaning_direction(MOVE_DIRECTION_ENUM &data)
 void cfg_if_set_partial_cleaning_original_pose(const POSE_STRU &data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->set_local_move_original_pose(data);
+	p_mobile_robot->set_partition_driving_original_pose(data);
 }
 
 /*****************************************************************************
@@ -933,7 +933,7 @@ void cfg_if_set_partial_cleaning_original_pose(const POSE_STRU &data)
 void cfg_if_get_partial_cleaning_original_pose(POSE_STRU &data)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->get_local_move_original_pose(data);
+	p_mobile_robot->get_partition_driving_original_pose(data);
 }
 
 /*****************************************************************************
@@ -1014,7 +1014,7 @@ bool cfg_if_set_run_velocity(double &line_v, double &angular_v)
 }
 
 /*****************************************************************************
- 函 数 名: cfg_if_set_local_move_planning_pose
+ 函 数 名: cfg_if_set_partition_driving_planning_pose
  功能描述  : 设置局域行驶区域方框角的位置
  输入参数: const POSE_STRU &data  
            int index              
@@ -1026,14 +1026,14 @@ bool cfg_if_set_run_velocity(double &line_v, double &angular_v)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_if_set_local_move_planning_pose(const POSE_STRU &data, int index)
+void cfg_if_set_partition_driving_planning_pose(const POSE_STRU &data, int index)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->set_local_move_planning_pose(data, index);
+	p_mobile_robot->set_partition_driving_planning_pose(data, index);
 }
 
 /*****************************************************************************
- 函 数 名: cfg_if_get_local_move_planning_pose
+ 函 数 名: cfg_if_get_partition_driving_planning_pose
  功能描述  : 获取局域行驶区域方框角的位置
  输入参数: POSE_STRU &data  
            int index        
@@ -1045,9 +1045,9 @@ void cfg_if_set_local_move_planning_pose(const POSE_STRU &data, int index)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void cfg_if_get_local_move_planning_pose(POSE_STRU &data, int index)
+void cfg_if_get_partition_driving_planning_pose(POSE_STRU &data, int index)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->get_local_move_planning_pose(data, index);
+	p_mobile_robot->get_partition_driving_planning_pose(data, index);
 }
 

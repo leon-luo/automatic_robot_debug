@@ -953,7 +953,7 @@ void bll_rotate::monitor_angle_pivot_respond(void)
 	
 	p_traight_line_moving->set_traight_line_moving();
 	
-	p_partial_cleaning->set_partial_cleaning_state(LOCAL_MOVE_FST_LINE_START);
+	p_partial_cleaning->set_partial_cleaning_state(PARTITION_DRIVING_FST_LINE_START);
 
 	cfg_if_switch_move_direction();
 	
@@ -982,7 +982,7 @@ void bll_rotate::monitor_angle_turn_to_refer_line_respond(void)
 	
 	p_traight_line_moving->set_traight_line_moving();
 	
-	p_partial_cleaning->set_partial_cleaning_state(LOCAL_MOVE_RETURN_REFER_LINE);
+	p_partial_cleaning->set_partial_cleaning_state(PARTITION_DRIVING_RETURN_REFER_LINE);
 }
 
 /*****************************************************************************
@@ -1011,7 +1011,7 @@ void bll_rotate::monitor_angle_turn_to_center_respond(void)
 	bll_partial_cleaning* p_partial_cleaning = bll_partial_cleaning::get_instance();
 	p_partial_cleaning->set_current_position_to_refer_start_pose();
 	p_partial_cleaning->update_refer_line_traight_line_moving_target_pos();
-	p_partial_cleaning->set_partial_cleaning_state(LOCAL_MOVE_SEC_HALF);
+	p_partial_cleaning->set_partial_cleaning_state(PARTITION_DRIVING_SEC_HALF);
 }
 
 /*****************************************************************************
@@ -1039,7 +1039,7 @@ void bll_rotate::monitor_angle_turn_to_original_pose_respond(void)
 	
 	p_traight_line_moving->set_traight_line_moving();
 	bll_partial_cleaning* p_partial_cleaning = bll_partial_cleaning::get_instance();
-	p_partial_cleaning->set_partial_cleaning_state(LOCAL_MOVE_RETURN_CENTER_POS);
+	p_partial_cleaning->set_partial_cleaning_state(PARTITION_DRIVING_RETURN_CENTER_POS);
 }
 
 /*****************************************************************************
@@ -1057,7 +1057,7 @@ void bll_rotate::monitor_angle_turn_to_original_pose_respond(void)
 void bll_rotate::monitor_angle_turn_to_original_direction_respond(void)
 {
 	bll_partial_cleaning* p_partial_cleaning = bll_partial_cleaning::get_instance();
-	p_partial_cleaning->set_partial_cleaning_state(LOCAL_MOVE_ALL_DONE);
+	p_partial_cleaning->set_partial_cleaning_state(PARTITION_DRIVING_ALL_DONE);
 	cfg_if_change_curr_action(STOP);
 	cfg_if_disable_linear_velocity_ajust();
 }

@@ -113,11 +113,11 @@ void cfg_if_enable_partial_cleaning(void);
 void cfg_if_disable_partial_cleaning(void);
 bool cfg_if_test_partial_cleaning_is_enable(void);
 
-void cfg_if_set_partial_cleaning_mode(const LOCAL_MOVE_MODE_ENUM data);
-void cfg_if_get_partial_cleaning_mode(LOCAL_MOVE_MODE_ENUM &data);
+void cfg_if_set_partial_cleaning_mode(const PARTITION_DRIVING_ENUM data);
+void cfg_if_get_partial_cleaning_mode(PARTITION_DRIVING_ENUM &data);
 
-void cfg_if_set_partial_cleaning_state(const LOCAL_MOVE_STATE_ENUM data);
-void cfg_if_get_partial_cleaning_state(LOCAL_MOVE_STATE_ENUM &data);
+void cfg_if_set_partial_cleaning_state(const PARTITION_DRIVING_STATE_ENUM data);
+void cfg_if_get_partial_cleaning_state(PARTITION_DRIVING_STATE_ENUM &data);
 
 void cfg_if_set_partial_cleaning_area_part(const AREA_PART_ENUM data);
 void cfg_if_get_partial_cleaning_area_part(AREA_PART_ENUM &data);
@@ -134,8 +134,8 @@ void cfg_if_get_velocity(double &line_v, double &angular_v);
 bool cfg_if_update_velocity(double &line_v, double &angular_v);
 bool cfg_if_set_run_velocity(double &line_v, double &angular_v);
 
-void cfg_if_set_local_move_planning_pose(const POSE_STRU &data, int index);
-void cfg_if_get_local_move_planning_pose(POSE_STRU &data, int index);
+void cfg_if_set_partition_driving_planning_pose(const POSE_STRU &data, int index);
+void cfg_if_get_partition_driving_planning_pose(POSE_STRU &data, int index);
 
 
 /*****************************************************************************/

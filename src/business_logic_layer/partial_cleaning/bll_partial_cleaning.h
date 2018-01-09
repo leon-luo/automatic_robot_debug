@@ -98,17 +98,17 @@ public:
 	void update_refer_line_traight_line_moving_target_pos(void);
 	void traight_line_moving_dynamic_regulation(void);
 
-	void set_partial_cleaning_state(const LOCAL_MOVE_STATE_ENUM data);
-	void local_move_start(void);
-	void local_move_pivot(void);
-	void local_move_fst_line_start(void);
-	void local_move_return_reference_line(void);
-	void local_move_return_center_pose(void);
-	bool local_move_parallel_lines(void);
-	void local_move_fst_half_area(void);
-	void local_move_sec_half_area(void);
+	void set_partial_cleaning_state(const PARTITION_DRIVING_STATE_ENUM data);
+	void partition_driving_start(void);
+	void partition_driving_pivot(void);
+	void partition_driving_fst_line_start(void);
+	void partition_driving_return_reference_line(void);
+	void partition_driving_return_center_pose(void);
+	bool partition_driving_parallel_lines(void);
+	void partition_driving_fst_half_area(void);
+	void partition_driving_sec_half_area(void);
 
-	void do_local_move(void);
+	void partition_driving(void);
 	void local_cover_movement(void);
 
 	void smooth_decelerate_stop(void);
@@ -133,8 +133,8 @@ public:
 
 	void save_first_line_refer_direction(void);
 
-	double get_local_move_edge_length(void);
-	double get_local_move_half_edge_length(void);
+	double get_partition_driving_edge_length(void);
+	double get_partition_driving_half_edge_length(void);
 	void change_rotate_direction(void);
 
 	void updata_district_area(const POSE_STRU &data);

@@ -624,7 +624,7 @@ bool bll_partial_cleaning::test_finish_half_area(void)
 	double length = 0.0;
 	double vertical_dimension = 0.0;
 	
-	length = get_local_move_edge_length();
+	length = get_partition_driving_edge_length();
 	vertical_dimension = get_vertical_dimension_curr_pos_to_refer_line();
 	if (vertical_dimension > (length/2))
 	{
@@ -730,7 +730,7 @@ void bll_partial_cleaning::traight_line_moving_dynamic_regulation(void)
 /*****************************************************************************
  函 数 名: bll_partial_cleaning.set_partial_cleaning_state
  功能描述  : 设置局部清扫的阶段
- 输入参数: const LOCAL_MOVE_STATE_ENUM data  
+ 输入参数: const PARTITION_DRIVING_STATE_ENUM data  
  输出参数: 无
  返 回 值: void
  
@@ -739,13 +739,13 @@ void bll_partial_cleaning::traight_line_moving_dynamic_regulation(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::set_partial_cleaning_state(const LOCAL_MOVE_STATE_ENUM data)
+void bll_partial_cleaning::set_partial_cleaning_state(const PARTITION_DRIVING_STATE_ENUM data)
 {
 	cfg_if_set_partial_cleaning_state(data);
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_start
+ 函 数 名: bll_partial_cleaning.partition_driving_start
  功能描述  : 开始运行局部无障碍清扫
  输入参数: void  
  输出参数: 无
@@ -756,11 +756,11 @@ void bll_partial_cleaning::set_partial_cleaning_state(const LOCAL_MOVE_STATE_ENU
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::local_move_start(void)
+void bll_partial_cleaning::partition_driving_start(void)
 {
 	cfg_if_set_partial_cleaning_direction(FORWARD);
 	cfg_if_set_partial_cleaning_area_part(AREA_PART_LEFT);
-	set_partial_cleaning_state(LOCAL_MOVE_PIVOT);
+	set_partial_cleaning_state(PARTITION_DRIVING_PIVOT);
 	
 	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
 	p_traight_line_moving->set_traight_line_moving();
@@ -769,7 +769,7 @@ void bll_partial_cleaning::local_move_start(void)
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_pivot
+ 函 数 名: bll_partial_cleaning.partition_driving_pivot
  功能描述  : 局部无障碍清扫原地旋转返回
  输入参数: void  
  输出参数: 无
@@ -780,7 +780,7 @@ void bll_partial_cleaning::local_move_start(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::local_move_pivot(void)
+void bll_partial_cleaning::partition_driving_pivot(void)
 {
 	bool flag = false;
 
@@ -792,7 +792,7 @@ void bll_partial_cleaning::local_move_pivot(void)
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_fst_line_start
+ 函 数 名: bll_partial_cleaning.partition_driving_fst_line_start
  功能描述  : 开始局部弓字行走
  输入参数: void  
  输出参数: 无
@@ -803,7 +803,7 @@ void bll_partial_cleaning::local_move_pivot(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::local_move_fst_line_start(void)
+void bll_partial_cleaning::partition_driving_fst_line_start(void)
 {
 	bool flag = false;
 
@@ -811,12 +811,12 @@ void bll_partial_cleaning::local_move_fst_line_start(void)
 	if (true == flag)
 	{
 		change_rotate_direction();
-		set_partial_cleaning_state(LOCAL_MOVE_FST_HALF);
+		set_partial_cleaning_state(PARTITION_DRIVING_FST_HALF);
 	}
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_return_reference_line
+ 函 数 名: bll_partial_cleaning.partition_driving_return_reference_line
  功能描述  : 返回参考线
  输入参数: void  
  输出参数: 无
@@ -827,14 +827,14 @@ void bll_partial_cleaning::local_move_fst_line_start(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::local_move_return_reference_line(void)
+void bll_partial_cleaning::partition_driving_return_reference_line(void)
 {
 	bool flag = false;
 	flag = test_arrive_at_refer_line();
 	if (true == flag)
 	{
 		cfg_if_disable_linear_velocity_ajust();
-		set_partial_cleaning_state(LOCAL_MOVE_SEC_HALF_START);
+		set_partial_cleaning_state(PARTITION_DRIVING_SEC_HALF_START);
 		smooth_decelerate_stop();
 		bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
 		p_traight_line_moving->clear_traight_line_moving_data();
@@ -846,7 +846,7 @@ void bll_partial_cleaning::local_move_return_reference_line(void)
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_return_center_pose
+ 函 数 名: bll_partial_cleaning.partition_driving_return_center_pose
  功能描述  : 局部弓字型行走返回中心位置
  输入参数: void  
  输出参数: 无
@@ -857,7 +857,7 @@ void bll_partial_cleaning::local_move_return_reference_line(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::local_move_return_center_pose(void)
+void bll_partial_cleaning::partition_driving_return_center_pose(void)
 {
 	bool flag = false;
 	
@@ -866,7 +866,7 @@ void bll_partial_cleaning::local_move_return_center_pose(void)
 	flag = test_arrive_at_refer_line();
 	if (true == flag)
 	{
-		set_partial_cleaning_state(LOCAL_MOVE_TURN_TO_ORIGINAL_DIR);
+		set_partial_cleaning_state(PARTITION_DRIVING_TURN_TO_ORIGINAL_DIR);
 		smooth_decelerate_stop();
 		bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
 		p_traight_line_moving->clear_traight_line_moving_data();
@@ -874,7 +874,7 @@ void bll_partial_cleaning::local_move_return_center_pose(void)
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_parallel_lines
+ 函 数 名: bll_partial_cleaning.partition_driving_parallel_lines
  功能描述  : 平行往返行驶
  输入参数: void  
  输出参数: 无
@@ -885,7 +885,7 @@ void bll_partial_cleaning::local_move_return_center_pose(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-bool bll_partial_cleaning::local_move_parallel_lines(void)
+bool bll_partial_cleaning::partition_driving_parallel_lines(void)
 {
 	bool flag = false;
 
@@ -905,7 +905,7 @@ bool bll_partial_cleaning::local_move_parallel_lines(void)
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_fst_half_area
+ 函 数 名: bll_partial_cleaning.partition_driving_fst_half_area
  功能描述  : 局部弓字行走第一半区往返运动
  输入参数: void  
  输出参数: 无
@@ -916,18 +916,18 @@ bool bll_partial_cleaning::local_move_parallel_lines(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::local_move_fst_half_area(void)
+void bll_partial_cleaning::partition_driving_fst_half_area(void)
 {
 	bool ret = false;
-	ret = local_move_parallel_lines();
+	ret = partition_driving_parallel_lines();
 	if (true == ret)
 	{
-		set_partial_cleaning_state(LOCAL_MOVE_FST_HALF_DONE);
+		set_partial_cleaning_state(PARTITION_DRIVING_FST_HALF_DONE);
 	}
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.local_move_sec_half_area
+ 函 数 名: bll_partial_cleaning.partition_driving_sec_half_area
  功能描述  : 局部弓字行走第二半区往返运动
  输入参数: void  
  输出参数: 无
@@ -938,18 +938,18 @@ void bll_partial_cleaning::local_move_fst_half_area(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::local_move_sec_half_area(void)
+void bll_partial_cleaning::partition_driving_sec_half_area(void)
 {
 	bool ret = false;
-	ret = local_move_parallel_lines();
+	ret = partition_driving_parallel_lines();
 	if (true == ret)
 	{
-		set_partial_cleaning_state(LOCAL_MOVE_TURN_TO_CENTER_DIR);
+		set_partial_cleaning_state(PARTITION_DRIVING_TURN_TO_CENTER_DIR);
 	}
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.do_local_move
+ 函 数 名: bll_partial_cleaning.partition_driving
  功能描述  : 局部无障碍弓字型遍历行驶
  输入参数: void  
  输出参数: 无
@@ -960,10 +960,10 @@ void bll_partial_cleaning::local_move_sec_half_area(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void bll_partial_cleaning::do_local_move(void)
+void bll_partial_cleaning::partition_driving(void)
 {
 	bool flag = false;
-	LOCAL_MOVE_STATE_ENUM state;
+	PARTITION_DRIVING_STATE_ENUM state;
 	
 	flag = cfg_if_test_partial_cleaning_is_enable();
 	if (true == flag)
@@ -971,53 +971,53 @@ void bll_partial_cleaning::do_local_move(void)
 		save_first_line_refer_direction();
 
 		cfg_if_get_partial_cleaning_state(state);
-		if (LOCAL_MOVE_START == state)
+		if (PARTITION_DRIVING_START == state)
 		{
-			local_move_start();
+			partition_driving_start();
 		}
-		else if (LOCAL_MOVE_PIVOT == state)
+		else if (PARTITION_DRIVING_PIVOT == state)
 		{
-			local_move_pivot();
+			partition_driving_pivot();
 		}
-		else if (LOCAL_MOVE_FST_LINE_START == state)
+		else if (PARTITION_DRIVING_FST_LINE_START == state)
 		{
-			local_move_fst_line_start();
+			partition_driving_fst_line_start();
 		}
-		else if (LOCAL_MOVE_FST_HALF == state)
+		else if (PARTITION_DRIVING_FST_HALF == state)
 		{
-			local_move_fst_half_area();
+			partition_driving_fst_half_area();
 		}
-		else if (LOCAL_MOVE_FST_HALF_DONE == state)
+		else if (PARTITION_DRIVING_FST_HALF_DONE == state)
 		{
 			monitor_angle_turn_to_refer_line_deal();
 		}
-		else if (LOCAL_MOVE_RETURN_REFER_LINE == state)
+		else if (PARTITION_DRIVING_RETURN_REFER_LINE == state)
 		{
-			local_move_return_reference_line();
+			partition_driving_return_reference_line();
 		}
-		else if (LOCAL_MOVE_SEC_HALF_START == state)
+		else if (PARTITION_DRIVING_SEC_HALF_START == state)
 		{
 			monitor_angle_turn_to_center_deal();
 		}
-		else if (LOCAL_MOVE_SEC_HALF == state)
+		else if (PARTITION_DRIVING_SEC_HALF == state)
 		{
-			local_move_sec_half_area();
+			partition_driving_sec_half_area();
 		}
-		else if (LOCAL_MOVE_TURN_TO_CENTER_DIR == state)
+		else if (PARTITION_DRIVING_TURN_TO_CENTER_DIR == state)
 		{
 			monitor_angle_turn_to_original_pose_deal();
 		}
-		else if (LOCAL_MOVE_RETURN_CENTER_POS == state)
+		else if (PARTITION_DRIVING_RETURN_CENTER_POS == state)
 		{
-			local_move_return_center_pose();
+			partition_driving_return_center_pose();
 		}
-		else if (LOCAL_MOVE_TURN_TO_ORIGINAL_DIR == state)
+		else if (PARTITION_DRIVING_TURN_TO_ORIGINAL_DIR == state)
 		{
 			monitor_angle_turn_to_original_direction_deal();
 		}
-		else if (LOCAL_MOVE_ALL_DONE == state)
+		else if (PARTITION_DRIVING_ALL_DONE == state)
 		{
-			set_partial_cleaning_state(LOCAL_MOVE_STOP);
+			set_partial_cleaning_state(PARTITION_DRIVING_STOP);
 		}
 	}
 }
@@ -1036,7 +1036,7 @@ void bll_partial_cleaning::do_local_move(void)
 *****************************************************************************/
 void bll_partial_cleaning::local_cover_movement(void)
 {
-	do_local_move();
+	partition_driving();
 }
 
 /*****************************************************************************
@@ -1457,7 +1457,7 @@ void bll_partial_cleaning::save_first_line_refer_direction(void)
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.get_local_move_edge_length
+ 函 数 名: bll_partial_cleaning.get_partition_driving_edge_length
  功能描述  : 获取局域行驶区域方框边长
  输入参数: 无
  输出参数: 无
@@ -1468,13 +1468,13 @@ void bll_partial_cleaning::save_first_line_refer_direction(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double bll_partial_cleaning::get_local_move_edge_length(void)
+double bll_partial_cleaning::get_partition_driving_edge_length(void)
 {
 	return local_erea_edge_length_;
 }
 
 /*****************************************************************************
- 函 数 名: bll_partial_cleaning.get_local_move_half_edge_length
+ 函 数 名: bll_partial_cleaning.get_partition_driving_half_edge_length
  功能描述  : 获取局域行驶区域方框边长的一半
  输入参数: void  
  输出参数: 无
@@ -1485,7 +1485,7 @@ double bll_partial_cleaning::get_local_move_edge_length(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-double bll_partial_cleaning::get_local_move_half_edge_length(void)
+double bll_partial_cleaning::get_partition_driving_half_edge_length(void)
 {
 	return local_erea_edge_length_/2.0;
 }
@@ -1539,21 +1539,21 @@ void bll_partial_cleaning::updata_district_area(const POSE_STRU &data)
 	POSE_STRU start;
 	POSE_STRU end;
 	bool function_enable = false;
-	LOCAL_MOVE_MODE_ENUM mode;
-	LOCAL_MOVE_STATE_ENUM state;
+	PARTITION_DRIVING_ENUM mode;
+	PARTITION_DRIVING_STATE_ENUM state;
 
 	function_enable = cfg_if_test_partial_cleaning_is_enable();
 	if (true == function_enable)
 	{
 		cfg_if_get_partial_cleaning_state(state);
-		if (LOCAL_MOVE_STOP == state)
+		if (PARTITION_DRIVING_STOP == state)
 		{
 			cfg_if_set_partial_cleaning_original_pose(data);
 			
 			cfg_if_get_partial_cleaning_mode(mode);
 			if (AMBIENT_NO_OBSTACLE == mode)
 			{
-				length = get_local_move_half_edge_length();
+				length = get_partition_driving_half_edge_length();
 				x_min = x0 - length;
 				x_max = x0 + length;
 				y_min = y0 - length;
@@ -1566,7 +1566,7 @@ void bll_partial_cleaning::updata_district_area(const POSE_STRU &data)
 				for (int i = 0; i < 4; ++i)
 				{
 					//debug_print_warnning("pose[%d].point=(%lf, %lf)", i, pose[i].point.x, pose[i].point.y);
-					cfg_if_set_local_move_planning_pose(pose[i], i); 
+					cfg_if_set_partition_driving_planning_pose(pose[i], i); 
 				}
 				//debug_print_warnning("pose[%d].point=(%lf, %lf)   pose[%d].point=(%lf, %lf)", 1, pose[1].point.x, pose[1].point.y, 0, pose[0].point.x, pose[0].point.y);
 				//debug_print_warnning("pose[%d].point=(%lf, %lf)   pose[%d].point=(%lf, %lf)", 2, pose[2].point.x, pose[2].point.y, 3, pose[3].point.x, pose[3].point.y);
@@ -1585,7 +1585,7 @@ void bll_partial_cleaning::updata_district_area(const POSE_STRU &data)
 				set_refer_line_start_point_pose(start);
 				set_refer_line_end_point_pose(end);
 
-				state = LOCAL_MOVE_START;
+				state = PARTITION_DRIVING_START;
 				cfg_if_set_partial_cleaning_state(state);
 			}
 			else if (AMBIENT_HAS_OBSTACLE == mode)
