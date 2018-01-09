@@ -79,6 +79,8 @@ public:
 	static bll_partial_cleaning* get_instance(void);
 	static void release_instance(void);
 
+	void set_partial_cleaning_max_length(double data);
+	
 	void get_front_position(POSE_STRU &position);
 	double get_vertical_distance_curr_position_to_refer_line(void);
 	void set_current_position_to_refer_start_pose(void);
@@ -177,7 +179,7 @@ private:
 	bll_partial_cleaning(const bll_partial_cleaning&){};
 	bll_partial_cleaning& operator=(const bll_partial_cleaning&){};
 
-	static constexpr double local_erea_edge_length_ = 1.2;//1.6;2.0;//      //局域清扫边长(单位:m)
+	double partial_cleaning_max_length_;//局域清扫边长(单位:m)
 
 	POSE_STRU ref_start_point_;
 	POSE_STRU ref_end_point_;

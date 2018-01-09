@@ -160,8 +160,9 @@ void bll_cliff::release_instance(void)
 void bll_cliff::upate_cliff_state(uint8_t id, uint8_t value)
 {
 	bool flag = false;
-	bool cliff_state = false;
+	bool cliff_status = false;
 	CLIFF_ID_ENUM cliff_id;
+	static bool last_status[4] = {false, false, false, false};
 
 	flag = cfg_if_convert_cliff_id(id, cliff_id);
 	if (false == flag)
@@ -170,16 +171,28 @@ void bll_cliff::upate_cliff_state(uint8_t id, uint8_t value)
 		return;
 	}
 
-	flag = cfg_if_convert_cliff_state(value, cliff_state);
+	flag = cfg_if_convert_cliff_state(value, cliff_status);
 	if (false == flag)
 	{
 		debug_print_warnning("value = %d", value);
 		return;
 	}
 
-	cfg_if_set_cliff_state(cliff_id, cliff_state);
-	
-	debug_print_info("cliff_id=%d, cliff_state=%d", cliff_id, cliff_state);
+	cfg_if_set_cliff_state(cliff_id, cliff_status);
+
+	if (last_status[id] != cliff_status)
+	{
+		last_status[id] = cliff_status;
+
+		if (last_status[id] == false)
+		{
+			debug_print_info("cliff sensor[%d] status[%d] is normal !", id, cliff_status);
+		}
+		else
+		{
+			debug_print_error("cliff sensor[%d] status[%d] is abnormal !", id, cliff_status);
+		}
+	}
 }
 
 /*****************************************************************************

@@ -550,17 +550,30 @@ bool cfg_robot_data::convert_wheel_drop_state(uint8_t value, bool &state)
 bool cfg_robot_data::test_wheel_sensor_is_normal(void)
 {
 	bool ret = true;
-	bool state = false;
+	bool status = false;
 	uint8_t i = 0;
 	uint8_t sum = WHEEL_SUM;
 
 	for (i = 0; i < sum; ++i)
 	{
-		get_wheel_drop_state((WHEEL_ID_ENUM)i, state);
-		if ( true == state )
+		get_wheel_drop_state((WHEEL_ID_ENUM)i, status);
+		if ( true == status )
 		{
-			debug_print_error("i=%d state=%d", i, state);
-			return false;
+			ret = false;
+		}
+		
+		static bool wheel[2] = {false,false};
+		if (wheel[i] != status)
+		{
+			wheel[i] = status;
+			if (wheel[i] == false)
+			{
+				debug_print_info("wheel sensor[%d] status[%d] is normal !", i, status);
+			}
+			else
+			{
+				debug_print_error("wheel sensor[%d] status[%d] is abnormal !", i, status);
+			}
 		}
 	}
 

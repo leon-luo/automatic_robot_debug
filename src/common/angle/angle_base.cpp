@@ -468,6 +468,54 @@ double angel_base::get_angle_differences(double angle1, double angle2)
 }
 
 /*****************************************************************************
+ 函 数 名: angel_base.is_acute_angle
+ 功能描述  : 检测角度是不是锐角
+ 输入参数: double angle  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2018年1月9日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool angel_base::is_acute_angle(double angle)
+{
+	bool ret = false;
+	
+	if ((0.0 < angle) && (angle < 90.0))
+	{
+		ret = true;
+	}
+	
+	return ret;
+}
+
+/*****************************************************************************
+ 函 数 名: angel_base.is_obtuse_angle
+ 功能描述  : 检测角度是不是钝角
+ 输入参数: double angle  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2018年1月9日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool angel_base::is_obtuse_angle(double angle)
+{
+	bool ret = false;
+	
+	if ((90.0 < angle) && (angle < 180.0))
+	{
+		ret = true;
+	}
+	
+	return ret;
+}
+
+/*****************************************************************************
  函 数 名: angel_base.test_angle_is_over_clockwise
  功能描述  : 设置顺时针旋转方向角度是否已经超过目标角度
  输入参数: double current  
@@ -486,6 +534,10 @@ bool angel_base::test_angle_is_over_clockwise(double current, double target)
 	bool over_flag = false;
 	QUADRANT_ENUM curr_quadrant;
 	QUADRANT_ENUM target_quadrant;
+	const QUADRANT_ENUM first = QUADRANT_1;
+	const QUADRANT_ENUM second = QUADRANT_2;
+	const QUADRANT_ENUM third = QUADRANT_3;
+	const QUADRANT_ENUM fourth = QUADRANT_4;
 
 	curr_quadrant = get_quadrant(current);
 	target_quadrant = get_quadrant(target);
@@ -507,45 +559,44 @@ bool angel_base::test_angle_is_over_clockwise(double current, double target)
 	{
 		temp = fabs(current) + fabs(target);
 		
-		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+		if ((first == curr_quadrant) && (fourth == target_quadrant))
 		{
 			over_flag = false;
 		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+		else if ((fourth == curr_quadrant) && (first == target_quadrant))
 		{
 			over_flag = true;
 		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+		else if ((third == curr_quadrant) && (second == target_quadrant))
 		{
 			over_flag = false;
 		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+		else if ((second == curr_quadrant) && (third == target_quadrant))
 		{
 			over_flag = true;
 		}
-		
-		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+		else if ((first == curr_quadrant) && (third == target_quadrant))
 		{
 			if ( temp > 180.0 ) 
 			{
 				over_flag = true;
 			}
 		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+		else if ((third == curr_quadrant) && (first == target_quadrant))
 		{
 			if ( temp < 180.0 ) 
 			{
 				over_flag = true;
 			}
 		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+		else if ((second == curr_quadrant) && (fourth == target_quadrant))
 		{
 			if ( temp > 180.0 ) 
 			{
 				over_flag = true;
 			}
 		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+		else if ((fourth == curr_quadrant) && (second == target_quadrant))
 		{
 			if ( temp < 180.0 ) 
 			{
@@ -576,6 +627,10 @@ bool angel_base::test_angle_is_over_anticlockwise(double current, double target)
 	bool over_flag = false;
 	QUADRANT_ENUM curr_quadrant;
 	QUADRANT_ENUM target_quadrant;
+	const QUADRANT_ENUM first = QUADRANT_1;
+	const QUADRANT_ENUM second = QUADRANT_2;
+	const QUADRANT_ENUM third = QUADRANT_3;
+	const QUADRANT_ENUM fourth = QUADRANT_4;
 
 	curr_quadrant = get_quadrant(current);
 	target_quadrant = get_quadrant(target);
@@ -597,45 +652,44 @@ bool angel_base::test_angle_is_over_anticlockwise(double current, double target)
 	{
 		temp = fabs(current) + fabs(target);
 		
-		if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+		if ((first == curr_quadrant) && (fourth == target_quadrant))
 		{
 			over_flag = true;
 		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+		else if ((fourth == curr_quadrant) && (first == target_quadrant))
 		{
 			over_flag = false;
 		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+		else if ((third == curr_quadrant) && (second == target_quadrant))
 		{
 			over_flag = true;
 		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+		else if ((second == curr_quadrant) && (third == target_quadrant))
 		{
 			over_flag = false;
 		}
-		
-		else if ((QUADRANT_1 == curr_quadrant) && (QUADRANT_3 == target_quadrant))
+		else if ((first == curr_quadrant) && (third == target_quadrant))
 		{
 			if ( temp < 180.0 ) 
 			{
 				over_flag = true;
 			}
 		}
-		else if ((QUADRANT_3 == curr_quadrant) && (QUADRANT_1 == target_quadrant))
+		else if ((third == curr_quadrant) && (first == target_quadrant))
 		{
 			if ( temp > 180.0 ) 
 			{
 				over_flag = true;
 			}
 		}
-		else if ((QUADRANT_2 == curr_quadrant) && (QUADRANT_4 == target_quadrant))
+		else if ((second == curr_quadrant) && (fourth == target_quadrant))
 		{
 			if ( temp < 180.0 ) 
 			{
 				over_flag = true;
 			}
 		}
-		else if ((QUADRANT_4 == curr_quadrant) && (QUADRANT_2 == target_quadrant))
+		else if ((fourth == curr_quadrant) && (second == target_quadrant))
 		{
 			if ( temp > 180.0 ) 
 			{
@@ -666,6 +720,10 @@ bool angel_base::test_angle_rotate_direction_is_clockwise(double start, double t
 	bool temp = 0.0;
 	QUADRANT_ENUM start_quadrant;
 	QUADRANT_ENUM target_quadrant;
+	const QUADRANT_ENUM first = QUADRANT_1;
+	const QUADRANT_ENUM second = QUADRANT_2;
+	const QUADRANT_ENUM third = QUADRANT_3;
+	const QUADRANT_ENUM fourth = QUADRANT_4;
 
 	if ((start >= 0.0) && (target >= 0.0))
 	{
@@ -685,23 +743,23 @@ bool angel_base::test_angle_rotate_direction_is_clockwise(double start, double t
 	{
 		start_quadrant = get_quadrant(start);
 		target_quadrant = get_quadrant(target);
-		if ((QUADRANT_1 == start_quadrant) && (QUADRANT_4 == target_quadrant))
+		if ((first == start_quadrant) && (fourth == target_quadrant))
 		{
 			flag = true;
 		}
-		else if ((QUADRANT_4 == start_quadrant) && (QUADRANT_1 == target_quadrant))
+		else if ((fourth == start_quadrant) && (first == target_quadrant))
 		{
 			flag = false;
 		}
-		else if ((QUADRANT_3 == start_quadrant) && (QUADRANT_2 == target_quadrant))
+		else if ((third == start_quadrant) && (second == target_quadrant))
 		{
 			flag = true;
 		}
-		else if ((QUADRANT_2 == start_quadrant) && (QUADRANT_3 == target_quadrant))
+		else if ((second == start_quadrant) && (third == target_quadrant))
 		{
 			flag = false;
 		}
-		else if ((QUADRANT_1 == start_quadrant) && (QUADRANT_3 == target_quadrant))
+		else if ((first == start_quadrant) && (third == target_quadrant))
 		{
 			temp = fabs(start) + fabs(target);
 			if (180.0 > temp)
@@ -709,7 +767,7 @@ bool angel_base::test_angle_rotate_direction_is_clockwise(double start, double t
 				flag = true;
 			}
 		}
-		else if ((QUADRANT_3 == start_quadrant) && (QUADRANT_1 == target_quadrant))
+		else if ((third == start_quadrant) && (first == target_quadrant))
 		{
 			temp = fabs(start) + fabs(target);
 			if (180.0 < temp)
@@ -717,7 +775,7 @@ bool angel_base::test_angle_rotate_direction_is_clockwise(double start, double t
 				flag = true;
 			}
 		}
-		else if ((QUADRANT_2 == start_quadrant) && (QUADRANT_4 == target_quadrant))
+		else if ((second == start_quadrant) && (fourth == target_quadrant))
 		{
 			temp = fabs(start) + fabs(target);
 			if (180.0 > temp)
@@ -725,7 +783,7 @@ bool angel_base::test_angle_rotate_direction_is_clockwise(double start, double t
 				flag = true;
 			}
 		}
-		else if ((QUADRANT_4 == start_quadrant) && (QUADRANT_2 == target_quadrant))
+		else if ((fourth == start_quadrant) && (second == target_quadrant))
 		{
 			temp = fabs(start) + fabs(target);
 			if (180.0 < temp)

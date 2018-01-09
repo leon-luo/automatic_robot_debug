@@ -25,14 +25,13 @@
 
 #include "line_base.h"
 
-#include "cfg_if_modulate.h"
-#include "cfg_if_mobile_robot.h"
-
 #include "bll_rotate.h"
 #include "bll_traight_line_moving.h"
 
-#include "debug_function.h"
+#include "cfg_if_modulate.h"
+#include "cfg_if_mobile_robot.h"
 
+#include "debug_function.h"
 
 /******************************************************************************
  * 外部变量定义
@@ -84,6 +83,7 @@ bll_partial_cleaning::bll_partial_cleaning()
 {
 	REFERENCE_DATA_STRU ref_data = {{0.0, false}};
 	set_reference_data(ref_data);
+	set_partial_cleaning_max_length(1.4);
 }
 
 /*****************************************************************************
@@ -155,6 +155,22 @@ void bll_partial_cleaning::release_instance(void)
 	}
 }
 
+/*****************************************************************************
+ 函 数 名: bll_partial_cleaning.set_partial_cleaning_max_length
+ 功能描述  : 设局部清扫最大边长
+ 输入参数: double data  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2018年1月9日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void bll_partial_cleaning::set_partial_cleaning_max_length(double data)
+{
+	partial_cleaning_max_length_ = data;
+}
 
 /*****************************************************************************
  函 数 名: bll_partial_cleaning.get_front_position
@@ -176,12 +192,10 @@ void bll_partial_cleaning::get_front_position(POSE_STRU &position)
 	if (true == direction_is_forward)
 	{
 		get_refer_line_end_point_pose(position);
-		//debug_print_info("{ end.pos  (%lf, %lf) : %lf}", position.point.x, position.point.y, position.angle);
 	}
 	else
 	{
 		get_refer_line_start_point_pose(position);
-		//debug_print_info("{ start.pos (%lf, %lf) : %lf}", position.point.x, position.point.y, position.angle);
 	}
 }
 
@@ -221,6 +235,7 @@ double bll_partial_cleaning::get_vertical_distance_curr_position_to_refer_line(v
 	y2 = point2.point.y;
 	line_base line_base_instance;
 	ret = line_base_instance.get_vertical_distance(x, y, x1, y1, x2, y2);
+
 	return ret;
 }
 
@@ -317,6 +332,7 @@ double bll_partial_cleaning::get_distance_to_start_point_pos(void)
 	line_base line_base_instance;
 	distance = line_base_instance.get_distance(curr_pos.point.x, curr_pos.point.y, start_pos.point.x, start_pos.point.y);
 	//debug_print_info("distance(%lf) = |curr_pos.point=(%lf, %lf)<-->start_pos.point=(%lf, %lf)|", distance, curr_pos.point.x, curr_pos.point.y, start_pos.point.x, start_pos.point.y);
+
 	return distance;
 }
 
@@ -391,7 +407,6 @@ double bll_partial_cleaning::get_vertical_dimension_curr_pos_to_refer_line(void)
 	acute_angle = angel_base_instance.get_angle_differences(angle, refe_angle);
 	radian = angel_base_instance.convert_degrees_to_radians(acute_angle);
 	vertical_dimension = distance*sin(radian);
-	//debug_print_warnning("direction_is_forward(%d), angle(%lf), refe_angle(%lf), acute_angle(%lf),radian(%lf), vertical_dimension(%lf)",direction_is_forward, angle, refe_angle, acute_angle,radian, vertical_dimension);
 
 	return vertical_dimension;
 }
@@ -529,10 +544,6 @@ bool bll_partial_cleaning::test_arrive_at_refer_line(void)
 			}
 		}
 	}
-	else
-	{
-		//debug_print_error("false == flag ==%d", flag);
-	}
 	
 	return is_over;
 }
@@ -588,6 +599,7 @@ bool bll_partial_cleaning::test_detect_obstacle_turn_back(void)
 bool bll_partial_cleaning::test_reach_refer_target_position(void)
 {
 	bool ret = false;
+	bool flag = true;
 	double angle = 0.0;
 	double real_direction = 0.0;
 	double refer_direction = 0.0;
@@ -597,8 +609,9 @@ bool bll_partial_cleaning::test_reach_refer_target_position(void)
 	refer_direction = get_parallel_moving_direction_angle();
 	angel_base angel_base_instance;
 	angle = angel_base_instance.get_angle_differences(real_direction, refer_direction);
-	//当直行行驶到达目标点并远离目标点是方向角将变为反向
-	if (angle > 135.0)
+	//当直行行驶靠近到达目标点并远离目标点时,指向目标点的方向角将变为反向
+	flag = angel_base_instance.is_obtuse_angle(angle);
+	if ((true == flag) || (90.0 == angle) || (180.0 == angle))
 	{
 		ret = true;
 	}
@@ -667,7 +680,6 @@ bool bll_partial_cleaning::test_finish_traight_line_moving(void)
 	return ret;
 }
 
-
 /*****************************************************************************
  函 数 名: bll_partial_cleaning.update_refer_line_traight_line_moving_target_pos
  功能描述  : 更新目标坐标点位置
@@ -685,16 +697,15 @@ void bll_partial_cleaning::update_refer_line_traight_line_moving_target_pos(void
 	POSE_STRU pos;
 	bool direction_is_forward = false;
 	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
+
 	direction_is_forward = cfg_if_test_move_direction_is_forward();
 	if (true == direction_is_forward)
 	{
 		get_refer_line_end_point_pose(pos);
-		//debug_print_info("set target pos end {(%lf, %lf): %lf}", pos.point.x, pos.point.y, pos.angle);
 	}
 	else
 	{
 		get_refer_line_start_point_pose(pos);
-		//debug_print_info("set target pos start {(%lf, %lf): %lf}", pos.point.x, pos.point.y, pos.angle);
 	}
 	p_traight_line_moving->set_traight_line_moving_target_pos(pos);
 }
@@ -715,15 +726,12 @@ void bll_partial_cleaning::traight_line_moving_dynamic_regulation(void)
 {
 	bool flag = false;
 	bll_traight_line_moving* p_traight_line_moving = bll_traight_line_moving::get_instance();
+
 	flag = p_traight_line_moving->test_is_traight_line_moving();
 	if (true == flag)
 	{
 		p_traight_line_moving->straight_driving_adjust_angle();
 		p_traight_line_moving->straight_driving_adjust_speed();
-	}
-	else
-	{
-		debug_print_error("test_is_traight_line_moving() false == flag =%d",flag);
 	}
 }
 
@@ -1470,7 +1478,7 @@ void bll_partial_cleaning::save_first_line_refer_direction(void)
 *****************************************************************************/
 double bll_partial_cleaning::get_partition_driving_edge_length(void)
 {
-	return local_erea_edge_length_;
+	return partial_cleaning_max_length_;
 }
 
 /*****************************************************************************
@@ -1487,7 +1495,7 @@ double bll_partial_cleaning::get_partition_driving_edge_length(void)
 *****************************************************************************/
 double bll_partial_cleaning::get_partition_driving_half_edge_length(void)
 {
-	return local_erea_edge_length_/2.0;
+	return partial_cleaning_max_length_/2.0;
 }
 
 /*****************************************************************************
@@ -1977,7 +1985,8 @@ double bll_partial_cleaning::get_driving_direction_right_angle(void)
 	bool area_part_is_left = false;
 	bool direction_is_forward = false;
 	ROTATE_DIRECTION_ENUM direction;
-
+	const ROTATE_DIRECTION_ENUM clockwise = CLOCKWISE;
+	const ROTATE_DIRECTION_ENUM anticlockwise = ANTICLOCKWISE;
 	area_part_is_left = cfg_if_test_partial_cleaning_part_is_left();
 	direction_is_forward = cfg_if_test_move_direction_is_forward();
 	if(true == area_part_is_left)
@@ -1985,12 +1994,12 @@ double bll_partial_cleaning::get_driving_direction_right_angle(void)
 		if (true == direction_is_forward)
 		{
 			get_reference_data_forward_angle(angle);
-			direction = ANTICLOCKWISE;
+			direction = anticlockwise;
 		}
 		else
 		{
 			get_reference_data_reverse_angle(angle);
-			direction = CLOCKWISE;
+			direction = clockwise;
 		}
 	}
 	else
@@ -1998,12 +2007,12 @@ double bll_partial_cleaning::get_driving_direction_right_angle(void)
 		if (true == direction_is_forward)
 		{
 			get_reference_data_forward_angle(angle);
-			direction = CLOCKWISE;
+			direction = clockwise;
 		}
 		else
 		{
 			get_reference_data_reverse_angle(angle);
-			direction = ANTICLOCKWISE;
+			direction = anticlockwise;
 		}
 	}
 	angel_base angel_base_instance;
@@ -2028,29 +2037,30 @@ void bll_partial_cleaning::get_turn_back_action_type(ACTION_STATUS_ENUM &action)
 {
 	bool area_part_is_left = false;
 	bool direction_is_forward = false;
-
+	const ACTION_STATUS_ENUM clockwise = TURN_BACK_CLOCKWISE;
+	const ACTION_STATUS_ENUM anticlockwise = TURN_BACK_ANTICLOCKWISE;
 	area_part_is_left = cfg_if_test_partial_cleaning_part_is_left();
 	direction_is_forward = cfg_if_test_move_direction_is_forward();
 	if(true == area_part_is_left)
 	{
 		if(true == direction_is_forward)
 		{
-			action = TURN_BACK_ANTICLOCKWISE;
+			action = anticlockwise;
 		}
 		else
 		{
-			action = TURN_BACK_CLOCKWISE;
+			action = clockwise;
 		}
 	}
 	else
 	{
 		if(true == direction_is_forward)
 		{
-			action = TURN_BACK_CLOCKWISE;
+			action = clockwise;
 		}
 		else
 		{
-			action = TURN_BACK_ANTICLOCKWISE;
+			action = anticlockwise;
 		}
 	}
 }
