@@ -180,16 +180,16 @@ void bll_timers::retreat_callback(const ros::TimerEvent& event)
 	static int n = 0;
 	ACTION_STATUS_ENUM curr_action;
 	
-	bll_bumper* p_bumper = bll_bumper::get_instance();
+	//bll_bumper* p_bumper = bll_bumper::get_instance();
 	curr_action = cfg_if_get_curr_action();
 	if ( GO_BACK == curr_action)
 	{
 		n++;
 		if (n > 80)
 		{
-			debug_print_fatal("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			debug_print_warnning("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 			
-			p_bumper->monitor_angle_left_bumper_deal();
+			//p_bumper->monitor_angle_left_bumper_deal();
 			n = 0;
 		}
 	}

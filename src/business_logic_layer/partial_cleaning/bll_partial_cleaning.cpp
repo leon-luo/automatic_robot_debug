@@ -574,7 +574,7 @@ bool bll_partial_cleaning::test_detect_obstacle_turn_back(void)
 	else if (SAFETY_LEVEL_FATAL == state.level)
 	{
 		flag = true;
-		debug_print_fatal("ultrasonic sensor state is SAFETY_LEVEL_FATAL. state.level=%d; state.value=%lf; flag = true;", state.level, state.value);
+		debug_print_fatal("ultrasonic sensor status is SAFETY_LEVEL_FATAL. state.level=%d; state.value=%lf; flag = true;", state.level, state.value);
 	}
 	else
 	{

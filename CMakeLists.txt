@@ -388,6 +388,7 @@ include_directories(
 	src/common/angle
 	src/common/algorithm/pid
 	src/common/line
+	src/common/time
 	src/common/version
 )
 
@@ -428,6 +429,7 @@ add_executable(${PROJECT_NAME}  src/main/mobile_robot_main.cpp
 								src/common/algorithm/pid/pid.cpp
 								src/common/angle/angle_base.cpp
 								src/common/line/line_base.cpp
+								src/common/time/time_base.c
 								src/common/version/version.cpp
 								
 								src/business_logic_layer/rotate/bll_rotate.cpp

@@ -27,6 +27,9 @@
 #include "cfg_if_mobile_robot.h"
 #include "debug_function.h"
 
+#include "time_base.h"
+#include <signal.h>
+
 /******************************************************************************
  * 外部变量定义
  ******************************************************************************/
@@ -34,6 +37,12 @@
 /******************************************************************************
  * 外部函数定义
  ******************************************************************************/
+ 
+/******************************************************************************
+ * 内部函数声明
+ ******************************************************************************/
+void left_bumper_deal(int signal);
+void right_bumper_deal(int signal);
 
 /******************************************************************************
  * 全局变量
@@ -75,7 +84,8 @@ bll_bumper* bll_bumper::p_instance_ = nullptr;
 *****************************************************************************/
 bll_bumper::bll_bumper()
 {
-
+	back_delay_s_ = 1;
+	back_delay_us_ = 5000;
 }
 
 /*****************************************************************************
@@ -299,7 +309,7 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 	static bool last_right_state = false;
 	BUMPER_ID_ENUM left_id = LEFT_BUMPER;
 	BUMPER_ID_ENUM right_id = RIGHT_BUMPER;
-
+	ACTION_STATUS_ENUM next_action = GO_BACK;
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
 	p_mobile_robot->get_bumper_state(left_id, left_state);
 	p_mobile_robot->get_bumper_state(right_id, right_state);
@@ -309,17 +319,21 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 		if ((true == left_state) && (true == right_state))
 		{
 			debug_print_warnning("【left】and【right】==【center】bump！");
-			cfg_if_change_curr_action(GO_BACK);
+			cfg_if_change_curr_action(next_action);
 		}
 		else if ((true == left_state) && (false == right_state))
 		{
 			debug_print_warnning("【left】bump！");
-			monitor_angle_left_bumper_deal();
+			cfg_if_change_curr_action(next_action);
+			//monitor_angle_left_bumper_deal();
+			deferred_execute(back_delay_s_, back_delay_us_, left_bumper_deal);
 		}
 		else if ((false == left_state) && (true == right_state))
 		{
 			debug_print_warnning("【right】bump！");
-			monitor_angle_right_bumper_deal();
+			cfg_if_change_curr_action(next_action);
+			//monitor_angle_right_bumper_deal();
+			deferred_execute(back_delay_s_, back_delay_us_, right_bumper_deal);
 		}
 	}
 	else if (last_left_state != left_state)
@@ -328,7 +342,9 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 		if ((true == left_state) && (false == right_state))
 		{
 			debug_print_warnning("【left】bump！");
-			monitor_angle_left_bumper_deal();
+			cfg_if_change_curr_action(next_action);
+			//monitor_angle_left_bumper_deal();
+			deferred_execute(back_delay_s_, back_delay_us_, left_bumper_deal);
 		}
 	}
 	else if (last_right_state != right_state)
@@ -337,7 +353,9 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 		if ((false == left_state) && (true == right_state))
 		{
 			debug_print_warnning("【right】bump！");
-			monitor_angle_right_bumper_deal();
+			cfg_if_change_curr_action(next_action);
+			//monitor_angle_right_bumper_deal();
+			deferred_execute(back_delay_s_, back_delay_us_, right_bumper_deal);
 		}
 	}
 }
@@ -346,4 +364,33 @@ void bll_bumper::bumper_sensor_respond_deal(void)
  * 内部函数定义
  ******************************************************************************/
 
+void left_bumper_deal(int signal)
+{
+	switch (signal)
+	{
+		case SIGALRM:
+			debug_print_info("Caught the SIGALRM signal!\n");
+			print_current_time();
+			bll_bumper* p_bumper_instance = bll_bumper::get_instance();
+			p_bumper_instance->monitor_angle_left_bumper_deal();
+			break;
+		default:
+			break;
+	}
+}
+
+void right_bumper_deal(int signal)
+{
+	switch (signal)
+	{
+		case SIGALRM:
+			debug_print_info("Caught the SIGALRM signal!\n");
+			print_current_time();
+			bll_bumper* p_bumper_instance = bll_bumper::get_instance();
+			p_bumper_instance->monitor_angle_right_bumper_deal();
+			break;
+		default:
+			break;
+	}
+}
 
