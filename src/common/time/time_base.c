@@ -28,6 +28,7 @@
 #include <signal.h>
 #include <sys/time.h>
 #include <time.h>
+#include "debug_function.h"
 
 /******************************************************************************
  * 外部变量定义
@@ -44,12 +45,6 @@
 /******************************************************************************
  * 宏定义
  ******************************************************************************/
-#define ERR_EXIT(m) \
-	do \
-	{ \
-		perror(m); \
-		exit(EXIT_FAILURE); \
-	} while(0)
 
 /******************************************************************************
  * 常量定义
@@ -102,10 +97,8 @@ void print_current_time(void)
 	time(&now);
 	p = localtime_r(&now, &result);
 	
-	//printf("[Current time]:{%d-%d-%d %d:%d:%d}\n", (1900 + result.tm_year), ( 1 + result.tm_mon), 
-	//	result.tm_mday, (result.tm_hour + 12), result.tm_min, result.tm_sec);
-	printf("[Current time]:{%d-%d-%d %d:%d:%d}\n", (1900 + p->tm_year), ( 1 + p->tm_mon), 
-		p->tm_mday, (p->tm_hour + 12), p->tm_min, p->tm_sec);
+	debug_print_info("[Current time]:{%d-%d-%d %d:%d:%d}", (1900 + result.tm_year), ( 1 + result.tm_mon), 
+		result.tm_mday, (result.tm_hour + 12), result.tm_min, result.tm_sec);
 }
 
 /*****************************************************************************
@@ -132,16 +125,26 @@ void print_current_time(void)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-int32_t get_current_time(void)
+uint32_t get_current_time(void)
 {
-	int32_t ret = 0;
+	uint64_t now = 0;
+//	uint64_t offset = 0;
+//	static uint64_t last = 0;
 	struct timeval tv;
 	
 	gettimeofday(&tv, NULL);
-	ret = tv.tv_sec * 1000 + tv.tv_usec / 1000;  //单位ms
-	printf("[Current time]:{%ld(s) + %ld(us) = %d(ms)}\n", tv.tv_sec, tv.tv_usec, ret);
+	now = tv.tv_sec * 1000 + tv.tv_usec / 1000;  //单位ms
+//	if (last != now)
+//	{
+//		if (0 != last)
+//		{
+//			offset = now - last;
+//		}
+//		last = now;
+//	}
+//	debug_print_info("[Current time]:now {%ld(s) + %ld(us) = %llu(ms)}; offset = %llu(ms)", tv.tv_sec, tv.tv_usec, now, offset);
 	
-	return ret;
+	return now;
 }
 
 /*****************************************************************************
@@ -177,10 +180,10 @@ void signal_handler(int16_t signo)
 /*****************************************************************************
  函 数 名: set_timer
  功能描述  : 设置定时器
- 输入参数: int16_t interval_sec             下次定时器响应的间隔时间秒
-           int16_t interval_usec        下次定时器响应的间隔时间微秒
-           int16_t current_sec          当前定时器的时间秒
-           int16_t current_usec         当前定时器的时间微秒
+ 输入参数: uint32_t interval_sec             下次定时器响应的间隔时间秒
+           uint32_t interval_usec        下次定时器响应的间隔时间微秒
+           uint32_t current_sec          当前定时器的时间秒
+           uint32_t current_usec         当前定时器的时间微秒
            void (*pf_handler)(int16_t)  时间到达以后执行的函数指针
  输出参数: 无
  返 回 值: 
@@ -195,38 +198,42 @@ void signal_handler(int16_t signo)
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-bool set_timer(int16_t interval_sec, int16_t interval_usec, int16_t current_sec, int16_t current_usec, pf_sighandler_t pf)
+bool set_timer(uint32_t interval_sec, uint32_t interval_usec, uint32_t current_sec, uint32_t current_usec, pf_sighandler_t pf)
 {
+	int ret = 0;
+
 	if (NULL == pf) {
 		return false;
 	}
 
 	if (signal(SIGALRM, pf) == SIG_ERR) {
-		ERR_EXIT("signal error!");
+		perror("signal() error!");
 		return false;
 	}
 
 	struct itimerval new_value, old_value;
 	//配置下次间隔时间
-	new_value.it_value.tv_sec = interval_sec;
-	new_value.it_value.tv_usec = interval_usec;
+	new_value.it_value.tv_sec = current_sec;
+	new_value.it_value.tv_usec = current_usec;
 	
 	//配置当前延时时间
-	new_value.it_interval.tv_sec = current_sec;
-	new_value.it_interval.tv_usec = current_usec;
-	
-	if (setitimer(ITIMER_REAL, &new_value, &old_value) != 0) {
+	new_value.it_interval.tv_sec = interval_sec;
+	new_value.it_interval.tv_usec = interval_usec;
+
+	ret = setitimer(ITIMER_REAL, &new_value, &old_value);
+	if (0 != ret) {
+		perror("setitimer() error!");
 		return false;
 	}
-	
+
 	return true;
 }
 
 /*****************************************************************************
  函 数 名: deferred_execute
  功能描述  : 延时执行响应指定功能函数
- 输入参数: int16_t delay_s     
-           int16_t delay_us    
+ 输入参数: uint32_t delay_s     
+           uint32_t delay_us    
            pf_sighandler_t pf  
  输出参数: 无
  返 回 值: 
@@ -236,12 +243,12 @@ bool set_timer(int16_t interval_sec, int16_t interval_usec, int16_t current_sec,
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-bool deferred_execute(int16_t delay_s, int16_t delay_us, pf_sighandler_t pf)
+bool deferred_execute(uint32_t delay_s, uint32_t delay_us, pf_sighandler_t pf)
 {
 	bool ret = false;
-	print_current_time();
-	ret = set_timer(0, 0, delay_s, delay_us, pf);
 	
+	ret = set_timer(0, 0, delay_s, delay_us, pf);
+
 	return ret;
 }
 

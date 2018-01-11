@@ -73,9 +73,9 @@ private:
 	bll_bumper(const bll_bumper&){};
 	bll_bumper& operator=(const bll_bumper&){};
 	
-	int16_t back_delay_s_;
-	int16_t back_delay_us_;
-	static constexpr double collide_adjusted_angle_ = 30.0;        //碰撞调节角度
+	uint32_t back_delay_s_;                         //后退时间的秒数
+	uint32_t back_delay_us_;                        //后退时间的微秒数
+	double collide_adjusted_angle_;                 //碰撞调节角度
 
 	static bll_bumper* p_instance_;
 	static pthread_mutex_t mutex_;

@@ -337,7 +337,7 @@ void bll_processing_function::functional_mode ( void )
 			p_motion_control->turn_right_angle_anticlockwise();
 			break;
 		default:
-			debug_print_warnning("p_motion_control->stop() action=%d", action);
+			//debug_print_warnning("p_motion_control->stop() action=%d", action);
 			p_motion_control->stop();
 			break;
 	}

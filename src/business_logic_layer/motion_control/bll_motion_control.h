@@ -98,11 +98,12 @@ private:
 	
 	static bll_motion_control* p_instance_;
 	static pthread_mutex_t mutex_;
-
-	static constexpr double Linear_velocity_ = 0.25;               //线速度(m/s)
-	static constexpr double Angular_velocity_ = 0.8;               //角速度(rad/s)
-	static constexpr double Linear_velocity_clockwise_ = 0.08;//0.15;     //顺时针旋转返回线速度(m/s)
-	static constexpr double Angular_velocity_clockwise_ = 1.0;//0.8;     //顺时针旋转返回角速度(rad/s)
+	
+	double go_back_linear_velocity_;        //后退速度(m/s)
+	double linear_velocity_;                //线速度(m/s)
+	double angular_velocity_;               //角速度(rad/s)
+	double linear_velocity_clockwise_;      //顺时针旋转返回线速度(m/s)
+	double angular_velocity_clockwise_;     //顺时针旋转返回角速度(rad/s)
 };
 
 

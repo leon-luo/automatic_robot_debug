@@ -77,7 +77,11 @@ pthread_mutex_t bll_motion_control::mutex_ = PTHREAD_MUTEX_INITIALIZER;
 *****************************************************************************/
 bll_motion_control::bll_motion_control()
 {
-
+	go_back_linear_velocity_ = -0.2;               //线速度(m/s)
+	linear_velocity_ = 0.25;               //线速度(m/s)
+	angular_velocity_ = 0.8;               //角速度(rad/s)
+	linear_velocity_clockwise_ = 0.08;//0.15;     //顺时针旋转返回线速度(m/s)
+	angular_velocity_clockwise_ = 1.0;//0.8;     //顺时针旋转返回角速度(rad/s)
 }
 
 /*****************************************************************************
@@ -263,7 +267,7 @@ void bll_motion_control::stop ( void )
 *****************************************************************************/
 void bll_motion_control::go_forward ( void )
 {
-	straight_moving ( Linear_velocity_ );
+	straight_moving ( linear_velocity_ );
 }
 
 /*****************************************************************************
@@ -280,7 +284,7 @@ void bll_motion_control::go_forward ( void )
 *****************************************************************************/
 void bll_motion_control::go_back ( void )
 {
-	straight_moving ( -Linear_velocity_ );
+	straight_moving ( go_back_linear_velocity_ );
 }
 
 /*****************************************************************************
@@ -297,7 +301,7 @@ void bll_motion_control::go_back ( void )
 *****************************************************************************/
 void bll_motion_control::turn_left ( void )
 {
-	rotate_moving( Angular_velocity_ );
+	rotate_moving( angular_velocity_ );
 }
 
 /*****************************************************************************
@@ -314,7 +318,7 @@ void bll_motion_control::turn_left ( void )
 *****************************************************************************/
 void bll_motion_control::turn_right ( void )
 {
-	rotate_moving( -Angular_velocity_ );
+	rotate_moving( -angular_velocity_ );
 }
 
 /*****************************************************************************
@@ -331,7 +335,7 @@ void bll_motion_control::turn_right ( void )
 *****************************************************************************/
 void bll_motion_control::pivot ( void )
 {
-	rotate_moving( Angular_velocity_ );
+	rotate_moving( angular_velocity_ );
 }
 
 /*****************************************************************************
@@ -348,8 +352,8 @@ void bll_motion_control::pivot ( void )
 *****************************************************************************/
 void bll_motion_control::turn_back_clockwise ( void )
 {
-	const double line_v = Linear_velocity_clockwise_;
-	const double angular_v = -Angular_velocity_clockwise_;
+	const double line_v = linear_velocity_clockwise_;
+	const double angular_v = -angular_velocity_clockwise_;
 	
 	set_motion_control_velocity(line_v, angular_v);
 }
@@ -368,8 +372,8 @@ void bll_motion_control::turn_back_clockwise ( void )
 *****************************************************************************/
 void bll_motion_control::turn_back_anticlockwise ( void )
 {
-	const double line_v = Linear_velocity_clockwise_;
-	const double angular_v = Angular_velocity_clockwise_;
+	const double line_v = linear_velocity_clockwise_;
+	const double angular_v = angular_velocity_clockwise_;
 	
 	set_motion_control_velocity(line_v, angular_v);
 }
@@ -388,7 +392,7 @@ void bll_motion_control::turn_back_anticlockwise ( void )
 *****************************************************************************/
 void bll_motion_control::turn_right_angle_clockwise(void)
 {
-	rotate_moving( -Angular_velocity_clockwise_ );
+	rotate_moving( -angular_velocity_clockwise_ );
 }
 
 /*****************************************************************************
@@ -405,7 +409,7 @@ void bll_motion_control::turn_right_angle_clockwise(void)
 *****************************************************************************/
 void bll_motion_control::turn_right_angle_anticlockwise(void)
 {
-	rotate_moving( Angular_velocity_clockwise_ );
+	rotate_moving( angular_velocity_clockwise_ );
 }
 
 /******************************************************************************

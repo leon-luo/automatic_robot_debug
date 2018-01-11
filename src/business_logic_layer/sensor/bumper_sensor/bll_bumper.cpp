@@ -84,8 +84,9 @@ bll_bumper* bll_bumper::p_instance_ = nullptr;
 *****************************************************************************/
 bll_bumper::bll_bumper()
 {
-	back_delay_s_ = 1;
-	back_delay_us_ = 5000;
+	back_delay_s_ = 0;
+	back_delay_us_ = 600000;
+	collide_adjusted_angle_ = 30.0;
 }
 
 /*****************************************************************************
@@ -280,9 +281,6 @@ void bll_bumper::monitor_angle_right_bumper_deal(void)
 		
 		curr_angle = cfg_if_get_current_position_angle();
 		angle = curr_angle + collide_adjusted_angle_;
-		//string str;
-		//get_action_status_str( action , str );
-		//debug_print_error("###########Change [%s]=%d; curr_angle = %lf; angle = %lf", str.c_str(), action,curr_angle, angle);
 		cfg_if_change_curr_action(action);
 		pf = &bll_rotate::monitor_angle_right_bumper_respond;
 		p_rotate_instance->set_monitor_angle_rotate_call_back(angle, pf);
@@ -303,6 +301,8 @@ void bll_bumper::monitor_angle_right_bumper_deal(void)
 *****************************************************************************/
 void bll_bumper::bumper_sensor_respond_deal(void)
 {
+	bool ret = false;
+	bool flag = false;
 	bool left_state = false;
 	bool right_state = false;
 	static bool last_left_state = false;
@@ -310,6 +310,7 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 	BUMPER_ID_ENUM left_id = LEFT_BUMPER;
 	BUMPER_ID_ENUM right_id = RIGHT_BUMPER;
 	ACTION_STATUS_ENUM next_action = GO_BACK;
+	pf_sighandler_t pf = left_bumper_deal;
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
 	p_mobile_robot->get_bumper_state(left_id, left_state);
 	p_mobile_robot->get_bumper_state(right_id, right_state);
@@ -319,21 +320,18 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 		if ((true == left_state) && (true == right_state))
 		{
 			debug_print_warnning("【left】and【right】==【center】bump！");
-			cfg_if_change_curr_action(next_action);
+			flag = true;
 		}
 		else if ((true == left_state) && (false == right_state))
 		{
 			debug_print_warnning("【left】bump！");
-			cfg_if_change_curr_action(next_action);
-			//monitor_angle_left_bumper_deal();
-			deferred_execute(back_delay_s_, back_delay_us_, left_bumper_deal);
+			flag = true;
 		}
 		else if ((false == left_state) && (true == right_state))
 		{
 			debug_print_warnning("【right】bump！");
-			cfg_if_change_curr_action(next_action);
-			//monitor_angle_right_bumper_deal();
-			deferred_execute(back_delay_s_, back_delay_us_, right_bumper_deal);
+			flag = true;
+			pf = right_bumper_deal;
 		}
 	}
 	else if (last_left_state != left_state)
@@ -342,9 +340,7 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 		if ((true == left_state) && (false == right_state))
 		{
 			debug_print_warnning("【left】bump！");
-			cfg_if_change_curr_action(next_action);
-			//monitor_angle_left_bumper_deal();
-			deferred_execute(back_delay_s_, back_delay_us_, left_bumper_deal);
+			flag = true;
 		}
 	}
 	else if (last_right_state != right_state)
@@ -353,9 +349,17 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 		if ((false == left_state) && (true == right_state))
 		{
 			debug_print_warnning("【right】bump！");
+			flag = true;
+			pf = right_bumper_deal;
+		}
+	}
+	
+	if (true == flag)
+	{
+		ret = deferred_execute(back_delay_s_, back_delay_us_, pf);
+		if (true == ret)
+		{
 			cfg_if_change_curr_action(next_action);
-			//monitor_angle_right_bumper_deal();
-			deferred_execute(back_delay_s_, back_delay_us_, right_bumper_deal);
 		}
 	}
 }
@@ -364,14 +368,24 @@ void bll_bumper::bumper_sensor_respond_deal(void)
  * 内部函数定义
  ******************************************************************************/
 
+/*****************************************************************************
+ 函 数 名: left_bumper_deal
+ 功能描述  : 左碰撞传感器响应处理
+ 输入参数: int signal  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2018年1月11日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
 void left_bumper_deal(int signal)
 {
+	bll_bumper* p_bumper_instance = bll_bumper::get_instance();
 	switch (signal)
 	{
 		case SIGALRM:
-			debug_print_info("Caught the SIGALRM signal!\n");
-			print_current_time();
-			bll_bumper* p_bumper_instance = bll_bumper::get_instance();
 			p_bumper_instance->monitor_angle_left_bumper_deal();
 			break;
 		default:
@@ -379,14 +393,24 @@ void left_bumper_deal(int signal)
 	}
 }
 
+/*****************************************************************************
+ 函 数 名: right_bumper_deal
+ 功能描述  : 右碰撞传感器响应处理
+ 输入参数: int signal  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2018年1月11日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
 void right_bumper_deal(int signal)
 {
+	bll_bumper* p_bumper_instance = bll_bumper::get_instance();
 	switch (signal)
 	{
 		case SIGALRM:
-			debug_print_info("Caught the SIGALRM signal!\n");
-			print_current_time();
-			bll_bumper* p_bumper_instance = bll_bumper::get_instance();
 			p_bumper_instance->monitor_angle_right_bumper_deal();
 			break;
 		default:

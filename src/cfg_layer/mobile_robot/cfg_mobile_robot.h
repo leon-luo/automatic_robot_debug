@@ -126,10 +126,10 @@ public:
 private:
 	static cfg_mobile_robot* p_instance_;
 
-	static constexpr double Linear_velocity_ = 0.25;               //线速度(m/s)
-	static constexpr double Angular_velocity_ = 0.8;               //角速度(rad/s)
-	static constexpr double Linear_velocity_clockwise_ = 0.08;//0.15;     //顺时针旋转返回线速度(m/s)
-	static constexpr double Angular_velocity_clockwise_ = 1.0;//0.8;     //顺时针旋转返回角速度(rad/s)
+	static constexpr double linear_velocity_ = 0.25;               //线速度(m/s)
+	static constexpr double angular_velocity_ = 0.8;               //角速度(rad/s)
+	static constexpr double linear_velocity_clockwise_ = 0.08;//0.15;     //顺时针旋转返回线速度(m/s)
+	static constexpr double angular_velocity_clockwise_ = 1.0;//0.8;     //顺时针旋转返回角速度(rad/s)
 	static constexpr double Diameter_ = 0.165;                     //机器人直径
 
 	static constexpr double distance_precision_ = 0.01;            //距离精度
