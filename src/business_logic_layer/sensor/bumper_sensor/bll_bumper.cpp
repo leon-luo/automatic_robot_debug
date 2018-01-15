@@ -317,6 +317,8 @@ void bll_bumper::bumper_sensor_respond_deal(void)
 
 	if ((last_left_state != left_state) && (last_right_state != right_state))
 	{
+		last_left_state = left_state;
+		last_right_state = right_state;
 		if ((true == left_state) && (true == right_state))
 		{
 			debug_print_warnning("【left】and【right】==【center】bump！");
