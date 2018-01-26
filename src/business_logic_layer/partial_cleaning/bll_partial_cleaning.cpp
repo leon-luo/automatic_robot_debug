@@ -21,7 +21,13 @@
  ******************************************************************************/
 #include "bll_partial_cleaning.h"
 
+#include "bll_base_type.h"
+
+#include <ros/ros.h>
+
 #include <math.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "line_base.h"
 
@@ -82,6 +88,7 @@ bll_partial_cleaning* bll_partial_cleaning::p_instance_ = nullptr;
 bll_partial_cleaning::bll_partial_cleaning()
 {
 	REFERENCE_DATA_STRU ref_data = {{0.0, false}};
+	set_partial_cleaning_enable(false);
 	set_reference_data(ref_data);
 	set_partial_cleaning_max_length(1.4);
 }
@@ -488,6 +495,91 @@ double bll_partial_cleaning::get_center_pose_to_curr_pos_angle(void)
 	angle = angel_base_instance.get_angle(orig_pos.point.x, orig_pos.point.y, curr_pos.point.x, curr_pos.point.y);
 
 	return angle;
+}
+
+/*****************************************************************************
+ 函 数 名: bll_partial_cleaning.test_start_do_partial_cleaning
+ 功能描述  : 检测是否直行局部清扫
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2018年1月15日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool bll_partial_cleaning::test_start_do_partial_cleaning(void)
+{
+	static bool last = false;
+	bool enable = false;
+	ros::NodeHandle n;
+	string param_value;
+
+	if (n.hasParam("partial_cleaning_enable"))
+	{
+		debug_print_warnning("no partial_cleaning_enable param_value= %s ", param_value.c_str());
+	}
+
+	if (ros::param::has("partial_cleaning_enable"))
+	{
+		debug_print_warnning("no partial_cleaning_enable param_value= %s ", param_value.c_str());
+	}
+	
+	n.getParam("/partial_cleaning_enable", param_value);
+
+	if (n.getParam("/partial_cleaning_enable", param_value))
+	{
+		debug_print_info("param_value = %s ", param_value.c_str());
+	}
+	else
+	{
+		debug_print_warnning("param_value = %s ", param_value.c_str());
+	}
+	 
+	if (n.getParam("partial_cleaning_enable", param_value))
+	{
+		debug_print_info("param_value = %s ", param_value.c_str());
+	}
+	else
+	{
+		debug_print_warnning("param_value = %s ", param_value.c_str());
+	}
+
+
+	if (ros::param::get("/partial_cleaning_enable", param_value))
+	{
+		debug_print_info("param_value = %s ", param_value.c_str());
+	}
+	else
+	{
+		debug_print_warnning("param_value = %s ", param_value.c_str());
+	}
+
+	if (ros::param::get("partial_cleaning_enable", param_value))
+	{
+		debug_print_info("param_value = %s ", param_value.c_str());
+	}
+	else
+	{
+		debug_print_warnning("param_value = %s ", param_value.c_str());
+	}
+	
+	if (0 == param_value.compare("true"))
+	{
+		enable = true;
+	}
+	printf("param_value : %s\n", param_value.c_str());
+	if (enable != last)
+	{
+		last = enable;
+		printf("partial_cleaning_enable : %s\n", param_value.c_str());
+		debug_print_info("enable = %d ", enable);
+	}
+	
+	set_partial_cleaning_enable(enable);
+	enable = get_partial_cleaning_enable();
+	return enable;
 }
 
 /*****************************************************************************
@@ -1044,7 +1136,15 @@ void bll_partial_cleaning::partition_driving(void)
 *****************************************************************************/
 void bll_partial_cleaning::local_cover_movement(void)
 {
-	partition_driving();
+	bool ret = false;
+	
+	//ret = test_start_do_partial_cleaning();
+	
+	ret = true; //ret = get_partial_cleaning_enable();
+	if (true == ret)
+	{
+		partition_driving();
+	}
 }
 
 /*****************************************************************************
@@ -2128,6 +2228,41 @@ void bll_partial_cleaning::get_turnt_to_reference_deriction_action_type(ACTION_S
 {
 	get_rotate_action_type(action);
 }
+
+/*****************************************************************************
+ 函 数 名: bll_partial_cleaning.set_partial_cleaning_enable
+ 功能描述  : 设置获取使能局部清扫功能
+ 输入参数: bool data  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2018年1月19日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void bll_partial_cleaning::set_partial_cleaning_enable(bool data)
+{
+	partial_cleaning_enable_ = data;
+}
+
+/*****************************************************************************
+ 函 数 名: bll_partial_cleaning.get_partial_cleaning_enable
+ 功能描述  : 获取获取使能局部清扫功能
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: bool
+ 
+ 修改历史:
+  1.日     期: 2018年1月19日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+bool bll_partial_cleaning::get_partial_cleaning_enable(void)
+{
+	return partial_cleaning_enable_;
+}
+
 
 
 /******************************************************************************

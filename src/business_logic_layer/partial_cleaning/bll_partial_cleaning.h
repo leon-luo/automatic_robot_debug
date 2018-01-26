@@ -91,6 +91,8 @@ public:
 
 	double get_refer_line_end_pos_to_curr_pos_angle(void);
 	double get_center_pose_to_curr_pos_angle(void);
+
+	bool test_start_do_partial_cleaning(void);
 	bool test_arrive_at_refer_line(void);
 	bool test_detect_obstacle_turn_back(void);
 	bool test_reach_refer_target_position(void);
@@ -175,10 +177,14 @@ public:
 	double get_turnt_to_reference_deriction_angle(void);
 	void get_turnt_to_reference_deriction_action_type(ACTION_STATUS_ENUM &action);
 
+	void set_partial_cleaning_enable(bool data);
+	bool get_partial_cleaning_enable(void);
+
 private:
 	bll_partial_cleaning(const bll_partial_cleaning&){};
 	bll_partial_cleaning& operator=(const bll_partial_cleaning&){};
 
+	bool partial_cleaning_enable_;
 	double partial_cleaning_max_length_;//局域清扫边长(单位:m)
 
 	POSE_STRU ref_start_point_;

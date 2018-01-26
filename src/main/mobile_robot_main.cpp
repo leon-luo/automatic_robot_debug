@@ -80,10 +80,9 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	string name_str ("cleaner_robot");
-	ROS_INFO ( "[%s():%d:]Application(%s) running !", __FUNCTION__, __LINE__, name_str.c_str());
-	
+	//ROS_INFO ( "[%s():%d:]Application(%s) running !", __FUNCTION__, __LINE__, name_str.c_str());
 	ros::init ( argc, argv, name_str );
-	
+	debug_print_info("Application(%s) running", name_str.c_str());
 	drv_sensor* p_sensor_instance = drv_sensor::get_instance();
 	p_sensor_instance->initialize();
 
@@ -95,11 +94,11 @@ int main(int argc, char** argv)
 		ros::spinOnce();
 	}
 	
-	ROS_WARN ( "[%s():%d:]After while(ros::ok())", __FUNCTION__, __LINE__);
+	//ROS_WARN ( "[%s():%d:]After while(ros::ok())", __FUNCTION__, __LINE__);
 	ros::spin();
-	ROS_ERROR ( "[%s():%d:]ros::spin();", __FUNCTION__, __LINE__);
+	//ROS_ERROR ( "[%s():%d:]ros::spin();", __FUNCTION__, __LINE__);
 	ros::shutdown();
-	ROS_FATAL ( "[%s():%d:]ros::shutdown();", __FUNCTION__, __LINE__);
+	//ROS_FATAL ( "[%s():%d:]ros::shutdown();", __FUNCTION__, __LINE__);
 	
 	return 0;
 }
