@@ -125,9 +125,13 @@ macro(config_cross_compiler)
 		#告知当前使用的是交叉编译方式，必须配置
 		set(CMAKE_SYSTEM_NAME Linux)
 		print_variate(CMAKE_SYSTEM_NAME)
-
+		
+		set(TOOL_COMPILING_PATH /home/compile/rk_repo/px3-se/buildroot/output/host/usr)
 		set(COMPILER_DIR /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin)
 		set(COMPILER_NAME_PREFIX arm-rockchip-linux-gnueabihf-)
+
+		#set(COMPILER_DIR $ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/bin)
+		#set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
 		
 		#不一定需要设置
 		#指定交叉编译环境安装目录
@@ -147,7 +151,38 @@ macro(config_cross_compiler)
 
 		set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 		print_variate(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE)
-		SET(ROS_LIB_DIR /opt/ros/indigo/lib)            #指定ROS库路径
+
+		set(CMAKE_CROSSCOMPILING true)
+		print_variate(CMAKE_CROSSCOMPILING)
+
+		#set(CMAKE_LIBRARY_PATH 
+			#$ENV{HOME}/cross_compile_lib/lib
+			#${TOOL_COMPILING_PATH}
+			#${TOOL_COMPILING_PATH}/arm-linux-gnueabihf 
+			#${TOOL_COMPILING_PATH}/lib
+		#)
+
+		#set(CMAKE_INCLUDE_PATH 
+			#${TOOL_COMPILING_PATH}/include 
+		#)
+			
+		#set(LD_LIBRARY_PATH 
+			#/usr/arm-linux-gnueabihf/lib
+			#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+			#$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib/
+			#${TOOL_COMPILING_PATH}/arm-linux-gnueabihf 
+			#${TOOL_COMPILING_PATH}/lib 
+		#)
+
+		SET(ROS_LIB_DIR $ENV{HOME}/cross_compile_lib/arm-ros/indigo/lib)            #指定ROS库路径
+		include_directories($ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include)
+
+		link_directories(
+			/usr/arm-linux-gnueabihf/lib
+			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+			$ENV{HOME}/cross_compile_lib/lib
+			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
+		)
 	elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
 		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 		set(COMPILER_DIR /usr/bin)
@@ -244,12 +279,16 @@ function(print_cmake_info)
 	print_variate(CMAKE_COMPILER_IS_GNUCXX)
 	blank_line()
 	print_variate(CMAKE_BUILD_TYPE)
+	print_variate(CMAKE_CROSSCOMPILING)
 	print_variate(CMAKE_FIND_ROOT_PATH)
 	print_variate(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM)
 	print_variate(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY)
 	print_variate(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE)
 	print_variate(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE)
 	print_variate(CMAKE_VERBOSE_MAKEFILE)
+	print_variate(CMAKE_LIBRARY_PATH)
+	print_variate(CMAKE_INCLUDE_PATH)
+	print_variate(LD_LIBRARY_PATH)
 	blank_line()
 	print_variate(BUILD_SHARED_LIBS)
 	print_variate(LIBRARY_OUTPUT_PATH)
@@ -306,8 +345,6 @@ config_compile_options()
 
 blank_line()
 parallel_lines()
-#SET(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
-#SET(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
 print_variate(CMAKE_C_COMPILER)
 print_variate(CMAKE_CXX_COMPILER)
 print_variate(CMAKE_C_FLAGS)
