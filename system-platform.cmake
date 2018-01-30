@@ -17,7 +17,7 @@
 include(print.cmake)
 
 ##支持IF(A) ELSE()的写法
-#SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON) 
+SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON) 
 
 #/*****************************************************************************
 # 函 数 名: include_sub_directories_recursively
