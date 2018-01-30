@@ -190,7 +190,7 @@ macro(config_compilers)
 
 		set(CMAKE_CROSSCOMPILING true)
 		print_variate(CMAKE_CROSSCOMPILING)
-	elseif ()
+	else ()
 		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 		
 		set(COMPILER_DIR /usr/bin)
@@ -241,7 +241,7 @@ macro(config_link_lib_and_include_directories)
 			$ENV{HOME}/cross_compile_lib/lib
 			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
 		)
-	elseif ()
+	else ()
 		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
 		SET(ROS_INSTALL_DIRECTORY /opt/ros/indigo)                             #指定ROS安装路径
