@@ -112,7 +112,7 @@ macro(config_compile_options)
 	##或
 	##$ export VERBOSE=1
 	##$ make
-	SET(CMAKE_VERBOSE_MAKEFILE on)
+	#SET(CMAKE_VERBOSE_MAKEFILE on)
 	parallel_lines()
 endmacro()
 
@@ -121,7 +121,6 @@ macro(config_cross_compiler)
 	message(STATUS "config_cross_compiler()")
 	if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
-		print_variate(CMAKE_SYSTEM_PROCESSOR)
 		#告知当前使用的是交叉编译方式，必须配置
 		set(CMAKE_SYSTEM_NAME Linux)
 		print_variate(CMAKE_SYSTEM_NAME)
@@ -154,40 +153,10 @@ macro(config_cross_compiler)
 
 		set(CMAKE_CROSSCOMPILING true)
 		print_variate(CMAKE_CROSSCOMPILING)
-
-		#set(CMAKE_LIBRARY_PATH 
-			#$ENV{HOME}/cross_compile_lib/lib
-			#${TOOL_COMPILING_PATH}
-			#${TOOL_COMPILING_PATH}/arm-linux-gnueabihf 
-			#${TOOL_COMPILING_PATH}/lib
-		#)
-
-		#set(CMAKE_INCLUDE_PATH 
-			#${TOOL_COMPILING_PATH}/include 
-		#)
-			
-		#set(LD_LIBRARY_PATH 
-			#/usr/arm-linux-gnueabihf/lib
-			#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
-			#$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib/
-			#${TOOL_COMPILING_PATH}/arm-linux-gnueabihf 
-			#${TOOL_COMPILING_PATH}/lib 
-		#)
-
-		SET(ROS_LIB_DIR $ENV{HOME}/cross_compile_lib/arm-ros/indigo/lib)            #指定ROS库路径
-		include_directories($ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include)
-
-		link_directories(
-			/usr/arm-linux-gnueabihf/lib
-			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
-			$ENV{HOME}/cross_compile_lib/lib
-			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
-		)
 	elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
 		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 		set(COMPILER_DIR /usr/bin)
 		set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
-		SET(ROS_LIB_DIR /opt/ros/indigo/lib)            #指定ROS库路径
 	endif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 
 	set(C_COMPILER_NAME   ${COMPILER_NAME_PREFIX}gcc)
@@ -200,16 +169,49 @@ macro(config_cross_compiler)
 	SET(CMAKE_C_COMPILER   ${C_COMPILER_PATH})      #指定C交叉编译器
 	SET(CMAKE_CXX_COMPILER ${CXX_COMPILER_PATH})    #指定C++交叉编译器
 
-	
+	parallel_lines()
+endmacro()
+
+macro(config_link_lib_and_include_directories)
+	parallel_lines()
+	message(STATUS "config_link_lib_and_include_directories()")
+	if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+
+		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
+		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
+		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
+		include_directories(
+			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include
+		)
+
+		link_directories(
+			/usr/arm-linux-gnueabihf/lib
+			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+			$ENV{HOME}/cross_compile_lib/lib
+			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
+		)
+	elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+
+		SET(ROS_INSTALL_DIRECTORY /opt/ros/indigo)                             #指定ROS安装路径
+		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
+		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
+	endif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+
+	include_directories(
+		${ROS_INCLUDE_DIRECTORY}
+	)
+
 	SET(OTHER_LINK_LIST	 
-		${ROS_LIB_DIR}/libroscpp.so 
-		${ROS_LIB_DIR}/librosconsole.so 
-		${ROS_LIB_DIR}/librosconsole_log4cxx.so 
-		${ROS_LIB_DIR}/librosconsole_backend_interface.so 
-		${ROS_LIB_DIR}/libroscpp_serialization.so 
-		${ROS_LIB_DIR}/librostime.so 
-		${ROS_LIB_DIR}/libxmlrpcpp.so 
-		${ROS_LIB_DIR}/libcpp_common.so 
+		${ROS_LIBRARY_DIRECTORY}/libroscpp.so 
+		${ROS_LIBRARY_DIRECTORY}/librosconsole.so 
+		${ROS_LIBRARY_DIRECTORY}/librosconsole_log4cxx.so 
+		${ROS_LIBRARY_DIRECTORY}/librosconsole_backend_interface.so 
+		${ROS_LIBRARY_DIRECTORY}/libroscpp_serialization.so 
+		${ROS_LIBRARY_DIRECTORY}/librostime.so 
+		${ROS_LIBRARY_DIRECTORY}/libxmlrpcpp.so 
+		${ROS_LIBRARY_DIRECTORY}/libcpp_common.so 
 		-rdynamic 
 		-lpthread 
 		-llog4cxx 
@@ -220,12 +222,9 @@ macro(config_cross_compiler)
 		-lboost_date_time 
 		-lboost_system 
 		-lboost_thread 
-		-Wl,-rpath,${ROS_LIB_DIR}
+		-Wl,-rpath,${ROS_LIBRARY_DIRECTORY}
 	)
 
-	#SET(OTHER_LINK_LIST -rdynamic /opt/ros/indigo/lib/libroscpp.so -lboost_signals -lboost_filesystem /opt/ros/indigo/lib/librosconsole.so /opt/ros/indigo/lib/librosconsole_log4cxx.so /opt/ros/indigo/lib/librosconsole_backend_interface.so -llog4cxx -lboost_regex /opt/ros/indigo/lib/libroscpp_serialization.so /opt/ros/indigo/lib/librostime.so -lboost_date_time /opt/ros/indigo/lib/libxmlrpcpp.so /opt/ros/indigo/lib/libcpp_common.so -lboost_system -lboost_thread -lpthread -lconsole_bridge -Wl,-rpath,/opt/ros/indigo/lib)
-	print_variate(CMAKE_C_COMPILER)
-	print_variate(CMAKE_CXX_COMPILER)
 	print_variate(OTHER_LINK_LIST)
 	parallel_lines()
 endmacro()
@@ -269,6 +268,7 @@ function(print_cmake_info)
 	print_variate(CMAKE_SYSTEM_NAME)
 	print_variate(CMAKE_SYSTEM_VERSION)
 	print_variate(CMAKE_SYSTEM_PROCESSOR)
+	blank_line()
 	print_variate(CMAKE_C_COMPILER)
 	print_variate(CMAKE_C_FLAGS)
 	blank_line()
@@ -288,12 +288,11 @@ function(print_cmake_info)
 	print_variate(CMAKE_VERBOSE_MAKEFILE)
 	print_variate(CMAKE_LIBRARY_PATH)
 	print_variate(CMAKE_INCLUDE_PATH)
-	print_variate(LD_LIBRARY_PATH)
 	blank_line()
+	print_variate(LD_LIBRARY_PATH)
 	print_variate(BUILD_SHARED_LIBS)
 	print_variate(LIBRARY_OUTPUT_PATH)
 	print_variate(EXECUTABLE_OUTPUT_PATH)
-	print_variate(CMAKE_VERBOSE_MAKEFILE)
 	print_variate(OTHER_LINK_LIST)
 	parallel_lines()
 endfunction()
@@ -319,23 +318,18 @@ endfunction()
 
 #===================================================================
 parallel_lines()
-print_variate(CMAKE_C_COMPILER)
-print_variate(CMAKE_CXX_COMPILER)
-
 print_cmake_info()
-
 parallel_lines()
 message(STATUS "| CMAKE VERSION is \"cmake version ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}\"")
 message(STATUS "|************ Current project is ${PROJECT_NAME} **************|")
 print_variate(PROJECT_NAME)
-
-parallel_lines()
-
+blank_line()
 print_operation_system_info()
 blank_line()
 config_cross_compiler()
 blank_line()
-
+config_link_lib_and_include_directories()
+blank_line()
 print_variate(CMAKE_C_COMPILER)
 print_variate(CMAKE_CXX_COMPILER)
 blank_line()
@@ -350,9 +344,10 @@ print_variate(CMAKE_CXX_COMPILER)
 print_variate(CMAKE_C_FLAGS)
 print_variate(CMAKE_CXX_FLAGS)
 parallel_lines()
-blank_line()
 
+blank_line()
 print_cmake_info()
+blank_line()
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -658,7 +653,7 @@ set(${PROJECT_NAME}_SRC_LIST
 	include/${PROJECT_NAME}/lib/common/version/cfg_if_version.cpp
 )
 
-#parallel_lines()
+#blank_line()
 #print_variate(${PROJECT_NAME}_SRC_LIST)
 #blank_line()
 #print_variate(PROJECT_NAME)
