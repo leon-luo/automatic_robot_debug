@@ -29,6 +29,9 @@
 #include "bll_ultrasonic.h"
 #include "bll_wall_following.h"
 
+#include "bit_base.h"
+#include "time_base.h"
+
 #include "cfg_if_mobile_robot.h"
 #include "debug_function.h"
 
@@ -464,6 +467,74 @@ void drv_sensor::velocity_callback ( const geometry_msgs::Twist& msg )
 }
 
 /*****************************************************************************
+ 函 数 名: drv_sensor.home_key_callback
+ 功能描述  : home按键检测回调函数
+ 输入参数: const std_msgs::Int16& msg  
+ 输出参数: 无
+ 返 回 值: void
+ 
+ 修改历史:
+  1.日     期: 2018年2月9日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+void drv_sensor::home_key_callback(const std_msgs::Int16& msg)
+{
+	int16_t value = ( int16_t ) msg.data;
+	static uint64_t start_time = 0;
+	uint64_t end_time = 0;
+	uint64_t keep_time = 0;
+	static bool flag = false;
+	const uint8_t short_press_bit = 0;
+	const uint8_t long_press_bit = 1;
+	const KEY_STATUS_ENUM key_press = KEY_PRESSED;
+	const KEY_STATUS_ENUM key_release = KEY_RELEASE;
+	KEY_STATUS_ENUM short_press_status = key_release;
+	KEY_STATUS_ENUM long_press_status = key_release;
+
+	if (1 == GET_BIT(value, short_press_bit))
+	{
+		short_press_status = key_press;
+	}
+	
+	if (1 == GET_BIT(value, long_press_bit))
+	{
+		long_press_status = key_press;
+	}
+	cout<<"home_key:"<<value<<endl;
+	cout<<"long_press_status:"<<long_press_status<<endl;
+	cout<<"short_press_status:"<<short_press_status<<endl;
+
+	if (short_press_status == key_press)
+	{
+		if(false == flag)
+		{
+			start_time = get_millisecond_time();
+			flag = true;
+		}
+	}
+	else if (short_press_status == key_release)
+	{
+		if(true == flag)
+		{
+			end_time = get_millisecond_time();
+
+			keep_time = end_time - start_time;
+			if (keep_time > 100)
+			{
+				cout<<"keep_time:"<<keep_time<<endl;
+			}
+			else if (keep_time > 5000)
+			{
+				cout<<"keep_time:"<<keep_time<<endl;
+			}
+			flag = false;
+			start_time = 0;
+		}
+	}
+}
+
+/*****************************************************************************
  函 数 名: drv_sensor.register_msgs_callback
  功能描述  : 注册消息处理相关回调函数
  输入参数: void
@@ -551,6 +622,8 @@ void drv_sensor::register_sensor_msgs_callback(void)
 	ultrasonic_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/dock_us", 100, &drv_sensor::ultrasonic_sensor_callback, p_instance_);
 	wall_following_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/edge_ir", 100, &drv_sensor::wall_following_sensor_callback, p_instance_);
 	laser_scan_sub_ = node_h.subscribe ( "/scan", 100, &drv_sensor::laser_scan_callback, p_instance_);
+
+	home_kye_sub_ = node_h.subscribe ( "/mobile_base/events/home_key", 10, &drv_sensor::home_key_callback, p_instance_);
 }
 
 /******************************************************************************

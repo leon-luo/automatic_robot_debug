@@ -101,6 +101,9 @@ private:
 	void laser_scan_callback( const sensor_msgs::LaserScan& msg );
 	void velocity_callback( const geometry_msgs::Twist& msg );
 
+	void home_key_callback(const std_msgs::Int16& msg);
+	
+
 	void register_sensor_msgs_callback(void);
 
 	drv_sensor(const drv_sensor&){};
@@ -116,6 +119,7 @@ private:
 	ros::Subscriber ultrasonic_sensor_sub_;
 	ros::Subscriber wall_following_sensor_sub_;
 	ros::Subscriber laser_scan_sub_;
+	ros::Subscriber home_kye_sub_;
 	
 	static drv_sensor* p_instance_;
 	static pthread_mutex_t mutex_;

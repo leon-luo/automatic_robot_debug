@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <errno.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -65,6 +66,19 @@
 /******************************************************************************
  * 内部函数定义
  ******************************************************************************/
+/*
+1)以下是各种精确度的类型转换:
+1秒=1000毫秒(ms), 1毫秒=1/1000秒(s)；
+1秒=1000000 微秒(μs), 1微秒=1/1000000秒(s)；
+1秒=1000000000 纳秒(ns),1纳秒=1/1000000000秒(s)；
+
+2)clock()函数的精确度是10毫秒(ms)
+times()函数的精确度是10毫秒(ms)
+gettimofday()函数的精确度是微秒(μs)
+clock_gettime()函数的计量单位为十亿分之一，也就是纳秒(ns)
+*/
+
+
 /*****************************************************************************
  函 数 名: print_current_time
  功能描述  : 打印当前时间
@@ -145,6 +159,56 @@ uint32_t get_current_time(void)
 //	debug_print_info("[Current time]:now {%ld(s) + %ld(us) = %llu(ms)}; offset = %llu(ms)", tv.tv_sec, tv.tv_usec, now, offset);
 	
 	return now;
+}
+
+/*****************************************************************************
+ 函 数 名: get_microsecond_time
+ 功能描述  : 获取当前时间的微秒数
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2018年2月9日
+    作     者: Leon
+    修改内容: 新生成函数
+备注:int clock_gettime(clockid_t clk_id, struct timespec *tp); clockid_t是确定哪个时钟类型.
+	CLOCK_REALTIME: 标准POSIX实时时钟
+	CLOCK_MONOTONIC: POSIX时钟,以恒定速率运行;不会复位和调整,它的取值和CLOCK_REALTIME是一样的.
+	CLOCK_PROCESS_CPUTIME_ID和CLOCK_THREAD_CPUTIME_ID是CPU中的硬件计时器中实现的.
+*****************************************************************************/
+uint64_t get_microsecond_time(void)
+{
+	uint32_t ret = 0;
+	struct timespec temp;
+	clockid_t clk_id = CLOCK_MONOTONIC;
+
+	clock_gettime(clk_id, &temp);
+
+	ret = MILLION*(temp.tv_sec)+(temp.tv_nsec)/KILO; //microseconds
+}
+
+/*****************************************************************************
+ 函 数 名: get_millisecond_time
+ 功能描述  : 获取当前时间的毫秒数
+ 输入参数: void  
+ 输出参数: 无
+ 返 回 值: 
+ 
+ 修改历史:
+  1.日     期: 2018年2月9日
+    作     者: Leon
+    修改内容: 新生成函数
+*****************************************************************************/
+uint64_t get_millisecond_time(void)
+{
+	uint32_t ret = 0;
+	struct timespec temp;
+	clockid_t clk_id = CLOCK_MONOTONIC;
+
+	clock_gettime(clk_id, &temp);
+
+	ret = KILO*(temp.tv_sec)+(temp.tv_nsec)/MILLION; //millisecond
 }
 
 /*****************************************************************************

@@ -485,7 +485,6 @@ void version::print_version(void)
 	}
 	
 	std::cout<<serial_version<<serial_number_<<std::endl;
-	
 	std::cout<<cut_off_rule<<std::endl;
 	std::cout<<std::endl;
 }

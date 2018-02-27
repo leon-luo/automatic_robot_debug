@@ -101,6 +101,12 @@ typedef enum SAFETY_LEVEL
 	SAFETY_LEVEL_FATAL,
 }SAFETY_LEVEL_ENUM;
 
+typedef enum KEY_STATUS
+{
+	KEY_RELEASE,
+	KEY_PRESSED,
+	KEY_STATUS_SUM,
+}KEY_STATUS_ENUM;
 /******************************************************************************
  * 结构体类型
  ******************************************************************************/
@@ -248,8 +254,6 @@ private:
 
 	double linear_velocity_;                                   //当前的线速度
 	double angular_velocity_;                                  //当前的角速度
-	//bool adjust_velocity_;
-	
 };
 
 /******************************************************************************

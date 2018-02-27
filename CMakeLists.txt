@@ -274,6 +274,7 @@ include_directories(
 include_directories(
 	src/common/angle
 	src/common/algorithm/pid
+	src/common/bit
 	src/common/line
 	src/common/time
 	src/common/version

@@ -1,89 +1,130 @@
 /******************************************************************************
 
-  版权所有 (C), 2017-2028 惠州市蓝微电子有限公司
+  Copyright (C), 2017-2028, HUIZHOU BLUEWAY ELECTRONICS Co., Ltd.
 
  ******************************************************************************
-  文件名称: time_base.h
-  版本编号: 初稿
-  作     者: Leon
-  生成日期: 2018年1月10日
-  最近修改:
-  功能描述: time_base.c 的头文件
-  函数列表:
-  修改历史:
-  1.日     期: 2018年1月10日
-    作     者: Leon
-    修改内容: 创建文件
+  File Name     : key_unit.h
+  Version       : Initial Draft
+  Author        : Leon
+  Created       : 2018/2/10
+  Last Modified :
+  Description   : key_unit.h header file
+  Function List :
+  History       :
+  1.Date        : 2018年2月10日
+    Author      : Leon
+    Modification: Created file
 ******************************************************************************/
-#ifndef __TIME_BASE_H__
-#define __TIME_BASE_H__
+#ifndef __KEY_UNIT_H__
+#define __KEY_UNIT_H__
 
 /*****************************************************************************/
 #ifdef __cplusplus
 #if __cplusplus
-extern "C"{
+//extern "C"{
 #endif
 #endif /* __cplusplus */
 /*****************************************************************************/
 
 /******************************************************************************
- * 包含头文件
+ * include header files list
  ******************************************************************************/
-#include <stdint.h>
-#include <stdbool.h>
+#include "key_base.h"
 
 /******************************************************************************
- * 外部变量声明
- ******************************************************************************/
-
-/******************************************************************************
- * 外部函数声明
+ * external variables
  ******************************************************************************/
 
 /******************************************************************************
- * 全局变量
+ * external function prototypes
  ******************************************************************************/
 
 /******************************************************************************
- * 宏定义
- ******************************************************************************/
-typedef void (*pf_sighandler_t)(int);
-
-/******************************************************************************
- * 常量声明
- ******************************************************************************/
-#define KILO                    1000               //1千
-#define MILLION                 1000000            //100万
-#define BILLION                 1000000000         //10亿
-
-
-/******************************************************************************
- * 枚举类型
+ * project-wide global variables
  ******************************************************************************/
 
 /******************************************************************************
- * 结构体类型
+ * macros
  ******************************************************************************/
 
 /******************************************************************************
- * 类声明
+ * constants
  ******************************************************************************/
 
 /******************************************************************************
- * 内部函数声明
+ * enum
  ******************************************************************************/
-void print_current_time(void);
-uint32_t get_current_time(void);
-uint64_t get_microsecond_time(void);
-uint64_t get_millisecond_time(void);
-bool deferred_execute(uint32_t delay_s, uint32_t delay_us, pf_sighandler_t pf);
+
+/******************************************************************************
+ * struct
+ ******************************************************************************/
+
+/******************************************************************************
+ * class
+ ******************************************************************************/
+class key_unit
+{
+public:
+	key_unit();
+	~key_unit();
+private:
+};
+
+class key_unit
+{
+public://protected:
+
+	key_unit();
+	~key_unit();
+	
+public:
+	void set_status(KEY_STATUS_ENUM value);
+	KEY_STATUS_ENUM get_status(void);
+	
+	void set_single_click(bool value);
+	bool get_single_click(void);
+
+	void set_double_click(bool value);
+	bool get_double_click(void);
+
+	void set_long_click(bool value);
+	bool get_long_click(void);
+	
+	bool get_enable_clocker(void);
+	void set_enable_clocker(bool value);
+
+	void set_valid_time(uint32_t value);
+	uint32_t get_valid_time(void);
+
+	void set_keep_time(uint32_t value);
+	uint32_t get_keep_time(void);
+
+	void init_hold(LONG_PRESS_STRU value);
+	void init_hold(bool enable_clocker = false, uint32_t valid_time = 100, uint32_t keep_time = 0);
+
+	virtual void update_single_click(void);
+	virtual void update_double_click(void);
+	virtual void update_long_click(void);
+
+private:
+	KEY_STRU data;
+	key_unit(const key_unit&){};
+	key_unit& operator=(const key_unit&){};
+};
+
+
+/******************************************************************************
+ * internal function prototypes
+ ******************************************************************************/
+
+
 
 /*****************************************************************************/
 #ifdef __cplusplus
 #if __cplusplus
-}
+//}
 #endif
 #endif /* __cplusplus */
 /*****************************************************************************/
 
-#endif /* __TIME_BASE_H__ */
+#endif /* __KEY_UNIT_H__ */
