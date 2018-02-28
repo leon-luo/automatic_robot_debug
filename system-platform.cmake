@@ -6,7 +6,7 @@
 # 最近修改:
 # 功能描述: 定义系统与开发编译平台相关功能宏与函数
 # 函数列表:
-# 
+#
 # 修改历史:
 # 1.日     期: 208年01月30日
 #   作     者: Leon
@@ -17,7 +17,7 @@
 include(print.cmake)
 
 ##支持IF(A) ELSE()的写法
-SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON) 
+SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
 #/*****************************************************************************
 # 函 数 名: include_sub_directories_recursively
@@ -25,7 +25,7 @@ SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 # 输入参数: root_dir:顶层目录
 # 输出参数: 无
 # 返 回 值: 无
-# 
+#
 # 修改历史:
 #  1.日     期: 208年01月30日
 #    作     者: Leon
@@ -33,18 +33,18 @@ SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 #*****************************************************************************/
 function(include_sub_directories_recursively root_dir)
 	parallel_lines()
-    if (IS_DIRECTORY ${root_dir})               # 当前路径是一个目录吗，是的话就加入到包含目录
-        message(STATUS "include dir: " ${root_dir})
-        include_directories(${root_dir})
-    endif()
+	if (IS_DIRECTORY ${root_dir})                                   # 当前路径是一个目录吗，是的话就加入到包含目录
+		message(STATUS "include dir: " ${root_dir})
+		include_directories(${root_dir})
+	endif()
 
-    file(GLOB ALL_SUB RELATIVE ${root_dir} ${root_dir}/*) # 获得当前目录下的所有文件，让如ALL_SUB列表中
-    foreach(sub ${ALL_SUB})
-        if (IS_DIRECTORY ${root_dir}/${sub})                    
-            include_sub_directories_recursively(${root_dir}/${sub}) # 对子目录递归调用，包含
-        endif()
-    endforeach()
-    parallel_lines()
+	file(GLOB ALL_SUB RELATIVE ${root_dir} ${root_dir}/*)           # 获得当前目录下的所有文件，让如ALL_SUB列表中
+	foreach(sub ${ALL_SUB})
+		if (IS_DIRECTORY ${root_dir}/${sub})
+			include_sub_directories_recursively(${root_dir}/${sub}) # 对子目录递归调用，包含
+		endif()
+	endforeach()
+	parallel_lines()
 endfunction()
 
 #/*****************************************************************************
@@ -53,7 +53,7 @@ endfunction()
 # 输入参数: 无
 # 输出参数: 无
 # 返 回 值: 无
-# 
+#
 # 修改历史:
 #  1.日     期: 208年01月30日
 #    作     者: Leon
@@ -73,7 +73,7 @@ function(print_operation_system_info)
 		message(STATUS "| Other platform: ${CMAKE_SYSTEM_NAME}")
 	endif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 	cut_off_rule()
-	
+
 	if (WIN32)
 		message(STATUS "| Now is windows")
 	elseif (APPLE)
@@ -90,7 +90,7 @@ endfunction()
 # 输入参数: 无
 # 输出参数: 无
 # 返 回 值: 无
-# 
+#
 # 修改历史:
 #  1.日     期: 208年01月30日
 #    作     者: Leon
@@ -105,9 +105,9 @@ macro(config_compile_options)
 	if (CMAKE_COMPILER_IS_GNUCXX)
 		print_variate(CMAKE_COMPILER_IS_GNUCXX)
 		# c++11 required
-	    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-	    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-	    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lstdc++ -std=gnu++11")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+		#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+		#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lstdc++ -std=gnu++11")
 		set(CMAKE_CXX_STANDARD 11)
 		set(CMAKE_CXX_STANDARD_REQUIRED ON)
 		print_variate(CMAKE_CXX_FLAGS)
@@ -126,11 +126,11 @@ macro(config_compile_options)
 	##CMAKE_CXX_FLAGS_RELEASE 和 CMAKE_C_FLAGS_RELEASE 选项生成 Makefile。 
 	#set(CMAKE_BUILD_TYPE Debug)
 	#但是，这样的设置却是没有效果的。必须改成如下的才行：
-	set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")  
+	set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
 	#还可以在命令行设置：
-	#cmake  -DCMAKE_BUILD_TYPE=Debug .. 
+	#cmake  -DCMAKE_BUILD_TYPE=Debug ..
 
-	##要显示执行构建过程中详细的信息(比如为了得到更详细的出错信息) 
+	##要显示执行构建过程中详细的信息(比如为了得到更详细的出错信息)
 	##或者执行make时
 	##$ make VERBOSE=1
 	##或
@@ -146,34 +146,35 @@ endmacro()
 # 输入参数: 无
 # 输出参数: 无
 # 返 回 值: 无
-# 
+#
 # 修改历史:
 #  1.日     期: 208年01月30日
 #    作     者: Leon
 #    修改内容: 新生成宏
+#   CMAKE_SYSTEM_PROCESSOR= 机器人："armv7l"， 虚拟机ubuntu中："i686"
 #*****************************************************************************/
 macro(config_compilers)
 	parallel_lines()
 	message(STATUS "config_compilers()")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
 		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
-		
+
 		#告知当前使用的是交叉编译方式，必须配置
 		set(CMAKE_SYSTEM_NAME Linux)
 		print_variate(CMAKE_SYSTEM_NAME)
-		
+
 		set(TOOL_COMPILING_PATH /home/compile/rk_repo/px3-se/buildroot/output/host/usr)
 		set(COMPILER_DIR /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin)
 		set(COMPILER_NAME_PREFIX arm-rockchip-linux-gnueabihf-)
 
 		#set(COMPILER_DIR $ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/bin)
 		#set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
-		
+
 		#不一定需要设置
 		#指定交叉编译环境安装目录
 		SET(TOOLCHAIN_DIR ${COMPILER_DIR})
 		SET(CMAKE_FIND_ROOT_PATH ${TOOLCHAIN_DIR})
-	
+
 		# Have to set this one to BOTH, to allow CMake to find rospack
 		#从来不在指定目录下查找工具程序
 		set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
@@ -192,7 +193,7 @@ macro(config_compilers)
 		print_variate(CMAKE_CROSSCOMPILING)
 	else ()
 		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
-		
+
 		set(COMPILER_DIR /usr/bin)
 		set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
 	endif()
@@ -216,7 +217,7 @@ endmacro()
 # 输入参数: 无
 # 输出参数: 无
 # 返 回 值: 无
-# 
+#
 # 修改历史:
 #  1.日     期: 208年01月30日
 #    作     者: Leon
@@ -253,25 +254,25 @@ macro(config_link_lib_and_include_directories)
 		${ROS_INCLUDE_DIRECTORY}
 	)
 
-	SET(OTHER_LINK_LIST	 
-		${ROS_LIBRARY_DIRECTORY}/libroscpp.so 
-		${ROS_LIBRARY_DIRECTORY}/librosconsole.so 
-		${ROS_LIBRARY_DIRECTORY}/librosconsole_log4cxx.so 
-		${ROS_LIBRARY_DIRECTORY}/librosconsole_backend_interface.so 
-		${ROS_LIBRARY_DIRECTORY}/libroscpp_serialization.so 
-		${ROS_LIBRARY_DIRECTORY}/librostime.so 
-		${ROS_LIBRARY_DIRECTORY}/libxmlrpcpp.so 
-		${ROS_LIBRARY_DIRECTORY}/libcpp_common.so 
-		-rdynamic 
-		-lpthread 
-		-llog4cxx 
-		-lconsole_bridge 
-		-lboost_signals 
-		-lboost_filesystem 
-		-lboost_regex 
-		-lboost_date_time 
-		-lboost_system 
-		-lboost_thread 
+	SET(OTHER_LINK_LIST
+		${ROS_LIBRARY_DIRECTORY}/libroscpp.so
+		${ROS_LIBRARY_DIRECTORY}/librosconsole.so
+		${ROS_LIBRARY_DIRECTORY}/librosconsole_log4cxx.so
+		${ROS_LIBRARY_DIRECTORY}/librosconsole_backend_interface.so
+		${ROS_LIBRARY_DIRECTORY}/libroscpp_serialization.so
+		${ROS_LIBRARY_DIRECTORY}/librostime.so
+		${ROS_LIBRARY_DIRECTORY}/libxmlrpcpp.so
+		${ROS_LIBRARY_DIRECTORY}/libcpp_common.so
+		-rdynamic
+		-lpthread
+		-llog4cxx
+		-lconsole_bridge
+		-lboost_signals
+		-lboost_filesystem
+		-lboost_regex
+		-lboost_date_time
+		-lboost_system
+		-lboost_thread
 		-Wl,-rpath,${ROS_LIBRARY_DIRECTORY}
 	)
 
@@ -285,28 +286,28 @@ endmacro()
 # 输入参数: 无
 # 输出参数: 无
 # 返 回 值: 无
-# 
+#
 # 修改历史:
 #  1.日     期: 208年01月30日
 #    作     者: Leon
 #    修改内容: 新生成函数
 #*****************************************************************************/
 function(print_cmake_info)
-## CMAKE_MAJOR_VERSION，CMAKE 主版本号，比如 2.4.6 中的 2 
-## CMAKE_MINOR_VERSION，CMAKE 次版本号，比如 2.4.6 中的 4 
-## CMAKE_PATCH_VERSION，CMAKE 补丁等级，比如 2.4.6 中的 6 
-## CMAKE_SYSTEM，系统名称，比如 Linux-2.6.22 
-## CMAKE_SYSTEM_NAME，不包含版本的系统名，比如 Linux 
-## CMAKE_SYSTEM_VERSION，系统版本，比如 2.6.22 
+## CMAKE_MAJOR_VERSION，CMAKE 主版本号，比如 2.4.6 中的 2
+## CMAKE_MINOR_VERSION，CMAKE 次版本号，比如 2.4.6 中的 4
+## CMAKE_PATCH_VERSION，CMAKE 补丁等级，比如 2.4.6 中的 6
+## CMAKE_SYSTEM，系统名称，比如 Linux-2.6.22
+## CMAKE_SYSTEM_NAME，不包含版本的系统名，比如 Linux
+## CMAKE_SYSTEM_VERSION，系统版本，比如 2.6.22
 ## CMAKE_SYSTEM_PROCESSOR，处理器名称，比如 x86_64、i686、arm、 armv7l
-## UNIX，在所有的类 UNIX 平台为 TRUE，包括 OS X 和 cygwin 
+## UNIX，在所有的类 UNIX 平台为 TRUE，包括 OS X 和 cygwin
 ## WIN32，在所有的 win32 平台为 TRUE，包括 cygwin
 ## CMAKE_BINARY_DIR 工程顶层目录
 ## CMAKE_SOURCE_DIR 工程顶层目录
 ## PROJECT_BINARY_DIR 应用程序存放的位置
 ## PROJECT_NAME 返回通过 PROJECT 指令定义的项目名称。
-## 使用$ENV{NAME}指令就可以调用系统的环境变量了。比如MESSAGE(STATUS “HOME dir: $ENV{HOME}”) 
-## 设置环境变量的方式是：SET(ENV{变量名} 值) 
+## 使用$ENV{NAME}指令就可以调用系统的环境变量了。比如MESSAGE(STATUS “HOME dir: $ENV{HOME}”)
+## 设置环境变量的方式是：SET(ENV{变量名} 值)
 ## EXECUTABLE_OUTPUT_PATH：可执行文件的存放路径，重新定义目标二进制可执行文件的存放位置
 ## LIBRARY_OUTPUT_PATH 重新定义目标链接库文件的存放位置，库文件路径
 ## CMAKE_BUILD_TYPE:：build 类型(Debug, Release, ...)，CMAKE_BUILD_TYPE=Debug
@@ -366,7 +367,7 @@ endfunction()
 # 输入参数: 无
 # 输出参数: 无
 # 返 回 值: 无
-# 
+#
 # 修改历史:
 #  1.日     期: 208年01月30日
 #    作     者: Leon
