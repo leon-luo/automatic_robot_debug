@@ -241,21 +241,24 @@ macro(config_link_lib_and_include_directories)
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
 		print_string("|************ (1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
-		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
-		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
-		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
-		include_directories(
+		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+			print_string( "************《cross compile in Server PC ubuntu》************")
+			
+			include_directories( 
+				/usr/include/
+				#$ENV{HOME}/boost_1_66_0/
+			)
+			
+		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
+			print_string( "************《cross compile in VMware Workstation ubuntu》************")
+
+			include_directories(
 			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include
 			#/usr/include/
 			#/usr/include/boost/
 			#/usr/include/boost/math/
 			#/usr/include/boost/math/special_functions/
-		)
-
-		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-			print_string( "************《cross compile in Server PC ubuntu》************")
-		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
-			print_string( "************《cross compile in VMware Workstation ubuntu》************")
+			)
 			link_directories( 
 			/usr/arm-linux-gnueabihf/lib
 			/usr/arm-linux-gnueabi/lib
@@ -272,6 +275,10 @@ macro(config_link_lib_and_include_directories)
 			$ENV{HOME}/cross_compile_lib/lib
 			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
 		)
+
+		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
+		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
+		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
 	else ()
 		print_string("|************ (2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
