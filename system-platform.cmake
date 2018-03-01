@@ -172,16 +172,15 @@ macro(config_compilers)
 
 		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 			print_string( "************《cross compile in Server PC ubuntu》************")
+			set(TOOL_COMPILING_PATH /home/compile/rk_repo/px3-se/buildroot/output/host/usr)
+			set(COMPILER_DIR /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin)
+			set(COMPILER_NAME_PREFIX arm-rockchip-linux-gnueabihf-)
 		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
 			print_string( "************《cross compile in VMware Workstation ubuntu》************")
+			#set(COMPILER_DIR $ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/bin)
+			set(COMPILER_DIR /usr/bin)
+			set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
 		endif ()
-
-		set(TOOL_COMPILING_PATH /home/compile/rk_repo/px3-se/buildroot/output/host/usr)
-		set(COMPILER_DIR /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin)
-		set(COMPILER_NAME_PREFIX arm-rockchip-linux-gnueabihf-)
-
-		#set(COMPILER_DIR $ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/bin)
-		#set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
 
 		#不一定需要设置
 		#指定交叉编译环境安装目录
@@ -240,7 +239,7 @@ macro(config_link_lib_and_include_directories)
 	#parallel_lines()
 	print_function_name_begin("config_link_lib_and_include_directories")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-		print_string("|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		print_string("|************ (1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
 		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
 		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
@@ -253,6 +252,20 @@ macro(config_link_lib_and_include_directories)
 			#/usr/include/boost/math/special_functions/
 		)
 
+		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+			print_string( "************《cross compile in Server PC ubuntu》************")
+		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
+			print_string( "************《cross compile in VMware Workstation ubuntu》************")
+			link_directories( 
+			/usr/arm-linux-gnueabihf/lib
+			/usr/arm-linux-gnueabi/lib
+			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+			$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/lib
+			$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/lib
+			)
+		endif ()
+
 		link_directories(
 			/usr/arm-linux-gnueabihf/lib
 			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
@@ -260,7 +273,7 @@ macro(config_link_lib_and_include_directories)
 			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
 		)
 	else ()
-		print_string("|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		print_string("|************ (2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
 		SET(ROS_INSTALL_DIRECTORY /opt/ros/indigo)                             #指定ROS安装路径
 		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
