@@ -7,7 +7,7 @@
 cd ~/Desktop/cross_compile_prj
 CURR_PATH=`pwd`
 
-cmake_file_path="/home/leon/catkin_ws/src/cleaner_robot"
+cmake_file_path="~/catkin_ws/src/cleaner_robot"
 
 echo "Current path: $CURR_PATH"
 echo "$0()++++++++++++++++++++++++++"
