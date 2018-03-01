@@ -115,3 +115,16 @@ endmacro()
 macro(print_info_variate arg)
 	message(STATUS "|[INFO] ${arg} is \"${${arg}}\"")
 endmacro()
+
+macro(print_function_name arg)
+	message(STATUS "|[INFO] @@@@@@@@@@@@@@@@> ${arg}() <@@@@@@@@@@@@@@@@@@")
+endmacro()
+
+
+macro(print_function_name_begin arg)
+	message(STATUS "|[INFO] ======================[begin]>>>>>> ${arg}()====================== ")
+endmacro()
+
+macro(print_function_name_end arg)
+	message(STATUS "|[INFO] ======================[ end ]<<<<<< ${arg}()====================== ")
+endmacro()

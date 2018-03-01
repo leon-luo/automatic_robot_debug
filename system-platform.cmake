@@ -60,7 +60,8 @@ endfunction()
 #    修改内容: 新生成函数
 #*****************************************************************************/
 function(print_operation_system_info)
-	parallel_lines()
+	#parallel_lines()
+	print_function_name_begin("print_operation_system_info")
 	message(STATUS "print_operation_system_info()")
 	message(STATUS "| operation system is ${CMAKE_SYSTEM}")
 	if (CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -81,7 +82,9 @@ function(print_operation_system_info)
 	elseif (UNIX)
 		message(STATUS "| Now is UNIX-like OS's. Including aPPLE os x and CygWin")
 	endif ()
-	parallel_lines()
+
+	print_function_name_end("print_operation_system_info")
+	#parallel_lines()
 endfunction()
 
 #/*****************************************************************************
@@ -97,7 +100,8 @@ endfunction()
 #    修改内容: 新生成宏
 #*****************************************************************************/
 macro(config_compile_options)
-	parallel_lines()
+	#parallel_lines()
+	print_function_name_begin("config_compile_options")
 	message(STATUS "config_compile_options()")
 	add_compile_options(-g -lrt -lm -lpthread)
 	## Compile as C++11, supported in ROS Kinetic and newer
@@ -137,7 +141,9 @@ macro(config_compile_options)
 	##$ export VERBOSE=1
 	##$ make
 	#SET(CMAKE_VERBOSE_MAKEFILE on)
-	parallel_lines()
+
+	print_function_name_end("config_compile_options")
+	#parallel_lines()
 endmacro()
 
 #/*****************************************************************************
@@ -154,7 +160,8 @@ endmacro()
 #   CMAKE_SYSTEM_PROCESSOR= 机器人："armv7l"， 虚拟机ubuntu中："i686",            服务器:"x86_64"
 #*****************************************************************************/
 macro(config_compilers)
-	parallel_lines()
+	#parallel_lines()
+	print_function_name_begin("config_compilers")
 	message(STATUS "config_compilers()")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
 		message(STATUS "|************(1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
@@ -213,8 +220,8 @@ macro(config_compilers)
 	#编译器必须配置,可以使用交叉编译器绝对地址
 	SET(CMAKE_C_COMPILER   ${C_COMPILER_PATH})      #指定C交叉编译器
 	SET(CMAKE_CXX_COMPILER ${CXX_COMPILER_PATH})    #指定C++交叉编译器
-
-	parallel_lines()
+	print_function_name_end("config_compilers")
+	#parallel_lines()
 endmacro()
 
 #/*****************************************************************************
@@ -230,8 +237,8 @@ endmacro()
 #    修改内容: 新生成宏
 #*****************************************************************************/
 macro(config_link_lib_and_include_directories)
-	parallel_lines()
-	message(STATUS "config_link_lib_and_include_directories()")
+	#parallel_lines()
+	print_function_name_begin("config_link_lib_and_include_directories")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
 		print_string("|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
@@ -240,6 +247,10 @@ macro(config_link_lib_and_include_directories)
 		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
 		include_directories(
 			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include
+			#/usr/include/
+			#/usr/include/boost/
+			#/usr/include/boost/math/
+			#/usr/include/boost/math/special_functions/
 		)
 
 		link_directories(
@@ -283,7 +294,8 @@ macro(config_link_lib_and_include_directories)
 	)
 
 	print_variate(OTHER_LINK_LIST)
-	parallel_lines()
+	print_function_name_end("config_link_lib_and_include_directories")
+	#parallel_lines()
 endmacro()
 
 #/*****************************************************************************
@@ -323,8 +335,8 @@ function(print_cmake_info)
 ## STATUS,输出前缀为-的信息。
 ## SEND_ERROR，产生错误，生成过程被跳过。
 ## FATAL_ERROR，立即终止所有cmake过程。
-	parallel_lines()
-	message(STATUS "print_cmake_info()")
+	#parallel_lines()
+	print_function_name_begin("print_cmake_info")
 	print_variate(UNIX)
 	print_variate(WIN32)
 	blank_line()
@@ -338,7 +350,7 @@ function(print_cmake_info)
 	print_variate(CMAKE_SYSTEM_VERSION)
 	print_variate(CMAKE_SYSTEM_PROCESSOR)
 	blank_line()
-	print_info_variate(CMAKE_C_COMPILER)
+	print_variate(CMAKE_C_COMPILER)
 	print_variate(CMAKE_C_FLAGS)
 	blank_line()
 	print_info_variate(CMAKE_CXX_COMPILER)
@@ -364,7 +376,8 @@ function(print_cmake_info)
 	print_variate(LIBRARY_OUTPUT_PATH)
 	print_variate(EXECUTABLE_OUTPUT_PATH)
 	print_variate(OTHER_LINK_LIST)
-	parallel_lines()
+	#parallel_lines()
+	print_function_name_end("print_cmake_info")
 endfunction()
 
 #/*****************************************************************************
@@ -380,7 +393,8 @@ endfunction()
 #    修改内容: 新生成函数
 #*****************************************************************************/
 function(debug_info)
-	parallel_lines()
+	#parallel_lines()
+	print_function_name_begin("debug_info")
 	print_variate(catkin_FOUND)
 	print_variate(catkin_INCLUDE_DIRS)
 	print_variate(catkin_LIBRARIES)
@@ -395,5 +409,6 @@ function(debug_info)
 	print_variate(roscpp_INCLUDE_DIRS)
 	print_variate(roscpp_LIBRARIES)
 	print_variate(roscpp_DEFINITIONS)
-	parallel_lines()
+	#parallel_lines()
+	print_function_name_end("debug_info")
 endfunction()
