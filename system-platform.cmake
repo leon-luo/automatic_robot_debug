@@ -151,17 +151,23 @@ endmacro()
 #  1.日     期: 208年01月30日
 #    作     者: Leon
 #    修改内容: 新生成宏
-#   CMAKE_SYSTEM_PROCESSOR= 机器人："armv7l"， 虚拟机ubuntu中："i686"
+#   CMAKE_SYSTEM_PROCESSOR= 机器人："armv7l"， 虚拟机ubuntu中："i686",            服务器:"x86_64"
 #*****************************************************************************/
 macro(config_compilers)
 	parallel_lines()
 	message(STATUS "config_compilers()")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		message(STATUS "|************(1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
 		#告知当前使用的是交叉编译方式，必须配置
 		set(CMAKE_SYSTEM_NAME Linux)
 		print_variate(CMAKE_SYSTEM_NAME)
+
+		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+			print_string( "************《cross compile in Server PC ubuntu》************")
+		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
+			print_string( "************《cross compile in VMware Workstation ubuntu》************")
+		endif ()
 
 		set(TOOL_COMPILING_PATH /home/compile/rk_repo/px3-se/buildroot/output/host/usr)
 		set(COMPILER_DIR /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin)
@@ -191,8 +197,8 @@ macro(config_compilers)
 
 		set(CMAKE_CROSSCOMPILING true)
 		print_variate(CMAKE_CROSSCOMPILING)
-	else ()
-		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+	else (CMAKE_SYSTEM_PROCESSOR MATCHES "armv7l")
+		print_string("|************(2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
 		set(COMPILER_DIR /usr/bin)
 		set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
@@ -227,7 +233,7 @@ macro(config_link_lib_and_include_directories)
 	parallel_lines()
 	message(STATUS "config_link_lib_and_include_directories()")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		print_string("|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
 		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
 		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
@@ -243,7 +249,7 @@ macro(config_link_lib_and_include_directories)
 			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
 		)
 	else ()
-		message(STATUS "|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		print_string("|************ Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
 
 		SET(ROS_INSTALL_DIRECTORY /opt/ros/indigo)                             #指定ROS安装路径
 		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
@@ -332,10 +338,10 @@ function(print_cmake_info)
 	print_variate(CMAKE_SYSTEM_VERSION)
 	print_variate(CMAKE_SYSTEM_PROCESSOR)
 	blank_line()
-	print_variate(CMAKE_C_COMPILER)
+	print_info_variate(CMAKE_C_COMPILER)
 	print_variate(CMAKE_C_FLAGS)
 	blank_line()
-	print_variate(CMAKE_CXX_COMPILER)
+	print_info_variate(CMAKE_CXX_COMPILER)
 	print_variate(CMAKE_CXX_FLAGS)
 	print_variate(CMAKE_CXX_STANDARD)
 	print_variate(CMAKE_CXX_STANDARD_REQUIRED)
