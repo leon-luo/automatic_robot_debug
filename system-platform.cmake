@@ -140,7 +140,7 @@ macro(config_compile_options)
 	##或
 	##$ export VERBOSE=1
 	##$ make
-	#SET(CMAKE_VERBOSE_MAKEFILE on)
+	SET(CMAKE_VERBOSE_MAKEFILE on)
 
 	print_function_name_end("config_compile_options")
 	#parallel_lines()
@@ -246,7 +246,9 @@ macro(config_link_lib_and_include_directories)
 			
 			include_directories( 
 				/usr/include/
+				#/usr/include/boost/
 				#$ENV{HOME}/boost_1_66_0/
+				$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include/
 			)
 			
 		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
@@ -254,18 +256,16 @@ macro(config_link_lib_and_include_directories)
 
 			include_directories(
 			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include
-			#/usr/include/
-			#/usr/include/boost/
-			#/usr/include/boost/math/
-			#/usr/include/boost/math/special_functions/
+			/opt/arm-boost-1.54/include
 			)
-			link_directories( 
+			
+			link_directories(
+			#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/lib
+			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+			/opt/arm-boost-1.54/lib
 			/usr/arm-linux-gnueabihf/lib
 			/usr/arm-linux-gnueabi/lib
-			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
-			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
-			$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/lib
-			$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/lib
+			#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/lib
 			)
 		endif ()
 
@@ -273,7 +273,7 @@ macro(config_link_lib_and_include_directories)
 			/usr/arm-linux-gnueabihf/lib
 			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
 			$ENV{HOME}/cross_compile_lib/lib
-			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
+		#	$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
 		)
 
 		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
