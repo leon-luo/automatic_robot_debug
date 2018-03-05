@@ -140,7 +140,7 @@ macro(config_compile_options)
 	##或
 	##$ export VERBOSE=1
 	##$ make
-	SET(CMAKE_VERBOSE_MAKEFILE on)
+	#SET(CMAKE_VERBOSE_MAKEFILE on)
 
 	print_function_name_end("config_compile_options")
 	#parallel_lines()
@@ -164,14 +164,14 @@ macro(config_compilers)
 	print_function_name_begin("config_compilers")
 	message(STATUS "config_compilers()")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-		message(STATUS "|************(1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		message(STATUS "|------------(1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" --------------|")
 
 		#告知当前使用的是交叉编译方式，必须配置
 		set(CMAKE_SYSTEM_NAME Linux)
 		print_variate(CMAKE_SYSTEM_NAME)
 
 		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-			print_string( "************《cross compile in Server PC ubuntu》************")
+			print_string( "~~~~~~~~~~~~《cross compile in Server PC ubuntu》~~~~~~~~~~~~")
 			set(TOOL_COMPILING_PATH /home/compile/rk_repo/px3-se/buildroot/output/host/usr)
 			set(COMPILER_DIR /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin)
 			set(COMPILER_NAME_PREFIX arm-rockchip-linux-gnueabihf-)
@@ -204,7 +204,7 @@ macro(config_compilers)
 		set(CMAKE_CROSSCOMPILING true)
 		print_variate(CMAKE_CROSSCOMPILING)
 	else (CMAKE_SYSTEM_PROCESSOR MATCHES "armv7l")
-		print_string("|************(2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		print_string("|============(2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" ==============|")
 
 		set(COMPILER_DIR /usr/bin)
 		set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
@@ -239,52 +239,69 @@ macro(config_link_lib_and_include_directories)
 	#parallel_lines()
 	print_function_name_begin("config_link_lib_and_include_directories")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-		print_string("|************ (1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		print_string("|------------ (1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" --------------|")
 
 		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-			print_string( "************《cross compile in Server PC ubuntu》************")
+			print_string( "~~~~~~~~~~~~《cross compile in Server PC ubuntu》~~~~~~~~~~~~")
+
+			SET(BOOST_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-boost_1_66_0)
+			SET(BOOST_INCLUDE_DIRECTORY $BOOST_DIRECTORY/include)
+			SET(BOOST_LIB_DIRECTORY $BOOST_DIRECTORY/lib)
 			
 			include_directories( 
 				/usr/include/
 				#/usr/include/boost/
 				#$ENV{HOME}/boost_1_66_0/
-				$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include/
+				$BOOST_INCLUDE
+			)
+			
+			link_directories(
+				/usr/arm-linux-gnueabihf/lib
 			)
 			
 		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
 			print_string( "************《cross compile in VMware Workstation ubuntu》************")
 
+			SET(BOOST_DIRECTORY /opt/arm-boost-1.54)
+			#SET(BOOST_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-boost_1_66_0)
+			SET(BOOST_INCLUDE_DIRECTORY $BOOST_DIRECTORY/include)
+			SET(BOOST_LIB_DIRECTORY $BOOST_DIRECTORY/lib)
+			
 			include_directories(
-			$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/include
-			/opt/arm-boost-1.54/include
+				#$BOOST_INCLUDE_DIRECTORY
+				#/usr/include/arm-linux-gnueabihf/
 			)
 			
-			link_directories(
-			#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/lib
-			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
-			/opt/arm-boost-1.54/lib
-			/usr/arm-linux-gnueabihf/lib
-			/usr/arm-linux-gnueabi/lib
-			#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/lib
-			)
+			#link_directories(
+				#/lib/arm-linux-gnueabihf
+				#/usr/lib/arm-linux-gnueabihf
+				#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/lib
+				#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+				#/usr/arm-linux-gnueabihf/lib
+				#/usr/arm-linux-gnueabi/lib
+				#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/lib
+			#)
 		endif ()
 
 		link_directories(
-			/usr/arm-linux-gnueabihf/lib
-			$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+			#/usr/arm-linux-gnueabihf/lib
+			#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
 			$ENV{HOME}/cross_compile_lib/lib
-		#	$ENV{HOME}/cross_compile_lib/arm-boost_1_66_0/lib
+			$BOOST_LIB_DIRECTORY
 		)
 
 		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
 		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
 		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
 	else ()
-		print_string("|************ (2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" **************|")
+		print_string("|============ (2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" ==============|")
 
 		SET(ROS_INSTALL_DIRECTORY /opt/ros/indigo)                             #指定ROS安装路径
 		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
 		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
+		link_directories(
+			/usr/arm-linux-gnueabihf/lib
+		)
 	endif()
 
 	include_directories(
@@ -432,3 +449,4 @@ function(debug_info)
 	#parallel_lines()
 	print_function_name_end("debug_info")
 endfunction()
+

@@ -50,17 +50,6 @@
 #define GET_MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define GET_MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-#ifndef bool
-#define bool uint8_t
-#endif
-
-#ifndef true
-#define true 1
-#endif
-
-#ifndef false
-#define false 0
-#endif
 
 /******************************************************************************
  * 常量声明
