@@ -172,12 +172,12 @@ macro(config_compilers)
 
 		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 			print_string( "~~~~~~~~~~~~《cross compile in Server PC ubuntu》~~~~~~~~~~~~")
+			#set(COMPILER_DIR $ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/bin)
 			set(TOOL_COMPILING_PATH /home/compile/rk_repo/px3-se/buildroot/output/host/usr)
 			set(COMPILER_DIR /home/compile/rk_repo/px3-se/buildroot/output/host/usr/bin)
 			set(COMPILER_NAME_PREFIX arm-rockchip-linux-gnueabihf-)
 		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
 			print_string( "************《cross compile in VMware Workstation ubuntu》************")
-			#set(COMPILER_DIR $ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/bin)
 			set(COMPILER_DIR /usr/bin)
 			set(COMPILER_NAME_PREFIX arm-linux-gnueabihf-)
 		endif ()
@@ -258,36 +258,23 @@ macro(config_link_lib_and_include_directories)
 			link_directories(
 				/usr/arm-linux-gnueabihf/lib
 			)
+
+			link_directories(
+			#/usr/arm-linux-gnueabihf/lib
+			#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+		)
 			
 		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
 			print_string( "************《cross compile in VMware Workstation ubuntu》************")
 
 			SET(BOOST_DIRECTORY /opt/arm-boost-1.54)
-			#SET(BOOST_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-boost_1_66_0)
 			SET(BOOST_INCLUDE_DIRECTORY $BOOST_DIRECTORY/include)
 			SET(BOOST_LIB_DIRECTORY $BOOST_DIRECTORY/lib)
-			
-			include_directories(
-				#$BOOST_INCLUDE_DIRECTORY
-				#/usr/include/arm-linux-gnueabihf/
-			)
-			
-			#link_directories(
-				#/lib/arm-linux-gnueabihf
-				#/usr/lib/arm-linux-gnueabihf
-				#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/lib
-				#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
-				#/usr/arm-linux-gnueabihf/lib
-				#/usr/arm-linux-gnueabi/lib
-				#$ENV{HOME}/cross_compile_lib/gcc-linaro-5.5.0-2017.10-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/lib
-			#)
 		endif ()
 
 		link_directories(
-			#/usr/arm-linux-gnueabihf/lib
-			#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
 			$ENV{HOME}/cross_compile_lib/lib
-			$BOOST_LIB_DIRECTORY
+			#$BOOST_LIB_DIRECTORY
 		)
 
 		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
