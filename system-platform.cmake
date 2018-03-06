@@ -239,48 +239,45 @@ macro(config_link_lib_and_include_directories)
 	#parallel_lines()
 	print_function_name_begin("config_link_lib_and_include_directories")
 	if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+#################################################################################
 		print_string("|------------ (1) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" --------------|")
 
 		if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 			print_string( "~~~~~~~~~~~~《cross compile in Server PC ubuntu》~~~~~~~~~~~~")
-
 			SET(BOOST_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-boost_1_66_0)
-			SET(BOOST_INCLUDE_DIRECTORY $BOOST_DIRECTORY/include)
-			SET(BOOST_LIB_DIRECTORY $BOOST_DIRECTORY/lib)
-			
-			include_directories( 
-				/usr/include/
-				#/usr/include/boost/
-				#$ENV{HOME}/boost_1_66_0/
-				$BOOST_INCLUDE
+			SET(BOOST_INCLUDE_DIRECTORY ${BOOST_DIRECTORY}/include)
+			SET(BOOST_LIB_DIRECTORY ${BOOST_DIRECTORY}/lib)
+			print_variate(BOOST_DIRECTORY)
+			print_variate(BOOST_INCLUDE_DIRECTORY)
+			print_variate(BOOST_LIB_DIRECTORY)
+			include_directories(
+				${BOOST_INCLUDE_DIRECTORY}
 			)
 			
 			link_directories(
 				/usr/arm-linux-gnueabihf/lib
+				/usr/lib/arm-linux-gnueabihf #or#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
 			)
-
-			link_directories(
-			#/usr/arm-linux-gnueabihf/lib
-			#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
-		)
 			
+		##########################################################################
 		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
 			print_string( "************《cross compile in VMware Workstation ubuntu》************")
 
 			SET(BOOST_DIRECTORY /opt/arm-boost-1.54)
 			SET(BOOST_INCLUDE_DIRECTORY $BOOST_DIRECTORY/include)
 			SET(BOOST_LIB_DIRECTORY $BOOST_DIRECTORY/lib)
+		#########################################################################
 		endif ()
 
 		link_directories(
 			$ENV{HOME}/cross_compile_lib/lib
-			#$BOOST_LIB_DIRECTORY
 		)
 
 		SET(ROS_INSTALL_DIRECTORY $ENV{HOME}/cross_compile_lib/arm-ros/indigo) #指定ROS安装路径
 		SET(ROS_LIBRARY_DIRECTORY ${ROS_INSTALL_DIRECTORY}/lib)                #指定ROS库路径
 		SET(ROS_INCLUDE_DIRECTORY ${ROS_INSTALL_DIRECTORY}/include)            #指定ROS头文件路径
 	else ()
+#################################################################################
 		print_string("|============ (2) Current processor is \"${CMAKE_SYSTEM_PROCESSOR}\" ==============|")
 
 		SET(ROS_INSTALL_DIRECTORY /opt/ros/indigo)                             #指定ROS安装路径
@@ -395,7 +392,9 @@ function(print_cmake_info)
 	print_variate(CMAKE_INCLUDE_PATH)
 	print_variate(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS)
 	blank_line()
+	print_variate(LIBRARY_PATH)
 	print_variate(LD_LIBRARY_PATH)
+	print_variate(CPLUS_INCLUDE_PATH)
 	print_variate(BUILD_SHARED_LIBS)
 	print_variate(LIBRARY_OUTPUT_PATH)
 	print_variate(EXECUTABLE_OUTPUT_PATH)
