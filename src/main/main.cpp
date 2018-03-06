@@ -12,6 +12,19 @@ using std::cout;
 using std::endl;
 using std::string;
 
+/******************************************************************************
+ Prototype   : main
+ Description : 测试程序
+ Input       : int argc 
+               char** argv 
+ Output      : None
+ Return Value: int
+ 
+ History        :
+  1.Data        :2018/3/6
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 int main(int argc, char** argv)
 {
 	string name_str("main.exe");

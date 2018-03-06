@@ -256,7 +256,7 @@ macro(config_link_lib_and_include_directories)
 			
 			link_directories(
 				/usr/arm-linux-gnueabihf/lib
-				/usr/lib/arm-linux-gnueabihf #or#$ENV{HOME}/cross_compile_lib/lib/usr/lib/arm-linux-gnueabihf
+				/usr/lib/arm-linux-gnueabihf
 			)
 			
 		##########################################################################
