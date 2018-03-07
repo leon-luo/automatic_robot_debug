@@ -23,6 +23,8 @@
 
 #include "tf/LinearMath/Matrix3x3.h"
 
+#include "key_base.h"
+
 #include "bll_cliff.h"
 #include "bll_bumper.h"
 #include "bll_wheel_drop.h"
@@ -488,7 +490,7 @@ void drv_sensor::home_key_callback(const std_msgs::Int16& msg)
 	const uint8_t short_press_bit = 0;
 	const uint8_t long_press_bit = 1;
 	const KEY_STATUS_ENUM key_press = KEY_PRESSED;
-	const KEY_STATUS_ENUM key_release = KEY_RELEASE;
+	const KEY_STATUS_ENUM key_release = KEY_RELEASED;
 	KEY_STATUS_ENUM short_press_status = key_release;
 	KEY_STATUS_ENUM long_press_status = key_release;
 

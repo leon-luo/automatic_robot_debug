@@ -29,6 +29,9 @@
 /******************************************************************************
  * include header files list
  ******************************************************************************/
+#include <unistd.h>
+#include <pthread.h>
+
 #include "key_base.h"
 
 /******************************************************************************
@@ -64,14 +67,6 @@
  ******************************************************************************/
 class key_unit
 {
-public:
-	key_unit();
-	~key_unit();
-private:
-};
-
-class key_unit
-{
 public://protected:
 
 	key_unit();
@@ -105,6 +100,8 @@ public:
 	virtual void update_single_click(void);
 	virtual void update_double_click(void);
 	virtual void update_long_click(void);
+
+	uint32_t get_press_hold_time(void);
 
 private:
 	KEY_STRU data;

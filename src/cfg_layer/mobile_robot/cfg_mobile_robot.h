@@ -35,6 +35,7 @@
 #include "cfg_base_type.h"
 
 #include "version.h"
+#include "key_data.h"
 #include "angle_base.h"
 #include "cfg_robot_data.h"
 #include "cfg_walk_plan.h"
@@ -85,7 +86,7 @@ using namespace std;
  ******************************************************************************/
 
 //移动机器人状态数据类 
-class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan
+class cfg_mobile_robot : public cfg_robot_data, public version, public cfg_walk_plan, public key_data
 {
 public:
 	static cfg_mobile_robot* get_instance();

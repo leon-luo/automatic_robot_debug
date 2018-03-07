@@ -19,6 +19,7 @@
 /******************************************************************************
  * include header files list
  ******************************************************************************/
+#include "key_unit.h"
 
 /******************************************************************************
  * external variables
@@ -359,7 +360,7 @@ void key_unit::init_hold(LONG_PRESS_STRU value)
     Author       : Leon
     Modification : Created function
 *****************************************************************************/
-void key_unit::init_hold(bool enable_clocker = false, uint32_t valid_time = 100, uint32_t keep_time = 0)
+void key_unit::init_hold(bool enable_clocker, uint32_t valid_time, uint32_t keep_time)
 {
 	set_enable_clocker(enable_clocker);
 	set_valid_time(valid_time);

@@ -248,6 +248,7 @@ include_directories(
 	include/${PROJECT_NAME}/lib/common/angle
 	include/${PROJECT_NAME}/lib/common/algorithm
 	include/${PROJECT_NAME}/lib/common/algorithm/pid
+	include/${PROJECT_NAME}/lib/common/key
 	include/${PROJECT_NAME}/lib/common/version
 )
 
@@ -275,6 +276,8 @@ include_directories(
 	src/common/angle
 	src/common/algorithm/pid
 	src/common/bit
+	src/common/key/key_data
+	src/common/key/key_unit
 	src/common/line
 	src/common/time
 	src/common/version
@@ -316,6 +319,8 @@ set(${PROJECT_NAME}_SRC_LIST
 
 	src/common/algorithm/pid/pid.cpp
 	src/common/angle/angle_base.cpp
+	src/common/key/key_data/key_data.cpp
+	src/common/key/key_unit/key_unit.cpp
 	src/common/line/line_base.cpp
 	src/common/time/time_base.c
 	src/common/version/version.cpp
