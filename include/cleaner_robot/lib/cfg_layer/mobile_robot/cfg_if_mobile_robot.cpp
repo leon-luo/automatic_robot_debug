@@ -1051,3 +1051,29 @@ void cfg_if_get_partition_driving_planning_pose(POSE_STRU &data, int index)
 	p_mobile_robot->get_partition_driving_planning_pose(data, index);
 }
 
+
+void cfg_if_set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->set_key_status(id, value);
+}
+
+bool cfg_if_get_key_single_click(KEY_ID_ENUM id)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->get_single_click(id);
+}
+
+bool cfg_if_get_key_double_click(KEY_ID_ENUM id)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->get_double_click(id);
+}
+
+bool cfg_if_get_key_long_click(KEY_ID_ENUM id)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->get_long_click(id);
+}
+
+

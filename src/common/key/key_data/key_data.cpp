@@ -143,7 +143,7 @@ void key_data::release_instance(void)
 }
 
 /******************************************************************************
- Prototype   : key_data.set_status
+ Prototype   : key_data.set_key_status
  Description : 设置指定按键状态
  Input       : KEY_ID_ENUM id 
                KEY_STATUS_ENUM value 
@@ -155,7 +155,7 @@ void key_data::release_instance(void)
     Author      : Leon
     Modification: Created function.
  ******************************************************************************/
-void key_data::set_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value)
+void key_data::set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value)
 {
 	key_unit* p_key_unit = nullptr;
 	

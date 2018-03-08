@@ -79,7 +79,7 @@ public:
 	static key_data* get_instance(void);
 	static void release_instance(void);
 
-	void set_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value);
+	void set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value);
 	
 	bool get_single_click(KEY_ID_ENUM id);
 	bool get_double_click(KEY_ID_ENUM id);
