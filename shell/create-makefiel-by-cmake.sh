@@ -55,6 +55,7 @@ function copy_application_program()
 	fi
 }
 
+
 #生成Makefile
 function creat_makefile()
 {
@@ -75,23 +76,48 @@ function creat_makefile()
 	CURR_DIR=`pwd`
 	echo "[INFO] Current dir is \"${CURR_DIR}\"."
 
-
 	cmake ${SOURCE_DIR}
 	echo
 	echo "[INFO] The new Makefile is:"
-	ls -lh --time-style=locale ${BUILD_DIR}/Makefile
+	ls -lh --time-style=long-iso ${BUILD_DIR}/Makefile
 	echo
+}
 
-  	if [ "make" == "$1" ]; then
+
+function do_action()
+{
+	cd ${BUILD_DIR}
+	CURR_DIR=`pwd`
+	echo "[INFO] Current dir is \"${CURR_DIR}\"."
+	
+	if [ "rebuilt" == "$1" ] || [ "mf-mk-cp" == "$1" ]; then
+		creat_makefile
 		make
-	elif [ "cp" == "$1" ]; then
 		copy_application_program $1
+	elif [ "mf" == "$1" ] || [ "makefile" == "$1" ]; then
+		creat_makefile
+	elif [ "mk" == "$1" ] || [ "make" == "$1" ]; then
+		make
+	elif [ "mf-mk" == "$1" ]; then
+		creat_makefile
+		make
+	elif [ "mk-cp" == "$1" ]; then
+		make
+		copy_application_program
+	elif [ "cp" == "$1" ]; then
+		copy_application_program
+	elif [ "rm" == "$1" ]; then
+		rm -rf ./*
 	else
 		make $1
 	fi
 
 	echo
 	ls -l --full-time ${BUILD_DIR}
+	echo
+
+	echo "[INFO] create files list:"
+	ls -l --time-style=long-iso ${BUILD_DIR}/Makefile ${BUILD_DIR}/${TEST_APP_NAME} ${BUILD_DIR}/${CLEANER_ROBOT_APP_NAME}
 	echo
 
 	return 1
@@ -107,7 +133,7 @@ echo "SOURCE_DIR = "${SOURCE_DIR}
 echo "BUILD_DIR = \"${BUILD_DIR}\""
 echo "SAVE_APP_DIR = \"${SAVE_APP_DIR}\""
 
-creat_makefile $1
+do_action $1
 
 print_info ${STOP_INFO}
 
