@@ -13,6 +13,8 @@
 script_name=$(basename $0)
 result_log=/var/log/${script_name}".log"
 
+home_path=${HOME}
+
 log_with_time() {
 	local now_time=$(date +%Y/%m/%d-%H:%M:%S)
 	echo "$now_time: $*" >>$result_log
@@ -20,23 +22,24 @@ log_with_time() {
 
 do_start() {
 	source /opt/ros/indigo/setup.bash >>$result_log 2>&1
-	source /home/firefly/.bashrc >>$result_log 2>&1
-	source /home/firefly/catkin_ws/devel/setup.bash
+	source ${home_path}/.bashrc >>$result_log 2>&1
+	source ${home_path}/catkin_ws/devel/setup.bash
 
-	#echo "[ INFO ]script_name=$script_name"
-	#echo "[ INFO ]result_log=$result_log"
+	#echo "[ INFO ]script_name=\"${script_name}\"
+	#echo "[ INFO ]result_log=\"${result_log}\"
+	#echo "[ INFO ]home_path=\"${home_path}\""
 
 	/opt/ros/indigo/bin/roscore >>$result_log 2>&1 &
 	sleep 2
 	echo "[ INFO ] run roscore"
 
 	#roslaunch turtlebot_bringup minimal.launch  >>$result_log 2>&1 &
-	roslaunch /home/firefly/turtlebot/src/turtlebot/turtlebot_bringup/launch/minimal.launch >>$result_log 2>&1 &
+	roslaunch ${home_path}/turtlebot/src/turtlebot/turtlebot_bringup/launch/minimal.launch >>$result_log 2>&1 &
 	sleep 2
-	echo "[ INFO ] roslaunch /home/firefly/turtlebot/src/turtlebot/turtlebot_bringup/launch/minimal.launch"
+	echo "[ INFO ] roslaunch ${home_path}/turtlebot/src/turtlebot/turtlebot_bringup/launch/minimal.launch"
 
-	/home/firefly/shell/start_prj.sh >>$result_log 2>&1 &
-	#/home/firefly/shell/start_prj.sh  &
+	${home_path}/shell/start_prj.sh >>$result_log 2>&1 &
+	#${home_path}/shell/start_prj.sh  &
 }
 
 do_stop() {

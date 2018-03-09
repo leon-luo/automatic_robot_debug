@@ -19,7 +19,7 @@ SELF_STARTING=0
 PRJ_NAME=cleaner_robot
 #PRJ_NAME=main.exe
 
-PRJ_DIRECTORY=/home/firefly/catkin_ws/devel/lib/cleaner_robot
+PRJ_DIRECTORY=${HOME}/catkin_ws/devel/lib/cleaner_robot
 PRJ_PATH=$PRJ_DIRECTORY"/"$PRJ_NAME
 
 if [ ! -f $PRJ_PATH ];then

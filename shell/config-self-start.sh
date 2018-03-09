@@ -24,6 +24,8 @@ if [ -f $CURR_DIR/$FILE_NAME ];then
 	fi
 	sudo ln -s $INIT_DIR/$FILE_NAME $INIT_DIR/$LINK_NAME
 	sudo chmod a+x $INIT_DIR/$LINK_NAME
+else
+	echo "[ERROR]Can't find the \"$CURR_DIR/$FILE_NAME\"."
 fi
 
 tree /etc/rc2.d/
@@ -32,7 +34,7 @@ if [ $? == 0 ];then
 	ls -lh --time-style=full-iso /etc/rc2.d/*$LINK_NAME
 fi
 
-SH_DIR=/home/firefly/shell
+SH_DIR=${HOME}/shell
 if [ ! -d $SH_DIR ];then
 	sudo mkdir $SH_DIR
 fi
