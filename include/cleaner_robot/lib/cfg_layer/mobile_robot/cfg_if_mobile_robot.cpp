@@ -1051,29 +1051,132 @@ void cfg_if_get_partition_driving_planning_pose(POSE_STRU &data, int index)
 	p_mobile_robot->get_partition_driving_planning_pose(data, index);
 }
 
-
+/******************************************************************************
+ Prototype   : cfg_if_set_key_status
+ Description : 设置按键状态
+ Input       : KEY_ID_ENUM id 
+               KEY_STATUS_ENUM value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void cfg_if_set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
 	p_mobile_robot->set_key_status(id, value);
 }
 
+/******************************************************************************
+ Prototype   : cfg_if_get_key_single_click
+ Description : 获取按键短按动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 bool cfg_if_get_key_single_click(KEY_ID_ENUM id)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
 	p_mobile_robot->get_single_click(id);
 }
 
+/******************************************************************************
+ Prototype   : cfg_if_clear_key_single_click
+ Description : 清除按键短按动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+bool cfg_if_clear_key_single_click(KEY_ID_ENUM id)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->clear_single_click(id);
+}
+
+/******************************************************************************
+ Prototype   : cfg_if_get_key_double_click
+ Description : 获取按键两次连按动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 bool cfg_if_get_key_double_click(KEY_ID_ENUM id)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
 	p_mobile_robot->get_double_click(id);
 }
 
+/******************************************************************************
+ Prototype   : cfg_if_clear_key_double_click
+ Description : 清除按键两次连按动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+bool cfg_if_clear_key_double_click(KEY_ID_ENUM id)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->clear_double_click(id);
+}
+
+/******************************************************************************
+ Prototype   : cfg_if_get_key_long_click
+ Description : 获取按键长按动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 bool cfg_if_get_key_long_click(KEY_ID_ENUM id)
 {
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
 	p_mobile_robot->get_long_click(id);
 }
+
+/******************************************************************************
+ Prototype   : cfg_if_clear_key_long_click
+ Description : 清除按键长按动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+bool cfg_if_clear_key_long_click(KEY_ID_ENUM id)
+{
+	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
+	p_mobile_robot->clear_long_click(id);
+}
+
 
 

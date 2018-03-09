@@ -138,9 +138,16 @@ void cfg_if_set_partition_driving_planning_pose(const POSE_STRU &data, int index
 void cfg_if_get_partition_driving_planning_pose(POSE_STRU &data, int index);
 
 void cfg_if_set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value);
+
 bool cfg_if_get_key_single_click(KEY_ID_ENUM id);
+bool cfg_if_clear_key_single_click(KEY_ID_ENUM id);
+
 bool cfg_if_get_key_double_click(KEY_ID_ENUM id);
+bool cfg_if_clear_key_double_click(KEY_ID_ENUM id);
+
 bool cfg_if_get_key_long_click(KEY_ID_ENUM id);
+bool cfg_if_clear_key_long_click(KEY_ID_ENUM id);
+
 
 /*****************************************************************************/
 #ifdef __cplusplus

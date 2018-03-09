@@ -503,37 +503,38 @@ void drv_sensor::home_key_callback(const std_msgs::Int16& msg)
 	{
 		long_press_status = key_press;
 	}
-	cout<<"home_key:"<<value<<endl;
-	cout<<"long_press_status:"<<long_press_status<<endl;
-	cout<<"short_press_status:"<<short_press_status<<endl;
-
-	if (short_press_status == key_press)
-	{
-		if(false == flag)
-		{
-			start_time = get_millisecond_time();
-			flag = true;
-		}
-	}
-	else if (short_press_status == key_release)
-	{
-		if(true == flag)
-		{
-			end_time = get_millisecond_time();
-
-			keep_time = end_time - start_time;
-			if (keep_time > 100)
-			{
-				cout<<"keep_time:"<<keep_time<<endl;
-			}
-			else if (keep_time > 5000)
-			{
-				cout<<"keep_time:"<<keep_time<<endl;
-			}
-			flag = false;
-			start_time = 0;
-		}
-	}
+	cfg_if_set_key_status(HOME_KEY_ID, short_press_status);
+//	cout<<"home_key:"<<value<<endl;
+//	cout<<"long_press_status:"<<long_press_status<<endl;
+//	cout<<"short_press_status:"<<short_press_status<<endl<<endl;
+//
+//	if (short_press_status == key_press)
+//	{
+//		if(false == flag)
+//		{
+//			start_time = get_millisecond_time();
+//			flag = true;
+//		}
+//	}
+//	else if (short_press_status == key_release)
+//	{
+//		if(true == flag)
+//		{
+//			end_time = get_millisecond_time();
+//
+//			keep_time = end_time - start_time;
+//			if (keep_time > 100)
+//			{
+//				cout<<"keep_time:"<<keep_time<<endl;
+//			}
+//			else if (keep_time > 5000)
+//			{
+//				cout<<"keep_time:"<<keep_time<<endl;
+//			}
+//			flag = false;
+//			start_time = 0;
+//		}
+//	}
 }
 
 /*****************************************************************************

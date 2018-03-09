@@ -82,8 +82,13 @@ public:
 	void set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value);
 	
 	bool get_single_click(KEY_ID_ENUM id);
+	bool clear_single_click(KEY_ID_ENUM id);
+	
 	bool get_double_click(KEY_ID_ENUM id);
+	bool clear_double_click(KEY_ID_ENUM id);
+	
 	bool get_long_click(KEY_ID_ENUM id);
+	bool clear_long_click(KEY_ID_ENUM id);
 
 private:
 	key_unit* get_key_unit_instance(KEY_ID_ENUM id);

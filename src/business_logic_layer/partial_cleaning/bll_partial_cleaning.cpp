@@ -1137,10 +1137,34 @@ void bll_partial_cleaning::partition_driving(void)
 void bll_partial_cleaning::local_cover_movement(void)
 {
 	bool ret = false;
-	
+	KEY_ID_ENUM home_key_id = HOME_KEY_ID;
 	//ret = test_start_do_partial_cleaning();
+
+	bool flag = false;
+	flag = cfg_if_get_key_single_click(home_key_id);
+	if ( true == flag)
+	{
+		debug_print_info("single_click");
+		cfg_if_clear_key_single_click(home_key_id);
+	}
 	
-	ret = true; //ret = get_partial_cleaning_enable();
+	flag = false;
+	flag = cfg_if_get_key_double_click(home_key_id);
+	if ( true == flag)
+	{
+		debug_print_info("double_click");
+		cfg_if_clear_key_double_click(home_key_id);
+	}
+	
+	flag = false;
+	flag = cfg_if_get_key_long_click(home_key_id);
+	if ( true == flag)
+	{
+		debug_print_info("long_click");
+		cfg_if_clear_key_long_click(home_key_id);
+	}
+	
+	//ret = get_partial_cleaning_enable();
 	if (true == ret)
 	{
 		partition_driving();

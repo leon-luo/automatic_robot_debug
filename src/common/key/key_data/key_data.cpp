@@ -163,6 +163,9 @@ void key_data::set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value)
 	if ( nullptr != p_key_unit)
 	{
 		p_key_unit->set_status(value);
+		p_key_unit->update_single_click();
+		p_key_unit->update_double_click();
+		p_key_unit->update_long_click();
 	}
 }
 
@@ -187,6 +190,33 @@ bool key_data::get_single_click(KEY_ID_ENUM id)
 	if ( nullptr != p_key_unit)
 	{
 		ret = p_key_unit->get_single_click();
+	}
+	
+	return ret;
+}
+
+/******************************************************************************
+ Prototype   : key_data.clear_single_click
+ Description : 清除单击按键动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+bool key_data::clear_single_click(KEY_ID_ENUM id)
+{
+	bool ret = false;
+	key_unit* p_key_unit = nullptr;
+	
+	p_key_unit = get_key_unit_instance(id);
+	if ( nullptr != p_key_unit)
+	{
+		p_key_unit->set_single_click(false);
+		ret = true;
 	}
 	
 	return ret;
@@ -219,6 +249,33 @@ bool key_data::get_double_click(KEY_ID_ENUM id)
 }
 
 /******************************************************************************
+ Prototype   : key_data.clear_double_click
+ Description : 清除双击按键动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+bool key_data::clear_double_click(KEY_ID_ENUM id)
+{
+	bool ret = false;
+	key_unit* p_key_unit = nullptr;
+	
+	p_key_unit = get_key_unit_instance(id);
+	if ( nullptr != p_key_unit)
+	{
+		p_key_unit->set_double_click(false);
+		ret = true;
+	}
+	
+	return ret;
+}
+
+/******************************************************************************
  Prototype   : key_data.get_long_click
  Description : 获取指定按键长按动作状态
  Input       : KEY_ID_ENUM id 
@@ -243,6 +300,34 @@ bool key_data::get_long_click(KEY_ID_ENUM id)
 	
 	return ret;
 }
+
+/******************************************************************************
+ Prototype   : key_data.clear_long_click
+ Description : 清除长按按键动作
+ Input       : KEY_ID_ENUM id 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+bool key_data::clear_long_click(KEY_ID_ENUM id)
+{
+	bool ret = false;
+	key_unit* p_key_unit = nullptr;
+	
+	p_key_unit = get_key_unit_instance(id);
+	if ( nullptr != p_key_unit)
+	{
+		p_key_unit->set_long_click(false);
+		ret = true;
+	}
+	
+	return ret;
+}
+
 
 /******************************************************************************
  Prototype   : key_data.get_key_unit_instance

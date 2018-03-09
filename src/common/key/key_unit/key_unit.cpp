@@ -21,6 +21,13 @@
  ******************************************************************************/
 #include "key_unit.h"
 
+#include <iostream>
+
+#include "time_base.h"
+#include "debug_function.h"
+
+using namespace std;
+
 /******************************************************************************
  * external variables
  ******************************************************************************/
@@ -381,7 +388,15 @@ void key_unit::init_hold(bool enable_clocker, uint32_t valid_time, uint32_t keep
 *****************************************************************************/
 void key_unit::update_single_click(void)
 {
-	
+	uint32_t value = 0;
+
+	value = get_press_hold_time();
+	if ((100 <= value) && (value <= 5000))
+	{
+		set_single_click(true);
+		debug_print_info("key hold presse time is %d", value);
+		cout<<"value:"<<value<<endl;
+	}
 }
 
 /*****************************************************************************
@@ -398,7 +413,7 @@ void key_unit::update_single_click(void)
 *****************************************************************************/
 void key_unit::update_double_click(void)
 {
-
+	
 }
 
 /*****************************************************************************
@@ -416,33 +431,63 @@ void key_unit::update_double_click(void)
 void key_unit::update_long_click(void)
 {
 	bool ret = false;
-	uint32_t keep_time = 0;
-	uint32_t valid_time = 0;
-	ret = get_enable_clocker();
-	if (true == ret)
-	{
-		keep_time = get_keep_time();
-		valid_time = get_valid_time();
-		if (keep_time >= valid_time)
-		{
-			set_long_click(true);
+	uint32_t value = 0;
 
-			ret = get_single_click();
-			if (true == ret)
-			{
-				set_single_click(false);
-			}
+	value = get_press_hold_time();
+	if (5000 <= value)
+	{
+		set_long_click(true);
+		debug_print_warnning("key hold presse time is %d", value);
+		cout<<"value:"<<value<<endl;
+		ret = get_single_click();
+		if (true == ret)
+		{
+			set_single_click(false);
+			debug_print_warnning("cancel single click!");
 		}
 	}
 }
 
 uint32_t key_unit::get_press_hold_time(void)
 {
-	uint32_t keep_time = 0;
-	uint32_t valid_time = 0;
+	static bool flag = false;
+	static uint64_t start_time = 0;
+	uint64_t end_time = 0;
+	uint64_t keep_time = 0;
+	const KEY_STATUS_ENUM pressed = KEY_PRESSED;
+	const KEY_STATUS_ENUM released = KEY_RELEASED;
+	KEY_STATUS_ENUM curr_status = KEY_STATUS_INVALID;
 
-	keep_time = get_keep_time();
-	valid_time = get_valid_time();
+	curr_status = get_status();
+	if (pressed == curr_status)
+	{
+		if(false == flag)
+		{
+			//print_current_time();
+			start_time = get_millisecond_time();
+			cout<<"start_time:"<<start_time<<endl;
+			flag = true;
+		}
+	}
+	else if (released == curr_status)
+	{
+		if(true == flag)
+		{
+			//print_current_time();
+			end_time = get_millisecond_time();
+			cout<<"end_time:"<<end_time<<endl;
+			keep_time = end_time - start_time;
+			//cout<<endl<<"keep_time:"<<keep_time<<endl;
+			flag = false;
+			start_time = 0;
+		}
+	}
+	else
+	{
+		debug_print_error("curr_status = %d!", curr_status);
+	}
+
+	return keep_time;
 }
 
 

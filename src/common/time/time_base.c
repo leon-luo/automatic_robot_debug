@@ -186,6 +186,7 @@ uint64_t get_microsecond_time(void)
 	clock_gettime(clk_id, &temp);
 
 	ret = MILLION*(temp.tv_sec)+(temp.tv_nsec)/KILO; //microseconds
+	return ret;
 }
 
 /*****************************************************************************
@@ -203,12 +204,19 @@ uint64_t get_microsecond_time(void)
 uint64_t get_millisecond_time(void)
 {
 	uint32_t ret = 0;
+	uint32_t temp1 = 0;
+	uint32_t temp2 = 0;
 	struct timespec temp;
 	clockid_t clk_id = CLOCK_MONOTONIC;
 
 	clock_gettime(clk_id, &temp);
+//	debug_print_info("[clock_gettime]:{tv_sec= %ld  tv_nsec=%ld}", temp.tv_sec, temp.tv_nsec);
+	temp1 = KILO*(temp.tv_sec); //seconds turn into milliseconds
+	temp2 = (temp.tv_nsec)/MILLION;//nanoseconds turn into milliseconds
+//	debug_print_info("[clock_gettime]:{temp1= %ld  temp2=%ld}", temp1, temp2);
+	ret = temp1 + temp2 ; //milliseconds
 
-	ret = KILO*(temp.tv_sec)+(temp.tv_nsec)/MILLION; //millisecond
+	return ret;
 }
 
 /*****************************************************************************
