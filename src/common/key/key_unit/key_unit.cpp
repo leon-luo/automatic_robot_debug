@@ -448,6 +448,18 @@ void key_unit::update_long_click(void)
 	}
 }
 
+/******************************************************************************
+ Prototype   : key_unit.get_press_hold_time
+ Description : 获取按键按下保持的时间
+ Input       : void 
+ Output      : None
+ Return Value: uint32_t
+ 
+ History        :
+  1.Data        :2018/3/9
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint32_t key_unit::get_press_hold_time(void)
 {
 	static bool flag = false;

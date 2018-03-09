@@ -483,58 +483,23 @@ void drv_sensor::velocity_callback ( const geometry_msgs::Twist& msg )
 void drv_sensor::home_key_callback(const std_msgs::Int16& msg)
 {
 	int16_t value = ( int16_t ) msg.data;
-	static uint64_t start_time = 0;
-	uint64_t end_time = 0;
-	uint64_t keep_time = 0;
-	static bool flag = false;
 	const uint8_t short_press_bit = 0;
 	const uint8_t long_press_bit = 1;
 	const KEY_STATUS_ENUM key_press = KEY_PRESSED;
 	const KEY_STATUS_ENUM key_release = KEY_RELEASED;
-	KEY_STATUS_ENUM short_press_status = key_release;
-	KEY_STATUS_ENUM long_press_status = key_release;
+	KEY_STATUS_ENUM status = KEY_STATUS_INVALID;
 
+	cout<<"value ="<<value<<endl;
 	if (1 == GET_BIT(value, short_press_bit))
 	{
-		short_press_status = key_press;
+		status = key_press;
+	}
+	else if (0 == GET_BIT(value, short_press_bit))
+	{
+		status = key_release;
 	}
 	
-	if (1 == GET_BIT(value, long_press_bit))
-	{
-		long_press_status = key_press;
-	}
-	cfg_if_set_key_status(HOME_KEY_ID, short_press_status);
-//	cout<<"home_key:"<<value<<endl;
-//	cout<<"long_press_status:"<<long_press_status<<endl;
-//	cout<<"short_press_status:"<<short_press_status<<endl<<endl;
-//
-//	if (short_press_status == key_press)
-//	{
-//		if(false == flag)
-//		{
-//			start_time = get_millisecond_time();
-//			flag = true;
-//		}
-//	}
-//	else if (short_press_status == key_release)
-//	{
-//		if(true == flag)
-//		{
-//			end_time = get_millisecond_time();
-//
-//			keep_time = end_time - start_time;
-//			if (keep_time > 100)
-//			{
-//				cout<<"keep_time:"<<keep_time<<endl;
-//			}
-//			else if (keep_time > 5000)
-//			{
-//				cout<<"keep_time:"<<keep_time<<endl;
-//			}
-//			flag = false;
-//			start_time = 0;
-//		}
-//	}
+	cfg_if_set_key_status(HOME_KEY_ID, status);
 }
 
 /*****************************************************************************
