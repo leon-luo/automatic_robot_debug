@@ -102,6 +102,7 @@ public:
 	virtual void update_long_click(void);
 
 	uint32_t get_press_hold_time(void);
+	void analyze_key_click_signal(void);
 
 private:
 	KEY_STRU data;

@@ -388,15 +388,14 @@ void key_unit::init_hold(bool enable_clocker, uint32_t valid_time, uint32_t keep
 *****************************************************************************/
 void key_unit::update_single_click(void)
 {
-	uint32_t value = 0;
-
-	value = get_press_hold_time();
-	if ((100 <= value) && (value <= 5000))
-	{
-		set_single_click(true);
-		debug_print_info("key hold presse time is %d", value);
-		cout<<"value:"<<value<<endl;
-	}
+//	uint32_t value = 0;
+//
+//	value = get_press_hold_time();
+//	if ((100 <= value) && (value <= 1000))
+//	{
+//		set_single_click(true);
+//		debug_print_info("key hold presse time is %d", value);
+//	}
 }
 
 /*****************************************************************************
@@ -430,22 +429,22 @@ void key_unit::update_double_click(void)
 *****************************************************************************/
 void key_unit::update_long_click(void)
 {
-	bool ret = false;
-	uint32_t value = 0;
-
-	value = get_press_hold_time();
-	if (5000 <= value)
-	{
-		set_long_click(true);
-		debug_print_warnning("key hold presse time is %d", value);
-		cout<<"value:"<<value<<endl;
-		ret = get_single_click();
-		if (true == ret)
-		{
-			set_single_click(false);
-			debug_print_warnning("cancel single click!");
-		}
-	}
+//	bool ret = false;
+//	uint32_t value = 0;
+//
+//	value = get_press_hold_time();
+//	if (1000 <= value)
+//	{
+//		set_long_click(true);
+//		debug_print_warnning("key hold presse time is %d", value);
+//		cout<<"value:"<<value<<endl;
+//		ret = get_single_click();
+//		if (true == ret)
+//		{
+//			set_single_click(false);
+//			debug_print_warnning("cancel single click!");
+//		}
+//	}
 }
 
 /******************************************************************************
@@ -489,7 +488,6 @@ uint32_t key_unit::get_press_hold_time(void)
 			end_time = get_millisecond_time();
 			cout<<"end_time:"<<end_time<<endl;
 			keep_time = end_time - start_time;
-			//cout<<endl<<"keep_time:"<<keep_time<<endl;
 			flag = false;
 			start_time = 0;
 		}
@@ -501,6 +499,36 @@ uint32_t key_unit::get_press_hold_time(void)
 
 	return keep_time;
 }
+
+/******************************************************************************
+ Prototype   : key_unit.analyze_key_click_signal
+ Description : 分析按键动作
+ Input       : void 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/10
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+void key_unit::analyze_key_click_signal(void)
+{
+	uint32_t value = 0;
+
+	value = get_press_hold_time();
+	if ((100 <= value) && (value <= 1000))
+	{
+		set_single_click(true);
+		debug_print_info("key hold presse time is %d", value);
+	}
+	else if ((1000 <= value) && (value <= 5000))
+	{
+		set_long_click(true);
+		debug_print_info("key hold presse time is %d", value);
+	}
+}
+
 
 
 /******************************************************************************

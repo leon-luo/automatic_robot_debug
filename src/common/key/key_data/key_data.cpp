@@ -163,9 +163,7 @@ void key_data::set_key_status(KEY_ID_ENUM id, KEY_STATUS_ENUM value)
 	if ( nullptr != p_key_unit)
 	{
 		p_key_unit->set_status(value);
-		p_key_unit->update_single_click();
-		p_key_unit->update_double_click();
-		p_key_unit->update_long_click();
+		p_key_unit->analyze_key_click_signal();
 	}
 }
 

@@ -489,7 +489,7 @@ void drv_sensor::home_key_callback(const std_msgs::Int16& msg)
 	const KEY_STATUS_ENUM key_release = KEY_RELEASED;
 	KEY_STATUS_ENUM status = KEY_STATUS_INVALID;
 
-	cout<<"value ="<<value<<endl;
+	//cout<<"value ="<<value<<endl;
 	if (1 == GET_BIT(value, short_press_bit))
 	{
 		status = key_press;
