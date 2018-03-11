@@ -1144,7 +1144,7 @@ void bll_partial_cleaning::local_cover_movement(void)
 	flag = cfg_if_get_key_single_click(home_key_id);
 	if ( true == flag)
 	{
-		debug_print_info("single_click");
+		debug_print_info("--------single_click");
 		cfg_if_clear_key_single_click(home_key_id);
 	}
 	
@@ -1152,7 +1152,7 @@ void bll_partial_cleaning::local_cover_movement(void)
 	flag = cfg_if_get_key_double_click(home_key_id);
 	if ( true == flag)
 	{
-		debug_print_info("double_click");
+		debug_print_warnning("==========double_click");
 		cfg_if_clear_key_double_click(home_key_id);
 	}
 	
@@ -1160,7 +1160,7 @@ void bll_partial_cleaning::local_cover_movement(void)
 	flag = cfg_if_get_key_long_click(home_key_id);
 	if ( true == flag)
 	{
-		debug_print_info("long_click");
+		debug_print_error("############long_click");
 		cfg_if_clear_key_long_click(home_key_id);
 	}
 	

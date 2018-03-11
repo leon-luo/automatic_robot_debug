@@ -82,8 +82,10 @@ typedef struct KEY
 	bool long_click;                   //单击长按标志
 	LONG_PRESS_STRU hold;              //状态保持数据
 	uint8_t click_num;                 //连续短按几次
-	uint32_t press_tick;               //按键按下的时刻
-	uint32_t release_tick;             //按键释放的时刻
+	uint64_t press_tick;               //按键按下的时刻
+	uint64_t release_tick;             //按键释放的时刻
+	uint64_t press_long;               //按键按下的保持的时间长度
+	uint64_t release_long;             //按键释放的保持的时间长度
 }KEY_STRU;
 
 /******************************************************************************

@@ -112,7 +112,7 @@ key_unit::~key_unit()
 *****************************************************************************/
 void key_unit::set_status(KEY_STATUS_ENUM value)
 {
-	data.status = value;
+	data_.status = value;
 }
 
 /*****************************************************************************
@@ -129,7 +129,7 @@ void key_unit::set_status(KEY_STATUS_ENUM value)
 *****************************************************************************/
 KEY_STATUS_ENUM key_unit::get_status(void)
 {
-	return data.status;
+	return data_.status;
 }
 
 /*****************************************************************************
@@ -146,7 +146,7 @@ KEY_STATUS_ENUM key_unit::get_status(void)
 *****************************************************************************/
 void key_unit::set_single_click(bool value)
 {
-	data.single_click = value;
+	data_.single_click = value;
 }
 
 /*****************************************************************************
@@ -163,7 +163,7 @@ void key_unit::set_single_click(bool value)
 *****************************************************************************/
 bool key_unit::get_single_click(void)
 {
-	return data.single_click;
+	return data_.single_click;
 }
 
 /*****************************************************************************
@@ -180,7 +180,7 @@ bool key_unit::get_single_click(void)
 *****************************************************************************/
 void key_unit::set_double_click(bool value)
 {
-	data.double_click = value;
+	data_.double_click = value;
 }
 
 /*****************************************************************************
@@ -197,7 +197,7 @@ void key_unit::set_double_click(bool value)
 *****************************************************************************/
 bool key_unit::get_double_click(void)
 {
-	return data.double_click;
+	return data_.double_click;
 }
 
 /*****************************************************************************
@@ -214,7 +214,7 @@ bool key_unit::get_double_click(void)
 *****************************************************************************/
 void key_unit::set_long_click(bool value)
 {
-	data.long_click = value;
+	data_.long_click = value;
 }
 
 /*****************************************************************************
@@ -231,7 +231,7 @@ void key_unit::set_long_click(bool value)
 *****************************************************************************/
 bool key_unit::get_long_click(void)
 {
-	return data.long_click;
+	return data_.long_click;
 }
 
 /*****************************************************************************
@@ -248,7 +248,7 @@ bool key_unit::get_long_click(void)
 *****************************************************************************/
 void key_unit::set_enable_clocker(bool value)
 {
-	data.hold.enable_clocker = value;
+	data_.hold.enable_clocker = value;
 }
 
 /*****************************************************************************
@@ -265,7 +265,7 @@ void key_unit::set_enable_clocker(bool value)
 *****************************************************************************/
 bool key_unit::get_enable_clocker(void)
 {
-	return data.hold.enable_clocker;
+	return data_.hold.enable_clocker;
 }
 
 /*****************************************************************************
@@ -282,7 +282,7 @@ bool key_unit::get_enable_clocker(void)
 *****************************************************************************/
 void key_unit::set_valid_time(uint32_t value)
 {
-	data.hold.valid_time = value;
+	data_.hold.valid_time = value;
 }
 
 /*****************************************************************************
@@ -299,7 +299,7 @@ void key_unit::set_valid_time(uint32_t value)
 *****************************************************************************/
 uint32_t key_unit::get_valid_time(void)
 {
-	return data.hold.valid_time;
+	return data_.hold.valid_time;
 }
 
 /*****************************************************************************
@@ -316,7 +316,7 @@ uint32_t key_unit::get_valid_time(void)
 *****************************************************************************/
 void key_unit::set_keep_time(uint32_t value)
 {
-	data.hold.keep_time = value;
+	data_.hold.keep_time = value;
 }
 
 /*****************************************************************************
@@ -333,7 +333,57 @@ void key_unit::set_keep_time(uint32_t value)
 *****************************************************************************/
 uint32_t key_unit::get_keep_time(void)
 {
-	return data.hold.keep_time;
+	return data_.hold.keep_time;
+}
+
+void key_unit::set_click_num(uint8_t value)
+{
+	data_.click_num = value;
+}
+
+uint8_t key_unit::get_click_num(void)
+{
+	return data_.click_num;
+}
+
+void key_unit::set_press_tick(uint64_t value)
+{
+	data_.press_tick = value;
+}
+
+uint64_t key_unit::get_press_tick(void)
+{
+	return data_.press_tick;
+}
+
+void key_unit::set_release_tick(uint64_t value)
+{
+	data_.release_tick = value;
+}
+
+uint64_t key_unit::get_release_tick(void)
+{
+	return data_.release_tick;
+}
+
+void key_unit::set_press_long(uint64_t value)
+{
+	data_.press_long = value;
+}
+
+uint64_t key_unit::get_press_long(void)
+{
+	return data_.press_long;
+}
+
+void key_unit::set_release_long(uint64_t value)
+{
+	data_.release_long = value;
+}
+
+uint64_t key_unit::get_release_long(void)
+{
+	return data_.release_long;
 }
 
 /*****************************************************************************
@@ -350,7 +400,7 @@ uint32_t key_unit::get_keep_time(void)
 *****************************************************************************/
 void key_unit::init_hold(LONG_PRESS_STRU value)
 {
-	data.hold = value;
+	data_.hold = value;
 }
 
 /*****************************************************************************
@@ -447,24 +497,87 @@ void key_unit::update_long_click(void)
 //	}
 }
 
+
+void key_unit::save_press_tick(void)
+{
+	uint64_t curr_time = 0;
+	
+	curr_time = get_millisecond_time();
+	set_press_tick(curr_time);
+	cout<<"save_press_tick = "<<curr_time<<endl;
+}
+
+void key_unit::save_release_tick(void)
+{
+	uint64_t curr_time = 0;
+	
+	curr_time = get_millisecond_time();
+	set_release_tick(curr_time);
+	cout<<"save_release_tick = "<<curr_time<<endl;
+}
+
+
+uint64_t key_unit::save_press_long(void)
+{
+	uint64_t ret = 0;
+	uint64_t press_tick = 0;
+	uint64_t release_tick = 0;
+	
+	press_tick = get_press_tick();
+	release_tick = get_release_tick();
+	if (release_tick >= press_tick)
+	{
+		ret = release_tick - press_tick;
+		set_press_long(ret);
+		debug_print_info("ret(%lld) = release_tick(%lld) - press_tick(%lld);", ret, release_tick, press_tick);
+	}
+	
+	return ret;
+}
+
+
+uint64_t key_unit::save_release_long(void)
+{
+	uint64_t ret = 0;
+	uint64_t press_tick = 0;
+	uint64_t release_tick = 0;
+	uint8_t click_num = 0;
+	
+	press_tick = get_press_tick();
+	release_tick = get_release_tick();
+	if (press_tick >= release_tick)
+	{
+		ret = press_tick - release_tick;
+		set_release_long(ret);
+		click_num = get_click_num();
+		if (ret < 300)
+		{
+			click_num++;
+			set_click_num(click_num);
+		}
+		
+		debug_print_warnning("ret(%lld) = press_tick(%lld) - release_tick(%lld);", ret, press_tick, release_tick);
+	}
+	
+	return ret;
+}
+
 /******************************************************************************
  Prototype   : key_unit.get_press_hold_time
  Description : 获取按键按下保持的时间
  Input       : void 
  Output      : None
- Return Value: uint32_t
+ Return Value: bool
  
  History        :
   1.Data        :2018/3/9
     Author      : Leon
     Modification: Created function.
  ******************************************************************************/
-uint32_t key_unit::get_press_hold_time(void)
+bool key_unit::save_key_status_time(void)
 {
+	bool ret = false;
 	static bool flag = false;
-	static uint64_t start_time = 0;
-	uint64_t end_time = 0;
-	uint64_t keep_time = 0;
 	const KEY_STATUS_ENUM pressed = KEY_PRESSED;
 	const KEY_STATUS_ENUM released = KEY_RELEASED;
 	KEY_STATUS_ENUM curr_status = KEY_STATUS_INVALID;
@@ -474,30 +587,29 @@ uint32_t key_unit::get_press_hold_time(void)
 	{
 		if(false == flag)
 		{
-			//print_current_time();
-			start_time = get_millisecond_time();
-			cout<<"start_time:"<<start_time<<endl;
+			save_press_tick();
+			save_release_long();
 			flag = true;
+			ret = true;
 		}
 	}
 	else if (released == curr_status)
 	{
 		if(true == flag)
 		{
-			//print_current_time();
-			end_time = get_millisecond_time();
-			cout<<"end_time:"<<end_time<<endl;
-			keep_time = end_time - start_time;
+			save_release_tick();
+			save_press_long();
 			flag = false;
-			start_time = 0;
+			ret = true;
 		}
 	}
 	else
 	{
 		debug_print_error("curr_status = %d!", curr_status);
+		ret = false;
 	}
 
-	return keep_time;
+	return ret;
 }
 
 /******************************************************************************
@@ -514,18 +626,40 @@ uint32_t key_unit::get_press_hold_time(void)
  ******************************************************************************/
 void key_unit::analyze_key_click_signal(void)
 {
+	bool ret = false;
+	uint8_t click_num = 0;
 	uint32_t value = 0;
 
-	value = get_press_hold_time();
-	if ((100 <= value) && (value <= 1000))
+	ret = save_key_status_time();
+	if (true == ret)
 	{
-		set_single_click(true);
-		debug_print_info("key hold presse time is %d", value);
-	}
-	else if ((1000 <= value) && (value <= 5000))
-	{
-		set_long_click(true);
-		debug_print_info("key hold presse time is %d", value);
+		click_num = get_click_num();
+		if ( 0 < click_num)
+		{
+			if ( 1 == click_num)
+			{
+				set_double_click(true);
+			}
+			set_click_num(0);
+		}
+		else
+		{
+			value = get_press_long();
+			if ((100 <= value) && (value <= 1000))
+			{
+				ret = get_double_click();
+				if (true != ret )
+				{
+					set_single_click(true);
+				}
+	//			debug_print_info("key hold presse time is %d", value);
+			}
+			else if ((1000 <= value) && (value <= 5000))
+			{
+				set_long_click(true);
+	//			debug_print_info("key hold presse time is %d", value);
+			}
+		}
 	}
 }
 

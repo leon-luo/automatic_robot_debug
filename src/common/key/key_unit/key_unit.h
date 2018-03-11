@@ -75,7 +75,7 @@ public://protected:
 public:
 	void set_status(KEY_STATUS_ENUM value);
 	KEY_STATUS_ENUM get_status(void);
-	
+
 	void set_single_click(bool value);
 	bool get_single_click(void);
 
@@ -84,7 +84,7 @@ public:
 
 	void set_long_click(bool value);
 	bool get_long_click(void);
-	
+
 	bool get_enable_clocker(void);
 	void set_enable_clocker(bool value);
 
@@ -94,6 +94,21 @@ public:
 	void set_keep_time(uint32_t value);
 	uint32_t get_keep_time(void);
 
+	void set_click_num(uint8_t value);
+	uint8_t get_click_num(void);
+	
+	void set_press_tick(uint64_t value);
+	uint64_t get_press_tick(void);
+	
+	void set_release_tick(uint64_t value);
+	uint64_t get_release_tick(void);
+	
+	void set_press_long(uint64_t value);
+	uint64_t get_press_long(void);
+	
+	void set_release_long(uint64_t value);
+	uint64_t get_release_long(void);
+
 	void init_hold(LONG_PRESS_STRU value);
 	void init_hold(bool enable_clocker = false, uint32_t valid_time = 100, uint32_t keep_time = 0);
 
@@ -101,11 +116,18 @@ public:
 	virtual void update_double_click(void);
 	virtual void update_long_click(void);
 
-	uint32_t get_press_hold_time(void);
+	void save_press_tick(void);
+	void save_release_tick(void);
+
+	uint64_t save_press_long(void);
+	uint64_t save_release_long(void);
+
+	bool save_key_status_time(void);
 	void analyze_key_click_signal(void);
 
 private:
-	KEY_STRU data;
+	KEY_STRU data_;
+	
 	key_unit(const key_unit&){};
 	key_unit& operator=(const key_unit&){};
 };
