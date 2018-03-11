@@ -79,6 +79,8 @@ key_unit::key_unit()
 	value.keep_time = 0;
 	value.valid_time = 0;
 	init_hold(value);
+
+	set_dblclick_takt_time(300);
 }
 
 /*****************************************************************************
@@ -336,51 +338,205 @@ uint32_t key_unit::get_keep_time(void)
 	return data_.hold.keep_time;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.set_click_num
+ Description : 连续短按的次数
+ Input       : uint8_t value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void key_unit::set_click_num(uint8_t value)
 {
 	data_.click_num = value;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.get_click_num
+ Description : 获取连续短按的次数
+ Input       : void 
+ Output      : None
+ Return Value: uint8_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint8_t key_unit::get_click_num(void)
 {
 	return data_.click_num;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.set_dblclick_takt_time
+ Description : 设置连续两次短按的时间间隔
+ Input       : uint32_t value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+void key_unit::set_dblclick_takt_time(uint32_t value)
+{
+	data_.dblclick_takt_time = value;
+}
+
+/******************************************************************************
+ Prototype   : key_unit.get_dblclick_takt_time
+ Description : 获取连续两次短按的时间间隔
+ Input       : void 
+ Output      : None
+ Return Value: uint32_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+uint32_t key_unit::get_dblclick_takt_time(void)
+{
+	return data_.dblclick_takt_time;
+}
+
+/******************************************************************************
+ Prototype   : key_unit.set_press_tick
+ Description : 设置按下的时刻
+ Input       : uint64_t value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void key_unit::set_press_tick(uint64_t value)
 {
 	data_.press_tick = value;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.get_press_tick
+ Description : 获取按下的时刻
+ Input       : void 
+ Output      : None
+ Return Value: uint64_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint64_t key_unit::get_press_tick(void)
 {
 	return data_.press_tick;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.set_release_tick
+ Description : 设置释放的时刻
+ Input       : uint64_t value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void key_unit::set_release_tick(uint64_t value)
 {
 	data_.release_tick = value;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.get_release_tick
+ Description : 获取释放的时刻
+ Input       : void 
+ Output      : None
+ Return Value: uint64_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint64_t key_unit::get_release_tick(void)
 {
 	return data_.release_tick;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.set_press_long
+ Description : 设置按键按下并保持的时长
+ Input       : uint64_t value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void key_unit::set_press_long(uint64_t value)
 {
 	data_.press_long = value;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.get_press_long
+ Description : 获取按键按下并保持的时长
+ Input       : void 
+ Output      : None
+ Return Value: uint64_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint64_t key_unit::get_press_long(void)
 {
 	return data_.press_long;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.set_release_long
+ Description : 设置按键释放并保持的时长
+ Input       : uint64_t value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void key_unit::set_release_long(uint64_t value)
 {
 	data_.release_long = value;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.get_release_long
+ Description : 获取按键释放并保持的时长
+ Input       : void 
+ Output      : None
+ Return Value: uint64_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint64_t key_unit::get_release_long(void)
 {
 	return data_.release_long;
@@ -438,14 +594,7 @@ void key_unit::init_hold(bool enable_clocker, uint32_t valid_time, uint32_t keep
 *****************************************************************************/
 void key_unit::update_single_click(void)
 {
-//	uint32_t value = 0;
-//
-//	value = get_press_hold_time();
-//	if ((100 <= value) && (value <= 1000))
-//	{
-//		set_single_click(true);
-//		debug_print_info("key hold presse time is %d", value);
-//	}
+
 }
 
 /*****************************************************************************
@@ -479,25 +628,21 @@ void key_unit::update_double_click(void)
 *****************************************************************************/
 void key_unit::update_long_click(void)
 {
-//	bool ret = false;
-//	uint32_t value = 0;
-//
-//	value = get_press_hold_time();
-//	if (1000 <= value)
-//	{
-//		set_long_click(true);
-//		debug_print_warnning("key hold presse time is %d", value);
-//		cout<<"value:"<<value<<endl;
-//		ret = get_single_click();
-//		if (true == ret)
-//		{
-//			set_single_click(false);
-//			debug_print_warnning("cancel single click!");
-//		}
-//	}
+
 }
 
-
+/******************************************************************************
+ Prototype   : key_unit.save_press_tick
+ Description : 保存按下的时刻
+ Input       : void 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void key_unit::save_press_tick(void)
 {
 	uint64_t curr_time = 0;
@@ -507,6 +652,18 @@ void key_unit::save_press_tick(void)
 	cout<<"save_press_tick = "<<curr_time<<endl;
 }
 
+/******************************************************************************
+ Prototype   : key_unit.save_release_tick
+ Description : 保存按键释放的时刻
+ Input       : void 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 void key_unit::save_release_tick(void)
 {
 	uint64_t curr_time = 0;
@@ -516,7 +673,18 @@ void key_unit::save_release_tick(void)
 	cout<<"save_release_tick = "<<curr_time<<endl;
 }
 
-
+/******************************************************************************
+ Prototype   : key_unit.save_press_long
+ Description : 保存按键按下保持的时长
+ Input       : void 
+ Output      : None
+ Return Value: uint64_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint64_t key_unit::save_press_long(void)
 {
 	uint64_t ret = 0;
@@ -529,19 +697,31 @@ uint64_t key_unit::save_press_long(void)
 	{
 		ret = release_tick - press_tick;
 		set_press_long(ret);
-		debug_print_info("ret(%lld) = release_tick(%lld) - press_tick(%lld);", ret, release_tick, press_tick);
+		debug_print_info("ret = release_tick(%lld) - press_tick(%lld) = (%lld);", release_tick, press_tick, ret);
 	}
 	
 	return ret;
 }
 
-
+/******************************************************************************
+ Prototype   : key_unit.save_release_long
+ Description : 保存按键释放保持的时长
+ Input       : void 
+ Output      : None
+ Return Value: uint64_t
+ 
+ History        :
+  1.Data        :2018/3/11
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
 uint64_t key_unit::save_release_long(void)
 {
 	uint64_t ret = 0;
 	uint64_t press_tick = 0;
 	uint64_t release_tick = 0;
 	uint8_t click_num = 0;
+	uint32_t takt_time = 0;
 	
 	press_tick = get_press_tick();
 	release_tick = get_release_tick();
@@ -550,13 +730,14 @@ uint64_t key_unit::save_release_long(void)
 		ret = press_tick - release_tick;
 		set_release_long(ret);
 		click_num = get_click_num();
-		if (ret < 300)
+		takt_time = get_dblclick_takt_time();
+		if (ret < takt_time)
 		{
 			click_num++;
 			set_click_num(click_num);
 		}
 		
-		debug_print_warnning("ret(%lld) = press_tick(%lld) - release_tick(%lld);", ret, press_tick, release_tick);
+		debug_print_warnning("ret = press_tick(%lld) - release_tick(%lld) = (%lld);", press_tick, release_tick, ret);
 	}
 	
 	return ret;
@@ -629,6 +810,9 @@ void key_unit::analyze_key_click_signal(void)
 	bool ret = false;
 	uint8_t click_num = 0;
 	uint32_t value = 0;
+	const uint32_t min_sigle_click = 100;
+	const uint32_t min_long_click = 1000;
+	uint32_t value = 0;
 
 	ret = save_key_status_time();
 	if (true == ret)
@@ -644,26 +828,22 @@ void key_unit::analyze_key_click_signal(void)
 		}
 		else
 		{
-			value = get_press_long();
-			if ((100 <= value) && (value <= 1000))
+			ret = get_double_click();
+			if (true != ret )
 			{
-				ret = get_double_click();
-				if (true != ret )
+				value = get_press_long();
+				if ((min_sigle_click <= value) && (value < min_long_click))
 				{
 					set_single_click(true);
 				}
-	//			debug_print_info("key hold presse time is %d", value);
-			}
-			else if ((1000 <= value) && (value <= 5000))
-			{
-				set_long_click(true);
-	//			debug_print_info("key hold presse time is %d", value);
+				else if (min_long_click <= value)
+				{
+					set_long_click(true);
+				}
 			}
 		}
 	}
 }
-
-
 
 /******************************************************************************
  * internal function prototypes

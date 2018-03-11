@@ -96,6 +96,9 @@ public:
 
 	void set_click_num(uint8_t value);
 	uint8_t get_click_num(void);
+
+	void set_dblclick_takt_time(uint32_t value);
+	uint32_t get_dblclick_takt_time(void);
 	
 	void set_press_tick(uint64_t value);
 	uint64_t get_press_tick(void);
