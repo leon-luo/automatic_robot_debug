@@ -1122,6 +1122,32 @@ void bll_partial_cleaning::partition_driving(void)
 	}
 }
 
+/******************************************************************************
+ Prototype   : bll_partial_cleaning.switch_partial_cleaning
+ Description : 切换局部清扫功能开启或停止
+ Input       : void 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/12
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+void bll_partial_cleaning::switch_partial_cleaning(void)
+{
+	bool ret = false;
+	bool enable = false;
+	
+	ret = get_partial_cleaning_enable();
+	if (false == ret)
+	{
+		enable = true;
+	}
+	set_partial_cleaning_enable(enable);
+}
+
+
 /*****************************************************************************
  函 数 名: bll_partial_cleaning.local_cover_movement
  功能描述  : 区域覆盖行驶
@@ -1137,15 +1163,15 @@ void bll_partial_cleaning::partition_driving(void)
 void bll_partial_cleaning::local_cover_movement(void)
 {
 	bool ret = false;
-	KEY_ID_ENUM home_key_id = HOME_KEY_ID;
-	//ret = test_start_do_partial_cleaning();
-
 	bool flag = false;
+	KEY_ID_ENUM home_key_id = HOME_KEY_ID;
+
 	flag = cfg_if_get_key_single_click(home_key_id);
 	if ( true == flag)
 	{
 		debug_print_info("--------single_click");
 		cfg_if_clear_key_single_click(home_key_id);
+		switch_partial_cleaning();
 	}
 	
 	flag = false;
@@ -1164,10 +1190,16 @@ void bll_partial_cleaning::local_cover_movement(void)
 		cfg_if_clear_key_long_click(home_key_id);
 	}
 	
-	//ret = get_partial_cleaning_enable();
+	ret = false;
+	ret = get_partial_cleaning_enable();
 	if (true == ret)
 	{
 		partition_driving();
+	}
+	else
+	{
+		cfg_if_change_curr_action(STOP);
+		set_partial_cleaning_state(PARTITION_DRIVING_STOP);
 	}
 }
 

@@ -113,6 +113,7 @@ public:
 	void partition_driving_sec_half_area(void);
 
 	void partition_driving(void);
+	void switch_partial_cleaning(void);
 	void local_cover_movement(void);
 
 	void smooth_decelerate_stop(void);
