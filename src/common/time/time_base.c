@@ -179,7 +179,7 @@ uint32_t get_current_time(void)
 *****************************************************************************/
 uint64_t get_microsecond_time(void)
 {
-	uint32_t ret = 0;
+	uint64_t ret = 0;
 	struct timespec temp;
 	clockid_t clk_id = CLOCK_MONOTONIC;
 
@@ -203,9 +203,9 @@ uint64_t get_microsecond_time(void)
 *****************************************************************************/
 uint64_t get_millisecond_time(void)
 {
-	uint32_t ret = 0;
-	uint32_t temp1 = 0;
-	uint32_t temp2 = 0;
+	uint64_t ret = 0;
+	uint64_t temp1 = 0;
+	uint64_t temp2 = 0;
 	struct timespec temp;
 	clockid_t clk_id = CLOCK_MONOTONIC;
 
