@@ -468,6 +468,39 @@ void drv_sensor::velocity_callback ( const geometry_msgs::Twist& msg )
 
 }
 
+/******************************************************************************
+ Prototype   : drv_sensor.set_key_status
+ Description : 设置按键状态
+ Input       : KEY_ID_ENUM id 
+               uint8_t bit 
+               int16_t value 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/13
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+void drv_sensor::set_key_status (KEY_ID_ENUM id, uint8_t bit, int16_t value )
+{
+	const KEY_STATUS_ENUM key_press = KEY_PRESSED;
+	const KEY_STATUS_ENUM key_release = KEY_RELEASED;
+	KEY_STATUS_ENUM status = KEY_STATUS_INVALID;
+
+	//cout<<"value ="<<value<<endl;
+	debug_print_info("id=%d, bit=%d, value=%d", id, bit, value);
+	if (1 == GET_BIT(value, bit))
+	{
+		status = key_press;
+	}
+	else if (0 == GET_BIT(value, bit))
+	{
+		status = key_release;
+	}
+	cfg_if_set_key_status(id, status);
+}
+
 /*****************************************************************************
  函 数 名: drv_sensor.home_key_callback
  功能描述  : home按键检测回调函数
@@ -483,23 +516,11 @@ void drv_sensor::velocity_callback ( const geometry_msgs::Twist& msg )
 void drv_sensor::home_key_callback(const std_msgs::Int16& msg)
 {
 	int16_t value = ( int16_t ) msg.data;
-	const uint8_t short_press_bit = 0;
-	const uint8_t long_press_bit = 1;
-	const KEY_STATUS_ENUM key_press = KEY_PRESSED;
-	const KEY_STATUS_ENUM key_release = KEY_RELEASED;
-	KEY_STATUS_ENUM status = KEY_STATUS_INVALID;
+	const uint8_t home_key_bit = 0;
+	const uint8_t power_key_bit = 1;
 
-	//cout<<"value ="<<value<<endl;
-	if (1 == GET_BIT(value, short_press_bit))
-	{
-		status = key_press;
-	}
-	else if (0 == GET_BIT(value, short_press_bit))
-	{
-		status = key_release;
-	}
-	
-	cfg_if_set_key_status(HOME_KEY_ID, status);
+	set_key_status(HOME_KEY_ID, home_key_bit, value);
+	set_key_status(POWER_KEY_ID, power_key_bit, value);
 }
 
 /*****************************************************************************

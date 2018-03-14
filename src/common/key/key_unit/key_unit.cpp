@@ -640,6 +640,92 @@ void key_unit::update_key_status(KEY_STATUS_ENUM value)
 }
 
 /******************************************************************************
+ Prototype   : key_unit.update_multiple_click
+ Description : 更新连按次数
+ Input       : void 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/14
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+void key_unit::update_multiple_click(void)
+{
+	uint64_t ret = 0;
+	uint8_t click_num = 0;
+	uint32_t takt_time = 0;
+	
+	takt_time = get_max_dblclick_takt_time();
+	if (ret < takt_time)
+	{
+		click_num = get_click_num();
+		click_num++;
+		set_click_num(click_num);
+	}
+}
+
+/******************************************************************************
+ Prototype   : key_unit.get_time_form_key_release
+ Description : 获取当前时刻离上次按键释放的时刻之间的时-
+               长
+ Input       : void 
+ Output      : None
+ Return Value: uint64_t
+ 
+ History        :
+  1.Data        :2018/3/14
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+uint64_t key_unit::get_time_form_key_release(void)
+{
+	uint64_t ret = 0;
+	uint64_t curr_time = 0;
+	uint64_t release_time = 0;
+	
+	curr_time = get_millisecond_time();
+	release_time = get_release_tick();
+	if ( curr_time > release_time )
+	{
+		ret = curr_time - release_time;
+	}
+
+	return ret;
+}
+
+/******************************************************************************
+ Prototype   : key_unit.test_valid_action_done
+ Description : 检测按键动作是否已经完成
+ Input       : void 
+ Output      : None
+ Return Value: bool
+ 
+ History        :
+  1.Data        :2018/3/14
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+bool key_unit::test_valid_action_done(void)
+{
+	bool ret = false;
+	uint64_t temp = 0;
+	uint64_t real_time = 0;
+	uint32_t takt_time = 0;
+	
+	takt_time = get_max_dblclick_takt_time();
+	temp = takt_time + 100;
+	real_time = get_time_form_key_release();
+	if (real_time > temp)
+	{
+		ret = true;
+	}
+	
+	return ret;
+}
+
+/******************************************************************************
  Prototype   : key_unit.save_press_tick
  Description : 保存按下的时刻
  Input       : void 
@@ -657,7 +743,6 @@ void key_unit::save_press_tick(void)
 	
 	curr_time = get_millisecond_time();
 	set_press_tick(curr_time);
-//	cout<<"save_press_tick = "<<curr_time<<endl;
 }
 
 /******************************************************************************
@@ -678,7 +763,6 @@ void key_unit::save_release_tick(void)
 	
 	curr_time = get_millisecond_time();
 	set_release_tick(curr_time);
-//	cout<<"save_release_tick = "<<curr_time<<endl;
 }
 
 /******************************************************************************
@@ -728,22 +812,15 @@ uint64_t key_unit::save_release_long(void)
 	uint64_t ret = 0;
 	uint64_t press_tick = 0;
 	uint64_t release_tick = 0;
-	uint8_t click_num = 0;
-	uint32_t takt_time = 0;
-	
+
 	press_tick = get_press_tick();
 	release_tick = get_release_tick();
 	if (press_tick >= release_tick)
 	{
 		ret = press_tick - release_tick;
 		set_release_long(ret);
-		click_num = get_click_num();
-		takt_time = get_max_dblclick_takt_time();
-		if (ret < takt_time)
-		{
-			click_num++;
-			set_click_num(click_num);
-		}
+		
+		update_multiple_click();
 		
 //		debug_print_warnning("ret = press_tick(%lld) - release_tick(%lld) = (%lld);", press_tick, release_tick, ret);
 	}
@@ -779,7 +856,6 @@ bool key_unit::save_key_status_time(void)
 			save_press_tick();
 			save_release_long();
 			flag = true;
-			//ret = true;
 		}
 	}
 	else if (released == curr_status)
@@ -816,6 +892,7 @@ bool key_unit::save_key_status_time(void)
 void key_unit::analyze_key_click_signal(void)
 {
 	bool ret = false;
+	bool action_done_flag = false;
 	uint8_t click_num = 0;
 	uint32_t value = 0;
 	const uint32_t min_sigle_click = 100;
@@ -835,19 +912,20 @@ void key_unit::analyze_key_click_signal(void)
 		}
 		else
 		{
+			action_done_flag = test_valid_action_done();
 			ret = get_double_click();
-			if (true != ret )
+			if ((false == ret ) && (true == action_done_flag))
 			{
 				value = get_press_long();
 				if ((min_sigle_click <= value) && (value < min_long_click))
 				{
 					set_single_click(true);
-					debug_print_info("value=%d, min_sigle_click=%d, min_long_click=%d", value, min_sigle_click, min_long_click);
+					debug_print_info(" set_single_click(true); value=%d, min_sigle_click=%d, min_long_click=%d", value, min_sigle_click, min_long_click);
 				}
 				else if (min_long_click <= value)
 				{
 					set_long_click(true);
-					debug_print_info("value=%d, min_sigle_click=%d, min_long_click=%d", value, min_sigle_click, min_long_click);
+					debug_print_info(" set_long_click(true); value=%d, min_sigle_click=%d, min_long_click=%d", value, min_sigle_click, min_long_click);
 				}
 			}
 		}

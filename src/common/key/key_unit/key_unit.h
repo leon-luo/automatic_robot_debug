@@ -121,6 +121,10 @@ private:
 	
 	void set_release_long(uint64_t value);
 	uint64_t get_release_long(void);
+
+	void update_multiple_click(void);
+	uint64_t get_time_form_key_release(void);
+	bool test_valid_action_done(void);
 	
 	void save_press_tick(void);
 	void save_release_tick(void);

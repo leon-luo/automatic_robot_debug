@@ -45,6 +45,8 @@
 #include <kobuki_msgs/BumperEvent.h>
 #include <kobuki_msgs/WheelDropEvent.h>
 
+#include "key_data.h"
+
 /******************************************************************************
  * 外部变量声明
  ******************************************************************************/
@@ -101,6 +103,7 @@ private:
 	void laser_scan_callback( const sensor_msgs::LaserScan& msg );
 	void velocity_callback( const geometry_msgs::Twist& msg );
 
+	void set_key_status(KEY_ID_ENUM id, uint8_t bit, int16_t value);
 	void home_key_callback(const std_msgs::Int16& msg);
 	
 
