@@ -399,7 +399,7 @@ bool cfg_if_convert_cliff_id(uint8_t num, CLIFF_ID_ENUM &id)
 {
 	bool ret = false;
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->convert_cliff_id(num, id);
+	ret = p_mobile_robot->convert_cliff_id(num, id);
 	return ret;
 }
 
@@ -420,7 +420,7 @@ bool cfg_if_convert_cliff_state(uint8_t value, bool &state)
 {
 	bool ret = false;
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->convert_cliff_state(value, state);
+	ret = p_mobile_robot->convert_cliff_state(value, state);
 	return ret;
 }
 
@@ -440,7 +440,7 @@ bool cfg_if_test_robot_is_ok(void)
 {
 	bool ret = false;
 	cfg_mobile_robot* p_mobile_robot = cfg_mobile_robot::get_instance();
-	p_mobile_robot->test_robot_is_ok();
+	ret = p_mobile_robot->test_robot_is_ok();
 	return ret;
 }
 
