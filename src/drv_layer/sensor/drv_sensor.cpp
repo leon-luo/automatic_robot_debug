@@ -487,9 +487,16 @@ void drv_sensor::set_key_status (KEY_ID_ENUM id, uint8_t bit, int16_t value )
 	const KEY_STATUS_ENUM key_press = KEY_PRESSED;
 	const KEY_STATUS_ENUM key_release = KEY_RELEASED;
 	KEY_STATUS_ENUM status = KEY_STATUS_INVALID;
-
-	//cout<<"value ="<<value<<endl;
-	debug_print_info("id=%d, bit=%d, value=%d", id, bit, value);
+//	cout<<"drv_sensor::set_key_status(";
+//	if (HOME_KEY_ID == id )
+//	{
+//		cout<<" HOME_KEY_ID,  ";
+//	}
+//	else if (POWER_KEY_ID == id )
+//	{
+//		cout<<" POWER_KEY_ID, ";
+//	}
+	
 	if (1 == GET_BIT(value, bit))
 	{
 		status = key_press;
@@ -499,6 +506,17 @@ void drv_sensor::set_key_status (KEY_ID_ENUM id, uint8_t bit, int16_t value )
 		status = key_release;
 	}
 	cfg_if_set_key_status(id, status);
+	
+//	if (status == key_press)
+//	{
+//		cout<<"key_press";
+//	}
+//	else if (status == key_release)
+//	{
+//		cout<<"key_release";
+//	}
+//	cout<<")"<<endl<<endl;
+//	cout<<endl;	
 }
 
 /*****************************************************************************

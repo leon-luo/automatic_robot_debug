@@ -65,25 +65,25 @@ typedef enum KEY_STATUS
 /******************************************************************************
  * struct
  ******************************************************************************/
-//长按数据结构
-typedef struct LONG_PRESS
+typedef struct KEY_TIMER
 {
-	bool enable_clocker;
-	uint32_t valid_time;
-	uint32_t keep_time;
-}LONG_PRESS_STRU;
+	bool enable;
+	uint32_t time;
+}KEY_TIMER_STRU;
 
 //按键数据类型
 typedef struct KEY
 {
 	KEY_STATUS_ENUM status;            //按键当前状态
+	bool record_time;                  //是否已经记录时间点标记
 	bool single_click;                 //单击短按标志
 	bool double_click;                 //双击短按标志
 	bool long_click;                   //单击长按标志
-	LONG_PRESS_STRU hold;              //状态保持数据
+	KEY_TIMER_STRU release_timer;      //释放定时器
 	uint8_t click_num;                 //连续短按几次
 	uint32_t max_dblclick_takt_time;   //有效连按:两次短按之间的最大有效时间间隔
-	uint32_t min_long_press_time;      //有效长按:保持按住的最短时间
+	uint32_t min_click_time;           //最小的有效按键时间:保持按住的最短时间
+	uint32_t min_long_press_time;      //最小的有效长按时间:保持按住的最短时间
 	uint64_t press_tick;               //按键按下的时刻
 	uint64_t release_tick;             //按键释放的时刻
 	uint64_t press_long;               //按键按下的保持的时间长度

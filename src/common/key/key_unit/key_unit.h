@@ -67,8 +67,7 @@
  ******************************************************************************/
 class key_unit
 {
-public://protected:
-
+public:
 	key_unit();
 	~key_unit();
 	
@@ -85,27 +84,26 @@ public:
 	void set_long_click(bool value);
 	bool get_long_click(void);
 
-	virtual void update_single_click(void);
-	virtual void update_double_click(void);
-	virtual void update_long_click(void);
-
 	virtual void update_key_status(KEY_STATUS_ENUM value);
 
 private:
-	bool get_enable_clocker(void);
-	void set_enable_clocker(bool value);
+	bool get_record_time(void);
+	void set_record_time(bool value);
 
-	void set_valid_time(uint32_t value);
-	uint32_t get_valid_time(void);
+	void set_release_timer_enable(bool value);
+	bool get_release_timer_enable(void);
 
-	void set_keep_time(uint32_t value);
-	uint32_t get_keep_time(void);
+	void set_release_timer_time(uint32_t value);
+	uint32_t get_release_timer_time(void);
 
 	void set_click_num(uint8_t value);
 	uint8_t get_click_num(void);
 
 	void set_max_dblclick_takt_time(uint32_t value);
 	uint32_t get_max_dblclick_takt_time(void);
+
+	void set_min_click_time(uint32_t value);
+	uint32_t get_min_click_time(void);
 
 	void set_min_long_press_time(uint32_t value);
 	uint32_t get_min_long_press_time(void);
@@ -116,11 +114,11 @@ private:
 	void set_release_tick(uint64_t value);
 	uint64_t get_release_tick(void);
 	
-	void set_press_long(uint64_t value);
-	uint64_t get_press_long(void);
+	void set_press_duration_time(uint64_t value);
+	uint64_t get_press_duration_time(void);
 	
-	void set_release_long(uint64_t value);
-	uint64_t get_release_long(void);
+	void set_release_duration_time(uint64_t value);
+	uint64_t get_release_duration_time(void);
 
 	void update_multiple_click(void);
 	uint64_t get_time_form_key_release(void);
@@ -129,24 +127,23 @@ private:
 	void save_press_tick(void);
 	void save_release_tick(void);
 
-	uint64_t save_press_long(void);
-	uint64_t save_release_long(void);
+	uint64_t calculate_time_from_press_to_release(void);
+	uint64_t calculate_time_from_release_to_press(void);
 
 	bool save_key_status_time(void);
 	void analyze_key_click_signal(void);
 	
+private:
 	KEY_STRU data_;
 	
 	key_unit(const key_unit&){};
 	key_unit& operator=(const key_unit&){};
-
 };
 
 
 /******************************************************************************
  * internal function prototypes
  ******************************************************************************/
-
 
 
 /*****************************************************************************/

@@ -261,7 +261,7 @@ void signal_handler(int16_t signo)
  返 回 值: 
  备     注：
 	settimer工作机制：先对it_value倒计时，当it_value为零时触发信号。
-	然后重置为it_interval。继续对it_value倒计时。一直这样循环下去。基
+	然后重置为it_interval,继续对it_value倒计时。一直这样循环下去。基
 	于此机制。setitimer既能够用来延时运行，也可定时运行。假如it_value
 	为0是不会触发信号的，所以要能触发信号，it_value得大于0；假设
 	it_interval为零，仅仅会延时。不会定时（也就是说仅仅会触发一次信号)。
@@ -284,11 +284,11 @@ bool set_timer(uint32_t interval_sec, uint32_t interval_usec, uint32_t current_s
 	}
 
 	struct itimerval new_value, old_value;
-	//配置下次间隔时间
+	//配置延时时长
 	new_value.it_value.tv_sec = current_sec;
 	new_value.it_value.tv_usec = current_usec;
 	
-	//配置当前延时时间
+	//配置计时间隔
 	new_value.it_interval.tv_sec = interval_sec;
 	new_value.it_interval.tv_usec = interval_usec;
 
