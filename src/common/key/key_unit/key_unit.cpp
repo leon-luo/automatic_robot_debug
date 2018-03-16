@@ -74,15 +74,20 @@ using namespace std;
 key_unit::key_unit()
 {
 	const uint32_t takt_time = 300;
-
+	
+	set_press_tick(0);
+	set_release_tick(0);
 	set_max_dblclick_takt_time(takt_time);
 	set_min_click_time(100);
 	set_min_long_press_time(1000);
 	set_click_num(0);
+	set_single_click(false);
 	set_double_click(false);
+	set_long_click(false);
 	set_record_time(false);
 	set_release_timer_enable(false);
 	set_release_timer_time(takt_time + 100);
+	set_release_duration_time(0);
 }
 
 /*****************************************************************************
@@ -645,16 +650,22 @@ void key_unit::update_key_status(KEY_STATUS_ENUM value)
  ******************************************************************************/
 void key_unit::update_multiple_click(void)
 {
-	uint64_t ret = 0;
 	uint8_t click_num = 0;
 	uint32_t takt_time = 0;
+	uint64_t release_time = 0;
 	
+	click_num = get_click_num();
+	release_time = get_release_duration_time();
 	takt_time = get_max_dblclick_takt_time();
-	if (ret < takt_time)
+	if (((0 < click_num) && (release_time < takt_time))
+	|| ((0 == click_num) && (release_time > takt_time)))
 	{
-		click_num = get_click_num();
 		click_num++;
 		set_click_num(click_num);
+	}
+	else
+	{
+		debug_print_warnning("takt_time = %d; release_time = %lld;", takt_time, release_time);
 	}
 }
 
@@ -739,6 +750,7 @@ void key_unit::save_press_tick(void)
 	
 	curr_time = get_millisecond_time();
 	set_press_tick(curr_time);
+//	debug_print_info("curr_time=%lld", curr_time);
 }
 
 /******************************************************************************
@@ -759,6 +771,7 @@ void key_unit::save_release_tick(void)
 	
 	curr_time = get_millisecond_time();
 	set_release_tick(curr_time);
+//	debug_print_info("curr_time=%lld", curr_time);
 }
 
 /******************************************************************************
@@ -788,7 +801,7 @@ uint64_t key_unit::calculate_time_from_press_to_release(void)
 	}
 	else
 	{
-		debug_print_warnning("release_tick(%lld)  press_tick(%lld) ret(%lld);", release_tick, press_tick, ret);
+		debug_print_warnning("release_tick(%lld) - press_tick(%lld) = ret(%lld);", release_tick, press_tick, ret);
 	}
 	
 	return ret;
@@ -818,8 +831,11 @@ uint64_t key_unit::calculate_time_from_release_to_press(void)
 	{
 		ret = press_tick - release_tick;
 		set_release_duration_time(ret);
-		
 		update_multiple_click();
+	}
+	else
+	{
+		debug_print_warnning("  press_tick(%lld) - release_tick(%lld) = ret(%lld);", press_tick, release_tick, ret);
 	}
 	
 	return ret;
@@ -905,40 +921,22 @@ void key_unit::analyze_key_click_signal(void)
 	if (true == action_done_flag)
 	{
 		click_num = get_click_num();
-		debug_print_info("click_num=%d", click_num);
+//		debug_print_info("click_num=%d", click_num);
 		if ( 1 == click_num)
 		{
-			ret = get_double_click();
-			if (false == ret )
+			value = get_press_duration_time();
+			if ((min_click_time <= value) && (value < min_long_click))
 			{
-				//debug_print_info(" min_click_time=%d, min_long_click=%d", min_click_time, min_long_click);
-				value = get_press_duration_time();
-				if ((min_click_time <= value) && (value < min_long_click))
-				{
-					set_single_click(true);
-					debug_print_info(" set_single_click(true); value=%lld", value);
-				}
-				else if (min_long_click <= value)
-				{
-					set_long_click(true);
-					debug_print_info(" set_long_click(true); value=%lld", value);
-				}
-				else
-				{
-					debug_print_warnning("value=%lld", value);
-				}
+				set_single_click(true);
 			}
-			else
+			else if (min_long_click <= value)
 			{
-				debug_print_warnning("ret=%d", ret);
+				set_long_click(true);
 			}
 		}
-		else
+		else if ( 2 == click_num)
 		{
-			if ( 2 == click_num)
-			{
-				set_double_click(true);
-			}
+			set_double_click(true);
 		}
 		
 		set_click_num(0);

@@ -1069,7 +1069,7 @@ void bll_partial_cleaning::partition_driving(void)
 	if (true == flag)
 	{
 		save_first_line_refer_direction();
-
+		
 		cfg_if_get_partial_cleaning_state(state);
 		if (PARTITION_DRIVING_START == state)
 		{
@@ -1117,7 +1117,7 @@ void bll_partial_cleaning::partition_driving(void)
 		}
 		else if (PARTITION_DRIVING_ALL_DONE == state)
 		{
-			set_partial_cleaning_state(PARTITION_DRIVING_STOP);
+			clear_local_cover_movement_data();
 		}
 	}
 }
@@ -1147,6 +1147,25 @@ void bll_partial_cleaning::switch_partial_cleaning(void)
 	set_partial_cleaning_enable(enable);
 }
 
+/******************************************************************************
+ Prototype   : bll_partial_cleaning.clear_local_cover_movement_data
+ Description : 清除局部弓字型运行数据
+ Input       : void 
+ Output      : None
+ Return Value: void
+ 
+ History        :
+  1.Data        :2018/3/16
+    Author      : Leon
+    Modification: Created function.
+ ******************************************************************************/
+void bll_partial_cleaning::clear_local_cover_movement_data(void)
+{
+	cfg_if_change_curr_action(STOP);
+	set_reference_data_valid(false);
+	set_partial_cleaning_enable(false);
+	set_partial_cleaning_state(PARTITION_DRIVING_STOP);
+}
 
 /*****************************************************************************
  函 数 名: bll_partial_cleaning.local_cover_movement
@@ -1169,7 +1188,7 @@ void bll_partial_cleaning::local_cover_movement(void)
 	flag = cfg_if_get_key_single_click(home_key_id);
 	if ( true == flag)
 	{
-		debug_print_info("--------single_click");
+		debug_print_info("---------------------------------[single click]");
 		cfg_if_clear_key_single_click(home_key_id);
 		switch_partial_cleaning();
 	}
@@ -1178,7 +1197,7 @@ void bll_partial_cleaning::local_cover_movement(void)
 	flag = cfg_if_get_key_double_click(home_key_id);
 	if ( true == flag)
 	{
-		debug_print_warnning("==========double_click");
+		debug_print_info("==================================[double click]");
 		cfg_if_clear_key_double_click(home_key_id);
 	}
 	
@@ -1186,7 +1205,7 @@ void bll_partial_cleaning::local_cover_movement(void)
 	flag = cfg_if_get_key_long_click(home_key_id);
 	if ( true == flag)
 	{
-		debug_print_error("############long_click");
+		debug_print_info("*********************************[long click]");
 		cfg_if_clear_key_long_click(home_key_id);
 	}
 	
@@ -1198,8 +1217,7 @@ void bll_partial_cleaning::local_cover_movement(void)
 	}
 	else
 	{
-		cfg_if_change_curr_action(STOP);
-		set_partial_cleaning_state(PARTITION_DRIVING_STOP);
+		clear_local_cover_movement_data();
 	}
 }
 
@@ -1596,19 +1614,21 @@ void bll_partial_cleaning::monitor_angle_turn_to_original_direction_deal(void)
 *****************************************************************************/
 void bll_partial_cleaning::save_first_line_refer_direction(void)
 {
+	bool ret = false;
 	double temp = 0.0;
 	double forward = 0.0;
 	double reverse = 0.0;
-	const double inversion = 180.0;
+	//const double inversion = 180.0;
 	POSE_STRU pos;
-
-	if ( false == check_reference_data_valid())
+	ret = check_reference_data_valid();
+	if ( false == ret)
 	{
 		cfg_if_get_current_position(pos);
 		angel_base angel_base_instance;
 		forward = angel_base_instance.format_angle(pos.angle);
-		temp = forward + inversion;
-		reverse = angel_base_instance.format_angle(temp);
+		reverse = angel_base_instance.get_reverse_angle(forward);
+		//temp = forward + inversion;
+		//reverse = angel_base_instance.format_angle(temp);
 
 		set_reference_data_forward_angle(forward);
 		set_reference_data_reverse_angle(reverse);
@@ -1722,7 +1742,7 @@ void bll_partial_cleaning::updata_district_area(const POSE_STRU &data)
 				x_max = x0 + length;
 				y_min = y0 - length;
 				y_max = y0 + length;
-				debug_print_warnning("p(x0, y0) = {(%lf, %lf) : %lf}; length=%lf", x0, y0, data.angle, length);
+				
 				pose[0].point = {x_max, y_max};
 				pose[1].point = {x_min, y_max};
 				pose[2].point = {x_min, y_min};
@@ -1744,8 +1764,9 @@ void bll_partial_cleaning::updata_district_area(const POSE_STRU &data)
 				end.point.x = x0 + adjacent;
 				end.point.y = y0 + opposite;
 				end.angle = data.angle;
-				debug_print_warnning("start.point = {(%lf, %lf) : %lf}", start.point.x, start.point.y, start.angle);
-				debug_print_warnning("end.point   = {(%lf, %lf) : %lf}", end.point.x, end.point.y, end.angle);
+				debug_print_info("| p(x0, y0)   = {(%lf, %lf) : %lf}; length=%lf", x0, y0, data.angle, length);
+				debug_print_info("| start.point = {(%lf, %lf) : %lf}", start.point.x, start.point.y, start.angle);
+				debug_print_info("| end.point   = {(%lf, %lf) : %lf}", end.point.x, end.point.y, end.angle);
 				set_refer_line_start_point_pose(start);
 				set_refer_line_end_point_pose(end);
 

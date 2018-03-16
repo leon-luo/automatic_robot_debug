@@ -114,6 +114,7 @@ public:
 
 	void partition_driving(void);
 	void switch_partial_cleaning(void);
+	void clear_local_cover_movement_data(void);
 	void local_cover_movement(void);
 
 	void smooth_decelerate_stop(void);
