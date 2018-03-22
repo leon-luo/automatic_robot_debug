@@ -104,7 +104,7 @@ private:
 	void velocity_callback( const geometry_msgs::Twist& msg );
 
 	void set_key_status(KEY_ID_ENUM id, uint8_t bit, int16_t value);
-	void home_key_callback(const std_msgs::Int16& msg);
+	void key_callback(const std_msgs::Int16& msg);
 	
 
 	void register_sensor_msgs_callback(void);

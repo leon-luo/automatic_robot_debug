@@ -658,14 +658,15 @@ void key_unit::update_multiple_click(void)
 	release_time = get_release_duration_time();
 	takt_time = get_max_dblclick_takt_time();
 	if (((0 < click_num) && (release_time < takt_time))
-	|| ((0 == click_num) && (release_time > takt_time)))
+	|| (0 == click_num))
 	{
 		click_num++;
 		set_click_num(click_num);
+		debug_print_info("takt_time = %d; release_time = %lld; click_num = %d;", takt_time, release_time,click_num);
 	}
 	else
 	{
-		debug_print_warnning("takt_time = %d; release_time = %lld;", takt_time, release_time);
+		debug_print_warnning("takt_time = %d; release_time = %lld; click_num = %d;", takt_time, release_time,click_num);
 	}
 }
 
@@ -750,7 +751,7 @@ void key_unit::save_press_tick(void)
 	
 	curr_time = get_millisecond_time();
 	set_press_tick(curr_time);
-//	debug_print_info("curr_time=%lld", curr_time);
+	debug_print_info("curr_time=%lld", curr_time);
 }
 
 /******************************************************************************
@@ -771,7 +772,7 @@ void key_unit::save_release_tick(void)
 	
 	curr_time = get_millisecond_time();
 	set_release_tick(curr_time);
-//	debug_print_info("curr_time=%lld", curr_time);
+	debug_print_info("curr_time=%lld", curr_time);
 }
 
 /******************************************************************************
@@ -798,6 +799,7 @@ uint64_t key_unit::calculate_time_from_press_to_release(void)
 	{
 		ret = release_tick - press_tick;
 		set_press_duration_time(ret);
+		debug_print_info("release_tick(%lld) - press_tick(%lld) = ret(%lld);", release_tick, press_tick, ret);
 	}
 	else
 	{
@@ -831,6 +833,8 @@ uint64_t key_unit::calculate_time_from_release_to_press(void)
 	{
 		ret = press_tick - release_tick;
 		set_release_duration_time(ret);
+		
+		debug_print_info("	press_tick(%lld) - release_tick(%lld) = ret(%lld);", press_tick, release_tick, ret);
 		update_multiple_click();
 	}
 	else
@@ -883,7 +887,7 @@ bool key_unit::save_key_status_time(void)
 	}
 	else
 	{
-		debug_print_error("curr_status = %d!", curr_status);
+		//debug_print_error("curr_status = %d!", curr_status);
 		ret = false;
 	}
 
@@ -921,7 +925,7 @@ void key_unit::analyze_key_click_signal(void)
 	if (true == action_done_flag)
 	{
 		click_num = get_click_num();
-//		debug_print_info("click_num=%d", click_num);
+		debug_print_info("click_num=%d", click_num);
 		if ( 1 == click_num)
 		{
 			value = get_press_duration_time();

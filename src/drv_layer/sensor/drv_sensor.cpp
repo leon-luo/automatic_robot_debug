@@ -516,12 +516,12 @@ void drv_sensor::set_key_status (KEY_ID_ENUM id, uint8_t bit, int16_t value )
 //		cout<<"key_release";
 //	}
 //	cout<<")"<<endl<<endl;
-//	cout<<endl;	
+//	cout<<endl;
 }
 
 /*****************************************************************************
- 函 数 名: drv_sensor.home_key_callback
- 功能描述  : home按键检测回调函数
+ 函 数 名: drv_sensor.key_callback
+ 功能描述  : 按键检测回调函数
  输入参数: const std_msgs::Int16& msg  
  输出参数: 无
  返 回 值: void
@@ -531,7 +531,7 @@ void drv_sensor::set_key_status (KEY_ID_ENUM id, uint8_t bit, int16_t value )
     作     者: Leon
     修改内容: 新生成函数
 *****************************************************************************/
-void drv_sensor::home_key_callback(const std_msgs::Int16& msg)
+void drv_sensor::key_callback(const std_msgs::Int16& msg)
 {
 	int16_t value = ( int16_t ) msg.data;
 	const uint8_t home_key_bit = 0;
@@ -630,7 +630,7 @@ void drv_sensor::register_sensor_msgs_callback(void)
 	wall_following_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/edge_ir", 100, &drv_sensor::wall_following_sensor_callback, p_instance_);
 	laser_scan_sub_ = node_h.subscribe ( "/scan", 100, &drv_sensor::laser_scan_callback, p_instance_);
 
-	home_kye_sub_ = node_h.subscribe ( "/mobile_base/events/home_key", 10, &drv_sensor::home_key_callback, p_instance_);
+	home_kye_sub_ = node_h.subscribe ( "/mobile_base/events/home_key", 10, &drv_sensor::key_callback, p_instance_);
 }
 
 /******************************************************************************
