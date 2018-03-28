@@ -86,6 +86,12 @@ function creat_makefile()
 
 function do_action()
 {
+	if [ ! -d ${BUILD_DIR} ]; then
+		ls -lh ${BUILD_DIR}
+		mkdir ${BUILD_DIR}
+		echo "[INFO]mkdir dir \"${BUILD_DIR}\"."
+		ls -lh ${BUILD_DIR}
+	fi
 	cd ${BUILD_DIR}
 	CURR_DIR=`pwd`
 	echo "[INFO] Current dir is \"${CURR_DIR}\"."
