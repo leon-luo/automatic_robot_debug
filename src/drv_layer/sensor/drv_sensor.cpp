@@ -419,6 +419,22 @@ float32[] ranges            # 距离数组(长度360)
 float32[] intensities       # 与设备有关,强度数组(长度360)
 leon@ubuntu:~$ 
 */
+
+//	blueway@blueway:~$ rosmsg show sensor_msgs/LaserScan
+//	std_msgs/Header header
+//	  uint32 seq
+//	  time stamp
+//	  string frame_id
+//	float32 angle_min
+//	float32 angle_max
+//	float32 angle_increment
+//	float32 time_increment
+//	float32 scan_time
+//	float32 range_min
+//	float32 range_max
+//	float32[] ranges
+//	float32[] intensities
+
 	float angle_min = msg.angle_min;
 	float angle_max = msg.angle_max;
 	float angle_increment = msg.angle_increment;
@@ -426,11 +442,7 @@ leon@ubuntu:~$
 	float scan_time = msg.scan_time;
 	float range_min = msg.range_min;
 	float range_max = msg.range_max;
-//	uint8_t ranges_length = msg.ranges_length;
-//	float st_ranges = msg.st_ranges;
 	std::vector<float> ranges = msg.ranges;
-//	uint8_t intensities_length = msg.intensities_length;
-//	float st_intensities = msg.st_intensities;
 	std::vector<float> intensities = msg.intensities;
 
 	cout<<"angle_min:"<<angle_min<<endl;
@@ -442,13 +454,9 @@ leon@ubuntu:~$
 	
 	cout<<"range_min:"<<range_min<<endl;
 	cout<<"range_max:"<<range_max<<endl;
-//	cout<<"ranges_length:"<<ranges_length<<endl;
-//	cout<<"st_ranges:"<<st_ranges<<endl;
-	cout<<"ranges:"<<ranges.size()<<endl;
+	cout<<"ranges.size():"<<ranges.size()<<endl;
 	
-//	cout<<"intensities_length:"<<intensities_length<<endl;
-//	cout<<"st_intensities:"<<st_intensities<<endl;
-	cout<<"intensities:"<<intensities.size()<<endl;
+	cout<<"intensities.size():"<<intensities.size()<<endl;
 }
 
 /*****************************************************************************
@@ -630,7 +638,7 @@ void drv_sensor::register_sensor_msgs_callback(void)
 	wall_following_sensor_sub_ = node_h.subscribe ( "/mobile_base/sensors/edge_ir", 100, &drv_sensor::wall_following_sensor_callback, p_instance_);
 	laser_scan_sub_ = node_h.subscribe ( "/scan", 100, &drv_sensor::laser_scan_callback, p_instance_);
 
-	home_kye_sub_ = node_h.subscribe ( "/mobile_base/events/home_key", 10, &drv_sensor::key_callback, p_instance_);
+	home_kye_sub_ = node_h.subscribe ( "/mobile_base/events/key", 10, &drv_sensor::key_callback, p_instance_);
 }
 
 /******************************************************************************
